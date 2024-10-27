@@ -9,7 +9,11 @@
 }
 
 body{
-  background: white;
+  background: #f4f7fa;
+}
+
+.white-color-sl {
+  background-color: #f4f7fa;
 }
 
 li{
