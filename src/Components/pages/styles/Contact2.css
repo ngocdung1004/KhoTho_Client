@@ -1,0 +1,64 @@
+.btn-common {
+    background-color: #0d6efd;
+    position: relative;
+    z-index: 1;
+    text-transform: uppercase;
+  }
+  
+  .btn-common:hover {
+    color: #0d6efd;
+    background: transparent;
+    border: 1px dotted #0d6efd;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.1);
+    transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -webkit-transition: all .2s ease-in-out;
+  }
+
+  .btn {
+    margin-right: 10px;
+  }
+
+  .btn.disabled, .btn:disabled {
+    opacity: 1;
+  }
+
+  .btn {
+    font-size: 14px;
+    padding: 10px 30px;
+    cursor: pointer;
+    font-weight: 400;
+    color: #fff;
+    border-radius: 30px;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+    display: inline-block;
+  }
+  
+  .btn:focus,
+  .btn:active {
+    box-shadow: none;
+    outline: none;
+    color: #fff;
+  }
+
+  .col-md-6{
+    background-color: #f4f7fa;
+  }
+  .cta-text .cta-text-h4{
+    font-size: 38px;
+    color: #222222;
+    font-weight: 700;
+  }
+
+  .cta-text .cta-text-h5{
+    font-size: 17px;
+    color: #545353;
+  }
+
+  .cta-text .cta-text-p{
+    font-size: 17px;
+    color: #545353;
+  }

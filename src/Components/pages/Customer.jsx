@@ -4,7 +4,7 @@ import { Col, Card, Table, Row } from 'react-bootstrap';
 import axios from 'axios';
 
 import Logo from "../common/logo";
-import NavBar from '../NavBar/NavBar';
+import NavBar from '../NavBar/NavBarLogin';
 import avatar1 from '../../Assets/user/avatar-1.jpg';
 import avatar2 from '../../Assets/user/avatar-2.jpg';
 import avatar3 from '../../Assets/user/avatar-3.jpg';
@@ -30,7 +30,6 @@ const Customer = () => {
       });
   }, []);
 
-  
 
   // Tìm người đầu tiên có workerId = 0
   const firstUserWithWorkerId0 = users.find(user => user.userType === 0);
@@ -56,7 +55,7 @@ const Customer = () => {
 
   return (
     
-    <div className="w-[85%] m-auto bg-white">
+    <div className="w-[85%] m-auto white-color-sl">
       <NavBar/>
       {/* <BrowserRouter > */}
       <div className='Customer-flex'>

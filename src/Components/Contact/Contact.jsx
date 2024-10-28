@@ -49,17 +49,17 @@ const Contact = () => {
     return(
         <Container style={{paddingTop: '50px'}} >
             <Row >
-              <Col md={6} className="c-left" >
+              <Col md={6} className="c-left white-color-sl" >
               <h1 >Get in Touch</h1>
               <h1 className="yellow text-blueColor">Contact me</h1>
               </Col>
-              <Col md={6} className="c-right">
+              <Col md={6} className="c-right white-color-sl">
                   <form ref={form} onSubmit={sendEmail}>
                   <input type="text" name="from_name" className="user"  placeholder="Name" onChange={handleChange}/>
                   <input type="email" name="reply_to" className="user" placeholder="Email" onChange={handleChange} />
                   <textarea name="message" className="user" placeholder="Message" onChange={handleChange} />
                   <span className='not-done' >{notDone && "Please, fill all the input field"}</span>
-                  <Button type="submit" className="button" disabled={done}>Send</Button>
+                  <Button type="submit" className="button button-contact" disabled={done}>SEND</Button>
                   <span className='done'>{done && "Thanks for contacting me and be sure i have recieved your mail. If you are testing this functionality then i am confirming this thing working perfectly fine. If you have any serious query then i will reply. Also if you need me, you can conatct me on Linkedin."}</span>
                   </form>
               </Col>

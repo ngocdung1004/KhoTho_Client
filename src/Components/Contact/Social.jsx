@@ -14,60 +14,60 @@ import { BsYoutube } from 'react-icons/bs';
 
 const Social = () => {
   return (
-    <Container style={{padding: '30px'}}>
-    <Row>
-              <Col md={12} className="contact-social">
-                <div className='contact-text'>
-                <h1>FIND ME ON</h1>
-                <p>
-                Please don't hesitate to reach out to me and <span className="yellow">connect.</span>
-                </p>
-                </div>
-                <ul className="contact-social-links">
-                  <li className="contact-icons">
-                    <a
-                      href=""
-                      target="_blank"
-                      rel="noreferrer"
-                      className="icon-color  contact-social-icons"
-                    >
-                      <AiFillFacebook />
-                    </a>
-                  </li>
-                  <li className="contact-icons">
-                    <a
-                      href=""
-                      target="_blank"
-                      rel="noreferrer"
-                      className="icon-color  contact-social-icons"
-                    >
-                      <FaFacebookMessenger />
-                    </a>
-                  </li>
-                  <li className="contact-icons">
-                    <a
-                      href=""
-                      target="_blank"
-                      rel="noreferrer"
-                      className="icon-color  contact-social-icons"
-                    >
-                      <SiGmail />
-                    </a>
-                  </li>
-                  <li className="contact-icons">
-                    <a
-                      href=""
-                      target="_blank"
-                      rel="noreferrer"
-                      className="icon-color contact-social-icons"
-                    >
-                      <FaPhone />
-                    </a>
-                  </li>
-                </ul>
-              </Col>
-            </Row>
-          </Container>
+    <Container style={{padding: '50px'}}>
+    <Row style={{paddingTop: '50px'}}>
+        <Col md={12} className="contact-social">
+          <div className='contact-text'>
+          <h1 >Tìm tôi trên</h1>
+          <p>
+          Xin đừng ngần ngại liên hệ với tôi và <span className="yellow">kết nối.</span>
+          </p>
+          </div>
+          <ul className="contact-social-links">
+            <li className="contact-icons">
+              <a
+                href=""
+                target="_blank"
+                rel="noreferrer"
+                className="icon-color  contact-social-icons"
+              >
+                <AiFillFacebook />
+              </a>
+            </li>
+            <li className="contact-icons">
+              <a
+                href=""
+                target="_blank"
+                rel="noreferrer"
+                className="icon-color  contact-social-icons"
+              >
+                <FaFacebookMessenger />
+              </a>
+            </li>
+            <li className="contact-icons">
+              <a
+                href=""
+                target="_blank"
+                rel="noreferrer"
+                className="icon-color  contact-social-icons"
+              >
+                <SiGmail />
+              </a>
+            </li>
+            <li className="contact-icons">
+              <a
+                href=""
+                target="_blank"
+                rel="noreferrer"
+                className="icon-color contact-social-icons"
+              >
+                <FaPhone />
+              </a>
+            </li>
+          </ul>
+        </Col>
+    </Row>
+  </Container>
   )
 }
 
