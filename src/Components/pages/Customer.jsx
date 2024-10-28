@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Col, Card, Table, Row } from 'react-bootstrap';
-import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import Logo from "../common/logo";
-import NavBar from '../NavBar/NavBar';
+import NavBar from '../NavBar/NavBarLogin';
 import avatar1 from '../../Assets/user/avatar-1.jpg';
 import avatar2 from '../../Assets/user/avatar-2.jpg';
 import avatar3 from '../../Assets/user/avatar-3.jpg';
@@ -17,7 +17,8 @@ import "./styles/Customer.css"
 
 const Customer = () => {
   const [users, setUsers] = useState([]);
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
     // Gọi API để lấy danh sách người dùng
     axios.get(config.url_get_user)
@@ -29,7 +30,6 @@ const Customer = () => {
       });
   }, []);
 
-  
 
   // Tìm người đầu tiên có workerId = 0
   const firstUserWithWorkerId0 = users.find(user => user.userType === 0);
@@ -57,7 +57,7 @@ const Customer = () => {
     
     <div className="w-[85%] m-auto white-color-sl">
       <NavBar/>
-      <BrowserRouter >
+      {/* <BrowserRouter > */}
       <div className='Customer-flex'>
           <div className="flex flex-1 bg-gray-50">
             <div className="hidden md:flex md:w-64 md:flex-col">
@@ -273,7 +273,7 @@ const Customer = () => {
             </Col>
           </div> 
         </div>
-      </BrowserRouter>
+      {/* </BrowserRouter> */}
     </div>
   );
 };
