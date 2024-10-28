@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import "./styles/NavBar.css"
 
 const NavBar = () => {
@@ -14,7 +15,7 @@ const NavBar = () => {
           <li className="menuList text-[#6f6f6f] hover:text-blueColor">Customer</li>
           <li className="menuList text-[#6f6f6f] hover:text-blueColor">About</li>
           <li className="menuList text-[#6f6f6f] hover:text-blueColor">Contact</li>
-          <li className="menuList text-[#6f6f6f] hover:text-blueColor">Login</li>
+          <Link to="/login" className="menuList text-[#6f6f6f] hover:text-blueColor">Login</Link>
           <li className="menuList text-[#6f6f6f] hover:text-blueColor">Register</li>
 
         </div>

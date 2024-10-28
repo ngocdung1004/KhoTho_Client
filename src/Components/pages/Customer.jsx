@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Col, Card, Table, Row } from 'react-bootstrap';
-import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import Logo from "../common/logo";
@@ -17,7 +17,8 @@ import "./styles/Customer.css"
 
 const Customer = () => {
   const [users, setUsers] = useState([]);
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
     // Gọi API để lấy danh sách người dùng
     axios.get(config.url_get_user)
@@ -57,7 +58,7 @@ const Customer = () => {
     
     <div className="w-[85%] m-auto bg-white">
       <NavBar/>
-      <BrowserRouter >
+      {/* <BrowserRouter > */}
       <div className='Customer-flex'>
           <div className="flex flex-1 bg-gray-50">
             <div className="hidden md:flex md:w-64 md:flex-col">
@@ -273,7 +274,7 @@ const Customer = () => {
             </Col>
           </div> 
         </div>
-      </BrowserRouter>
+      {/* </BrowserRouter> */}
     </div>
   );
 };
