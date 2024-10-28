@@ -67,7 +67,7 @@ const About = () => {
 	};
 
   return (
-    <div className='w-[85%] m-auto bg-white'>
+    <div className='w-[85%] m-auto white-color-sl'>
         <NavBar/>
         
         <React.Fragment>
@@ -326,6 +326,9 @@ const About = () => {
         
         </React.Fragment>
         <Gallery/>
+        
+        
+
         <Footer/>
     </div>
   )

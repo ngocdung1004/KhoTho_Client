@@ -15,7 +15,11 @@
 }
 
 .contact-text>h1{
-  font-size: calc(1.375rem + 1.5vw);
+  font-size: 30px;
+    color: #222222;
+    display: inline-block;
+    font-weight: 700;
+    position: relative;
 
 }
 .contact-social-links {

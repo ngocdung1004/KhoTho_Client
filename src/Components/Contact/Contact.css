@@ -7,6 +7,14 @@
   padding-top: 3rem;
 }
 
+.button-contact {
+    font-weight: 800;
+}
+
+.text-blueColor {
+    font-weight: 900;
+}
+
 .c-left{
     text-align: center !important;
     padding-top: 25px;
