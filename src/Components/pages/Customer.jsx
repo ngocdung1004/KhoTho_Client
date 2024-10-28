@@ -4,7 +4,7 @@ import { Col, Card, Table, Row } from 'react-bootstrap';
 import axios from 'axios';
 
 import Logo from "../common/logo";
-import NavBar from '../NavBar/NavBarLogin';
+import NavBar from '../NavBarLogin/NavBar';
 import avatar1 from '../../Assets/user/avatar-1.jpg';
 import avatar2 from '../../Assets/user/avatar-2.jpg';
 import avatar3 from '../../Assets/user/avatar-3.jpg';

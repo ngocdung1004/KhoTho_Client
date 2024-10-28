@@ -19,3 +19,8 @@
 .logo-font-yellow{
     color: rgb(255 182 42);
 }
+.menuList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
