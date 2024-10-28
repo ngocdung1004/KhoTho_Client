@@ -9,11 +9,11 @@ const Footer = () => {
 
       <div className="">
         <div className="logoDiv">
-        <h1 className="logo text-[25px] text-white pb-[1.5rem]"> <strong>Job</strong>Finder
+        <h1 className="logo text-[25px] text-white pb-[1.5rem]"> <strong>Kho</strong>Tho
         </h1>
         </div>
         <p className="text-white pb-[13px] opacity-70 leading-7">
-          we always make our seekers and companies find the best job and employers find the best candidate
+        Quickly connect workers and people in need, from repair to cleaning, helping unskilled workers get jobs right away, with immediate income, no CV required.
         </p>
       </div>
 
@@ -55,7 +55,7 @@ const Footer = () => {
         </span>
         <div>
           <small className='text-[14px] text-white'>
-            yoosufaath007@gmail.com
+            khotho.24h@gmail.com
           </small>
           <div className='icons flex gap-4 py-[1rem]'>
             <AiFillInstagram className='bg-white p-[8px] w-[35px] h-[35px] rounded-full icon text-blueColor'/>

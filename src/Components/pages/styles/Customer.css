@@ -1,0 +1,114 @@
+.Customer-flex {
+    display: flex;
+}
+
+
+.H6-mb-4 {
+    font-size: 30px;
+    font-weight: 700;
+    padding-bottom: 10px;
+}
+
+.info-Administrator {
+    padding: 3px 0px 3px 0px;
+}
+
+.name-Administrator {
+    font-size: 22px;
+    font-weight: 600;
+    color: red;
+}
+.recent-users tbody {
+    display: block;
+    max-height: 460px; 
+    overflow-y: auto;
+    width: 100%;
+    border-radius: 0px;
+  }
+
+.recent-users thead tr th {
+    background-color:antiquewhite;
+}
+
+.recent-users thead, .recent-users tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+
+.navbar-show-gene {
+    height: 200px;
+    border-radius: 10px; 
+    border: none;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    background-color: rgba(255, 255, 255, 0.848);
+
+}
+
+.navbar-show-gene-body {
+    height: 200px;
+    border-radius: 10px; 
+    border: none;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    background-color: rgba(255, 255, 255, 0.848);
+}
+
+.H6-mb-4 {
+    flex: 1;
+}
+
+.f-w-300 {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    max-height: 40px;
+    font-size: 38px;
+    font-weight: 700;
+    color:rgb(48, 206, 0);
+}
+
+.navbar-show-content {
+    display: flex; 
+    flex-direction: column;
+    height: 100%;
+}
+
+.icon-navbar-info {
+    margin-right: 20px;
+    color: blue;
+    font-size: large;
+}
+
+.Recent-Users {
+    border-radius: 0px;
+    border: none;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    background-color: rgba(255, 255, 255, 0.848);
+    transition: all 0.5s ease-in-out;
+}
+
+.px-0 {
+    border-radius: 0px; 
+    border: none;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    background-color: rgba(255, 255, 255, 0.848);
+    transition: all 0.5s ease-in-out;
+}
+
+.navbar-vertical {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    background-color: rgba(255, 255, 255, 0.848);
+    padding-bottom: 48px;
+    
+}
+
+.logo-manager {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+
