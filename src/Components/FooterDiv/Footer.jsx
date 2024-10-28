@@ -13,7 +13,7 @@ const Footer = () => {
         </h1>
         </div>
         <p className="text-white pb-[13px] opacity-70 leading-7">
-        Quickly connect workers and people in need, from repair to cleaning, helping unskilled workers get jobs right away, with immediate income, no CV required.
+        Kết nối nhanh thợ và người cần, từ sửa chữa đến dọn dẹp, giúp lao động phổ thông có việc làm ngay, thu nhập liền tay, không cần CV
         </p>
       </div>
 
