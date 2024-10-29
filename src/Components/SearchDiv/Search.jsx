@@ -1,88 +1,100 @@
-import React from 'react'
-import {AiOutlineSearch} from 'react-icons/ai'
-import {AiOutlineCloseCircle} from 'react-icons/ai'
-import {AiOutlineHome} from 'react-icons/ai'
-import {CiLocationOn} from 'react-icons/ci'
-
+import React, { useEffect, useState } from 'react';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { CiLocationOn } from 'react-icons/ci';
+import axios from 'axios';
 
 const Search = () => {
+  // State variables for API data and search form values
+  const [jobTypes, setJobTypes] = useState([]);
+  const [workers, setWorkers] = useState([]);
+  const [selectedJobType, setSelectedJobType] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedExperience, setSelectedExperience] = useState('');
+
+  // Fetch job types and worker data on component mount
+  useEffect(() => {
+    const fetchJobTypes = async () => {
+      try {
+        const response = await axios.get('https://localhost:7062/api/JobTypes');
+        setJobTypes(response.data);
+      } catch (error) {
+        console.error('Error fetching job types:', error);
+      }
+    };
+
+    const fetchWorkers = async () => {
+      try {
+        const response = await axios.get('https://localhost:7062/api/Workers');
+        setWorkers(response.data);
+      } catch (error) {
+        console.error('Error fetching workers:', error);
+      }
+    };
+
+    fetchJobTypes();
+    fetchWorkers();
+  }, []);
+
+  // Extract unique experience years and locations for dropdowns
+  const uniqueExperienceYears = [...new Set(workers.map(worker => worker.experienceYears))];
+  const uniqueLocations = [...new Set(workers.map(worker => worker.user.address).filter(address => address))];
+
   return (
     <div className='searchDiv grid gap-10 bg-greyIsh rounded-[10px] p-[3rem]'>
-      <form action=''>
+      <form>
         <div className='firstDiv flex justify-between items-center rounded-[8px] gap-[10px] bg-white p-5 shadow-lg shadow-greyIsh-700'>
           
+          {/* Dịch vụ Dropdown */}
           <div className='flex gap-2 items-center'>
-            
-            <AiOutlineSearch className='text-[25px] icon'/>
-            <input type="text" className='bg-transparent text-blue-500 focus:outline-none w-[100%]' placeholder='Search Job Here'/>
-             <AiOutlineCloseCircle className='text-[30px] text-[#a5a6a6] hover:text-textColor icon'/>
-                  
+            <select
+              className='bg-transparent text-blue-500 focus:outline-none w-[100%]'
+              value={selectedJobType}
+              onChange={(e) => setSelectedJobType(e.target.value)}
+            >
+              {selectedJobType === '' && <option value=''>Dịch vụ</option>}
+              {jobTypes.map((job) => (
+                <option key={job.jobTypeId} value={job.jobTypeName}>{job.jobTypeName}</option>
+              ))}
+            </select>
+            <AiOutlineCloseCircle className='text-[30px] text-[#a5a6a6] hover:text-textColor icon' onClick={() => setSelectedJobType('')}/>
           </div>
 
+          {/* Vị trí Dropdown */}
           <div className='flex gap-2 items-center'>
-            
-            <AiOutlineHome className='text-[25px] icon'/>
-            <input type="text" className='bg-transparent text-blue-500 focus:outline-none w-[100%]' placeholder='Search by company'/>
-             <AiOutlineCloseCircle className='text-[30px] text-[#a5a6a6] hover:text-textColor icon'/>
-                  
-          </div>
-
-          <div className='flex gap-2 items-center'>
-            
             <CiLocationOn className='text-[25px] icon'/>
-            <input type="text" className='bg-transparent text-blue-500 focus:outline-none w-[100%]' placeholder='Search by location'/>
-             <AiOutlineCloseCircle className='text-[30px] text-[#a5a6a6] hover:text-textColor icon'/>
-                  
+            <select
+              className='bg-transparent text-blue-500 focus:outline-none w-[100%]'
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.target.value)}
+            >
+              {selectedLocation === '' && <option value=''>Vị trí</option>}
+              {uniqueLocations.map((location, index) => (
+                <option key={index} value={location}>{location}</option>
+              ))}
+            </select>
+            <AiOutlineCloseCircle className='text-[30px] text-[#a5a6a6] hover:text-textColor icon' onClick={() => setSelectedLocation('')}/>
           </div>
 
-          <button className='bg-blueColor h-full p-5 px-10 rounded-[10px] text-white cursor-pointer hover:bg-blue-300' >Search</button>
+          {/* Kinh nghiệm Dropdown */}
+          <div className='flex gap-2 items-center'>
+            <select
+              className='bg-transparent text-blue-500 focus:outline-none w-[100%]'
+              value={selectedExperience}
+              onChange={(e) => setSelectedExperience(e.target.value)}
+            >
+              {selectedExperience === '' && <option value=''>Kinh nghiệm</option>}
+              {uniqueExperienceYears.map((year, index) => (
+                <option key={index} value={year}>{year} years</option>
+              ))}
+            </select>
+            <AiOutlineCloseCircle className='text-[30px] text-[#a5a6a6] hover:text-textColor icon' onClick={() => setSelectedExperience('')}/>
+          </div>
 
+          <button className='bg-blueColor h-full p-5 px-10 rounded-[10px] text-white cursor-pointer hover:bg-blue-300'>Tìm kiếm</button>
         </div>
       </form>
-
-      <div className='secDiv flex items-center gap-10 justify-center '>
-
-        <div className='singleSearch flex item-center gap-2' > 
-          <label htmlFor='relevance' className='text-[#808080] font-semibold'>
-            Sort by:
-          </label>
-          <select name='' id='relevance' className='bg-white rounded-[3px] px-4 py-1'>
-            <option value="" > Relevance </option>
-            <option value="" > Inclusive </option>
-            <option value="" > Starts with </option>
-            <option value="" > Contains </option>
-          </select>
-        </div>
-
-        <div className='singleSearch flex item-center gap-2' > 
-          <label htmlFor='type' className='text-[#808080] font-semibold'>
-            Type:
-          </label>
-          <select name='' id='type' className='bg-white rounded-[3px] px-4 py-1'>
-            <option value="" > Full-time </option>
-            <option value="" > Remote </option>
-            <option value="" > contract </option>
-            <option value="" > Part-time </option>
-          </select>
-        </div>
-
-        <div className='singleSearch flex item-center gap-2' > 
-          <label htmlFor='level' className='text-[#808080] font-semibold'>
-            Level:
-          </label>
-          <select name='' id='level' className='bg-white rounded-[3px] px-4 py-1'>
-            <option value="" > Internship </option>
-            <option value="" > Intermediate </option>
-            <option value="" > Senior </option>
-            <option value="" > Advocate </option>
-          </select>
-        </div>
-        
-        <span className='text-[#a1a1a1] cursor-pointer' > Clear All </span>
-      </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;
