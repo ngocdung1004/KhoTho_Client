@@ -1,86 +1,181 @@
-// ForgotPassword.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { TEInput, TERipple } from "tw-elements-react";
+import { Snackbar, Alert, IconButton } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { API_ENDPOINT } from "../../../config";
+import "./ForgotPassword.css";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [step, setStep] = useState(1); // 1: email, 2: otp+password
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [step, setStep] = useState(1);
   const [confirmedEmail, setConfirmedEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success"
+  });
   const navigate = useNavigate();
+
+  const handleCloseNotification = () => {
+    setNotification({ ...notification, open: false });
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const startCountdown = () => {
+    setCountdown(60);
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  // ForgotPassword.jsx
-const handleSendOTP = async () => {
+  const handleSendOTP = async () => {
     if (!validateEmail(email)) {
-      setErrorMessage("Vui lòng nhập email hợp lệ!");
+      setNotification({
+        open: true,
+        message: "Vui lòng nhập email hợp lệ!",
+        severity: "error"
+      });
       return;
     }
 
     try {
-      // Kiểm tra email tồn tại bằng API GetUserByEmail
       const checkEmailResponse = await axios.get(
-        `https://localhost:7062/api/Users/email/${encodeURIComponent(email)}`
+        `${API_ENDPOINT}/api/Users/email/${encodeURIComponent(email)}`
       );
 
       if (checkEmailResponse.data) {
-        // Email tồn tại, tiến hành gửi OTP
         const response = await axios.post(
-          "https://localhost:7062/api/Password/forgot-password",
+          `${API_ENDPOINT}/api/Password/forgot-password`,
           { email }
         );
-        
+
         setConfirmedEmail(email);
-        setSuccessMessage("Mã OTP đã được gửi đến email của bạn!");
+        setNotification({
+          open: true,
+          message: "Mã OTP đã được gửi đến email của bạn!",
+          severity: "success"
+        });
         setStep(2);
-        setErrorMessage("");
+        startCountdown();
       }
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setErrorMessage("Email không tồn tại trong hệ thống. Vui lòng kiểm tra lại!");
-      } else {
-        setErrorMessage("Có lỗi xảy ra. Vui lòng thử lại sau!");
-      }
+      setNotification({
+        open: true,
+        message: error.response?.status === 404
+          ? "Email không tồn tại trong hệ thống. Vui lòng kiểm tra lại!"
+          : "Có lỗi xảy ra. Vui lòng thử lại sau!",
+        severity: "error"
+      });
     }
-};
+  };
+
+  const handleResendOTP = async () => {
+    if (countdown > 0) return;
+    
+    try {
+      await axios.post(
+        `${API_ENDPOINT}/api/Password/forgot-password`,
+        { email: confirmedEmail }
+      );
+      
+      setNotification({
+        open: true,
+        message: "Mã OTP mới đã được gửi đến email của bạn!",
+        severity: "success"
+      });
+      startCountdown();
+    } catch (error) {
+      setNotification({
+        open: true,
+        message: "Có lỗi xảy ra khi gửi lại mã OTP. Vui lòng thử lại sau!",
+        severity: "error"
+      });
+    }
+  };
+
   const handleResetPassword = async () => {
     if (!otp || !newPassword) {
-      setErrorMessage("Vui lòng nhập đầy đủ thông tin!");
+      setNotification({
+        open: true,
+        message: "Vui lòng nhập đầy đủ thông tin!",
+        severity: "error"
+      });
       return;
     }
 
     if (newPassword.length < 6) {
-      setErrorMessage("Mật khẩu phải có ít nhất 6 ký tự!");
+      setNotification({
+        open: true,
+        message: "Mật khẩu phải có ít nhất 6 ký tự!",
+        severity: "error"
+      });
       return;
     }
 
     try {
-      const response = await axios.post(
-        "https://localhost:7062/api/Password/reset-password",
+      await axios.post(
+        `${API_ENDPOINT}/api/Password/reset-password`,
         {
           email: confirmedEmail,
           otp,
           newPassword,
         }
       );
-      setSuccessMessage("Đặt lại mật khẩu thành công! Đang chuyển hướng đến trang đăng nhập...");
+      
+      setNotification({
+        open: true,
+        message: "Đặt lại mật khẩu thành công!",
+        severity: "success"
+      });
+      
       setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
-      setErrorMessage("Mã OTP không đúng hoặc đã hết hạn. Vui lòng thử lại!");
+      setNotification({
+        open: true,
+        message: "Mã OTP không đúng hoặc đã hết hạn. Vui lòng thử lại!",
+        severity: "error"
+      });
     }
   };
 
   return (
     <section className="flex items-center justify-center min-h-screen bg-neutral-200 dark:bg-neutral-700">
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={3000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
+
       <div className="w-full max-w-md p-10">
         <div className="bg-white shadow-lg dark:bg-neutral-800 rounded-lg">
           <div className="p-8">
@@ -126,7 +221,8 @@ const handleSendOTP = async () => {
                 <>
                   <div className="text-center mb-4">
                     <p className="text-sm text-gray-600">
-                      Đang gửi mã OTP đến email: <strong>{confirmedEmail}</strong>
+                      Đang gửi mã OTP đến email:{" "}
+                      <strong>{confirmedEmail}</strong>
                     </p>
                   </div>
                   <div className="input-container mb-4">
@@ -141,19 +237,40 @@ const handleSendOTP = async () => {
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
                     />
+                    <div className="text-right mt-1">
+                      <button
+                        onClick={handleResendOTP}
+                        className={`text-sm ${countdown > 0 ? 'text-gray-400' : 'text-blue-600 hover:text-blue-700'}`}
+                        disabled={countdown > 0}
+                      >
+                        {countdown > 0 ? `Gửi lại sau ${countdown}s` : 'Gửi lại mã OTP'}
+                      </button>
+                    </div>
                   </div>
                   <div className="input-container mb-4">
                     <label className="input-label" htmlFor="newPassword">
                       Mật khẩu mới
                     </label>
-                    <TEInput
-                      type="password"
-                      id="newPassword"
-                      placeholder="Nhập mật khẩu mới"
-                      className="input-field"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                    />
+                    <div className="relative">
+                      <TEInput
+                        type={showPassword ? "text" : "password"}
+                        id="newPassword"
+                        placeholder="Nhập mật khẩu mới"
+                        className="input-field"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-2">
+                        <IconButton
+                          onClick={togglePasswordVisibility}
+                          edge="end"
+                          size="small"
+                          style={{ color: '#666' }}
+                        >
+                          {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                        </IconButton>
+                      </div>
+                    </div>
                   </div>
                   <div className="text-center mt-4">
                     <TERipple rippleColor="light" className="w-full">
@@ -173,21 +290,14 @@ const handleSendOTP = async () => {
               )}
 
               <div className="text-center mt-4">
-                <button
-                  className="text-sm text-neutral-600 hover:text-neutral-700"
+                <a
                   onClick={() => navigate("/login")}
+                  className="text-sm text-neutral-600 cursor-pointer hover:text-neutral-700 transition duration-150 ease-in-out"
                 >
-                  Quay lại đăng nhập
-                </button>
+                  Quay lại đăng nhập!
+                </a>
               </div>
             </form>
-
-            {errorMessage && (
-              <p className="text-red-500 text-center mt-4">{errorMessage}</p>
-            )}
-            {successMessage && (
-              <p className="text-green-500 text-center mt-4">{successMessage}</p>
-            )}
           </div>
         </div>
       </div>
