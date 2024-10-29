@@ -32,7 +32,7 @@ const App = () => {
     <div className='w-[85%] m-auto white-color-sl'>
      <NavBar/>
      <Search/>
-     <Jobs/>
+     {/* <Jobs/> */}
      <Value/>
      <Footer/>
     </div>
