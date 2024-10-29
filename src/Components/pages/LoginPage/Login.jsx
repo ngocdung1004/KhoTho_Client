@@ -12,11 +12,14 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("https://localhost:7062/api/Auth/login", {
-        email,
-        password,
-      });
-  
+      const response = await axios.post(
+        "https://localhost:7062/api/Auth/login",
+        {
+          email,
+          password,
+        }
+      );
+
       if (response.data && response.data.token) {
         localStorage.setItem("authToken", response.data.token);
         alert("Đăng nhập thành công!");
@@ -40,15 +43,21 @@ export default function Login() {
                 src="..\src\Assets\logokhotho.png"
                 alt="logo"
               />
-              <h4 className="mt-4 text-xl font-semibold">VIỆC LÀM GẤP, THỢ TỚI TẤP</h4>
+              <h4 className="mt-4 text-xl font-semibold">
+                VIỆC LÀM GẤP, THỢ TỚI TẤP
+              </h4>
             </div>
 
             <form onSubmit={(e) => e.preventDefault()}>
-              <p className="mb-4 text-center">Vui lòng đăng nhập vào tài khoản của bạn</p>
+              <p className="mb-4 text-center">
+                Vui lòng đăng nhập vào tài khoản của bạn
+              </p>
 
               {/* Email input */}
               <div className="input-container mb-4">
-                <label className="input-label" htmlFor="email">Email</label>
+                <label className="input-label" htmlFor="email">
+                  Email
+                </label>
                 <TEInput
                   type="text"
                   id="email"
@@ -61,7 +70,9 @@ export default function Login() {
 
               {/* Password input */}
               <div className="input-container mb-4">
-                <label className="input-label" htmlFor="password">Mật khẩu</label>
+                <label className="input-label" htmlFor="password">
+                  Mật khẩu
+                </label>
                 <TEInput
                   type="password"
                   id="password"
@@ -86,7 +97,12 @@ export default function Login() {
                     Đăng nhập
                   </button>
                 </TERipple>
-                <a href="#!" className="text-sm text-neutral-600 mt-2 inline-block">Quên mật khẩu?</a>
+                <a
+                  onClick={() => navigate("/forgot-password")}
+                  className="text-sm text-neutral-600 mt-2 inline-block cursor-pointer hover:text-neutral-700"
+                >
+                  Quên mật khẩu?
+                </a>
               </div>
 
               {/* Register button */}

@@ -8,6 +8,7 @@ import Customer from './Components/pages/Customer';
 import Jobs from './Components/pages/Jobs';
 import Register from './Components/pages/RegisterPage/Register';  
 import Login from './Components/pages/LoginPage/Login';
+import ForgotPassword from './Components/pages/ForgotPasswordPage/ForgotPassword';
 import './index.css';
 
 
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/customer" element={<Customer />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         {/* Add more routes as needed */}
       </Routes>
     </BrowserRouter>
