@@ -20,15 +20,11 @@ const NavBar = () => {
         <Link to="/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Customer</Link>
         <Link to="/about" className="menuList text-[#6f6f6f] hover:text-blueColor">About</Link>
         <Link to="/contact" className="menuList text-[#6f6f6f] hover:text-blueColor">Contact</Link>
-        <Link to="/login" className="menuList text-[#6f6f6f] hover:text-blueColor">
-        <img
-            className="rounded-circle "
-            style={{ width: '40px', marginRight: '10px' }}
+        <Link to="" className="menuList text-[#6f6f6f] hover:text-blueColor"><img
+            className="rounded-full w-10 mr-2"
             src={avatar1}
             alt="avatar"
-          />
-        </Link>
-
+        /></Link>
       </div>
     </div>
   );
