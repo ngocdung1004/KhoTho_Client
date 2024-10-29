@@ -5,6 +5,7 @@ import { MdWorkOutline, MdVerified } from "react-icons/md";
 import { BsBriefcase } from "react-icons/bs";
 import { FaStar } from "react-icons/fa";
 import { BiStar } from "react-icons/bi";
+import { API_ENDPOINT } from "../../config";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import axios from "axios";
 
@@ -34,9 +35,9 @@ const Search = () => {
       try {
         const [jobTypesResponse, workersResponse, workerJobTypesResponse] =
           await Promise.all([
-            axios.get("https://localhost:7062/api/JobTypes"),
-            axios.get("https://localhost:7062/api/Workers"),
-            axios.get("https://localhost:7062/api/WorkerJobTypes"),
+            axios.get(`${API_ENDPOINT}/api/JobTypes`),
+            axios.get(`${API_ENDPOINT}/api/Workers`),
+            axios.get(`${API_ENDPOINT}/api/WorkerJobTypes`),
           ]);
 
         setJobTypes(jobTypesResponse.data);

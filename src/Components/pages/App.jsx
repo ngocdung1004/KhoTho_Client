@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Col, Card, Table, Row } from 'react-bootstrap';
-
+import { API_ENDPOINT } from "../../config";
 import Footer from '../FooterDiv/Footer'
 import Jobs from '../JobDiv/Jobs'
 import NavBar from '../NavBar/NavBar'
@@ -18,7 +18,7 @@ const App = () => {
   const navigate = useNavigate();
   useEffect(() => {
     // Gọi API để lấy danh sách người dùng
-    axios.get(config.url_get_worker)
+    axios.get(`${API_ENDPOINT}/api/Workers`)
       .then(response => {
         console.log(response.data)
         setWorkers(response.data);

@@ -16,10 +16,10 @@ const NavBar = () => {
       </div>
 
       <div className="menu flex gap-8">
-        <Link to="/jobs" className="menuList text-[#6f6f6f] hover:text-blueColor">Jobs</Link>
-        <Link to="/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Customer</Link>
-        <Link to="/about" className="menuList text-[#6f6f6f] hover:text-blueColor">About</Link>
-        <Link to="/contact" className="menuList text-[#6f6f6f] hover:text-blueColor">Contact</Link>
+        <Link to="/jobs" className="menuList text-[#6f6f6f] hover:text-blueColor">Công việc</Link>
+        <Link to="/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Khách hàng</Link>
+        <Link to="/about" className="menuList text-[#6f6f6f] hover:text-blueColor">Tổng quan</Link>
+        <Link to="/contact" className="menuList text-[#6f6f6f] hover:text-blueColor">Liên hệ</Link>
         <Link to="" className="menuList text-[#6f6f6f] hover:text-blueColor"><img
             className="rounded-full w-10 mr-2"
             src={avatar1}

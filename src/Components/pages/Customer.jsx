@@ -9,7 +9,7 @@ import avatar1 from '../../Assets/user/avatar-1.jpg';
 import avatar2 from '../../Assets/user/avatar-2.jpg';
 import avatar3 from '../../Assets/user/avatar-3.jpg';
 import * as config from "../../config.jsx";
-
+import { API_ENDPOINT } from "../../config";
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 
@@ -21,7 +21,7 @@ const Customer = () => {
   
   useEffect(() => {
     // Gọi API để lấy danh sách người dùng
-    axios.get(config.url_get_user)
+    axios.get(`${API_ENDPOINT}/api/Users`)
       .then(response => {
         setUsers(response.data);
       })
