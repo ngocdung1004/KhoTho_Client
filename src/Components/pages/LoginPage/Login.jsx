@@ -2,38 +2,81 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { TEInput, TERipple } from "tw-elements-react";
+import { Snackbar, Alert, IconButton } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { API_ENDPOINT } from "../../../config";
 import "./Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
   const navigate = useNavigate();
+
+  const handleCloseNotification = () => {
+    setNotification({ ...notification, open: false });
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        "https://localhost:7062/api/Auth/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post(`${API_ENDPOINT}/api/Auth/login`, {
+        email,
+        password,
+      });
 
       if (response.data && response.data.token) {
         localStorage.setItem("authToken", response.data.token);
-        alert("Đăng nhập thành công!");
-        navigate("/customer");
+        setNotification({
+          open: true,
+          message: "Đăng nhập thành công!",
+          severity: "success",
+        });
+        setTimeout(() => {
+          navigate("/customer");
+        }, 1000);
       } else {
-        setErrorMessage("Đăng nhập thất bại! Vui lòng kiểm tra lại.");
+        setNotification({
+          open: true,
+          message: "Đăng nhập thất bại! Vui lòng kiểm tra lại.",
+          severity: "error",
+        });
       }
     } catch (error) {
-      setErrorMessage("Lỗi khi đăng nhập! Vui lòng thử lại.");
+      setNotification({
+        open: true,
+        message: "Lỗi khi đăng nhập! Vui lòng thử lại.",
+        severity: "error",
+      });
     }
   };
 
   return (
     <section className="flex items-center justify-center min-h-screen bg-neutral-200 dark:bg-neutral-700">
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={3000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
+
       <div className="w-full max-w-md p-10">
         <div className="bg-white shadow-lg dark:bg-neutral-800 rounded-lg">
           <div className="p-8">
@@ -73,14 +116,30 @@ export default function Login() {
                 <label className="input-label" htmlFor="password">
                   Mật khẩu
                 </label>
-                <TEInput
-                  type="password"
-                  id="password"
-                  placeholder="Nhập mật khẩu của bạn"
-                  className="input-field"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <TEInput
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    placeholder="Nhập mật khẩu của bạn"
+                    className="input-field"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-2">
+                    <IconButton
+                      onClick={togglePasswordVisibility}
+                      edge="end"
+                      size="small"
+                      style={{ color: "#666" }}
+                    >
+                      {showPassword ? (
+                        <VisibilityOff fontSize="small" />
+                      ) : (
+                        <Visibility fontSize="small" />
+                      )}
+                    </IconButton>
+                  </div>
+                </div>
               </div>
 
               {/* Submit button */}
@@ -119,11 +178,6 @@ export default function Login() {
                 </TERipple>
               </div>
             </form>
-
-            {/* Error message */}
-            {errorMessage && (
-              <p className="text-red-500 text-center mt-4">{errorMessage}</p>
-            )}
           </div>
         </div>
       </div>
