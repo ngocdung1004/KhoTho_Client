@@ -18,40 +18,40 @@ const Footer = () => {
       </div>
 
       <div className="grid">
-        <span className='divTitle text-[18px] font-semibold pb-[1.5rem] text-white' >Company 
+        <span className='divTitle text-[18px] font-semibold pb-[1.5rem] text-white' >Công ty 
         </span>
         <div className="grid gap-3">
-        <li className="text-white opacity-[0.7] hover:opacity-[1]"> About </li>
-        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Features </li>
+        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Giới thiệu </li>
+        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Chức năng </li>
         <li className="text-white opacity-[0.7] hover:opacity-[1]"> Blog </li>
         <li className="text-white opacity-[0.7] hover:opacity-[1]"> FAQ </li>
       </div>
       </div>
 
       <div className="grid">
-        <span className='divTitle text-[18px] font-semibold pb-[1.5rem] text-white' >Resources 
+        <span className='divTitle text-[18px] font-semibold pb-[1.5rem] text-white' >Nguồn lực 
         </span>
         <div className="grid gap-3">
-        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Account </li>
-        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Support Center</li>
+        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Tài khoản </li>
+        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Trung tâm hỗ trợ</li>
         <li className="text-white opacity-[0.7] hover:opacity-[1]"> Feedback </li>
-        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Contact Us </li>
+        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Thông tin liên lạc </li>
       </div>
       </div>
 
       <div className="grid">
-        <span className='divTitle text-[18px] font-semibold pb-[1.5rem] text-white' >Support 
+        <span className='divTitle text-[18px] font-semibold pb-[1.5rem] text-white' >Hỗ trợ 
         </span>
         <div className="grid gap-3">
-        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Events </li>
-        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Promo </li>
+        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Sự kiện </li>
+        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Khuyến khích </li>
         <li className="text-white opacity-[0.7] hover:opacity-[1]"> Req Demo </li>
-        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Careers </li>
+        <li className="text-white opacity-[0.7] hover:opacity-[1]"> Nghề nghiệp </li>
       </div>
       </div>
 
       <div className="grid">
-        <span className='divTitle text-[18px] font-semibold pb-[1.5rem] text-white' >Contact info 
+        <span className='divTitle text-[18px] font-semibold pb-[1.5rem] text-white' >Thông tin liên lạc 
         </span>
         <div>
           <small className='text-[14px] text-white'>
