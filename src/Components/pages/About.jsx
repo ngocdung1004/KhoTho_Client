@@ -398,7 +398,7 @@ const About = () => {
                 
                 <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg text-center w-80">
                     <div className="img-thumb mb-4 mx-auto">
-                        <img src="src/Assets/testimonial/img1.jpg" alt="Domeni Gesson" className="w-20 h-20 rounded-full mx-auto"/>
+                        <img src="src/Assets/testimonial/img4.jpg" alt="Domeni Gesson" className="w-20 h-20 rounded-full mx-auto"/>
                     </div>
                     <div className="info mb-2">
                         <h2 className="font-bold text-lg">Nguyễn Trọng Nghĩa</h2>
@@ -418,7 +418,7 @@ const About = () => {
 
                 <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg text-center w-80">
                     <div className="img-thumb mb-4 mx-auto">
-                        <img src="src/Assets/testimonial/img1.jpg" alt="Domeni Gesson" className="w-20 h-20 rounded-full mx-auto"/>
+                        <img src="src/Assets/testimonial/img5.jpg" alt="Domeni Gesson" className="w-20 h-20 rounded-full mx-auto"/>
                     </div>
                     <div className="info mb-2">
                         <h2 className="font-bold text-lg">Nguyễn Ngọc Dũng</h2>
@@ -438,7 +438,7 @@ const About = () => {
                 
                 <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg text-center w-80">
                     <div className="img-thumb mb-4 mx-auto">
-                        <img src="src/Assets/testimonial/img1.jpg" alt="Domeni Gesson" className="w-20 h-20 rounded-full mx-auto"/>
+                        <img src="src/Assets/testimonial/img6.jpg" alt="Domeni Gesson" className="w-20 h-20 rounded-full mx-auto"/>
                     </div>
                     <div className="info mb-2">
                         <h2 className="font-bold text-lg">Võ T.Kim Chung</h2>
