@@ -9,8 +9,9 @@ import Jobs from './Components/pages/Jobs';
 import Register from './Components/pages/RegisterPage/Register';  
 import Login from './Components/pages/LoginPage/Login';
 import ForgotPassword from './Components/pages/ForgotPasswordPage/ForgotPassword';
+import AdminDashboard from './Components/pages/Dashboard/AdminDashboard';  // Updated path
+import CustomerDashboard from './Components/pages/Dashboard/CustomerDashboard';  // Updated path
 import './index.css';
-
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -24,7 +25,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/register" element={<Register />} />
         <Route path="/customer" element={<Customer />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        {/* Add more routes as needed */}
+        <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/customerdashboard" element={<CustomerDashboard />} />  
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
