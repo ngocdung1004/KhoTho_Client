@@ -32,16 +32,26 @@ export default function Login() {
         email,
         password,
       });
-
+  
       if (response.data && response.data.token) {
+        // Lưu token và thông tin user vào localStorage
         localStorage.setItem("authToken", response.data.token);
+        localStorage.setItem("userType", response.data.userType);
+        localStorage.setItem("userData", JSON.stringify(response.data));
+  
         setNotification({
           open: true,
           message: "Đăng nhập thành công!",
           severity: "success",
         });
+  
+        // Chuyển hướng dựa trên userType
         setTimeout(() => {
-          navigate("/customer");
+          if (response.data.userType === 0) {
+            navigate("/admindashboard");
+          } else if (response.data.userType === 1) {
+            navigate("/customerdashboard");
+          }
         }, 1000);
       } else {
         setNotification({
