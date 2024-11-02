@@ -11,6 +11,11 @@ import Login from './Components/pages/LoginPage/Login';
 import ForgotPassword from './Components/pages/ForgotPasswordPage/ForgotPassword';
 import AdminDashboard from './Components/pages/Dashboard/AdminDashboard';  // Updated path
 import CustomerDashboard from './Components/pages/Dashboard/CustomerDashboard';  // Updated path
+import UserManagement from './Components/pages/Dashboard/UserManagement';
+import Dashboard from './Components/pages/Dashboard/Dashboard';  // Updated path
+import WorkerManagement from './Components/pages/Dashboard/WorkerManagement';
+import JobTypeManagement from './Components/pages/Dashboard/JobTypeManagement';
+import ReviewManagement from './Components/pages/Dashboard/ReviewManagement';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -26,7 +31,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/customer" element={<Customer />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
-        <Route path="/customerdashboard" element={<CustomerDashboard />} />  
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin/usermanagement" element={<UserManagement />} />
+        <Route path="/admin/customers" element={<CustomerDashboard />} />  
+        <Route path="/admin/users" element={<UserManagement />} />  
+        <Route path="/admin/workers" element={<WorkerManagement/>} />  
+        <Route path="/admin/jobtypes" element={<JobTypeManagement />} />
+        <Route path="/admin/reviews" element={<ReviewManagement />} />
+        
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

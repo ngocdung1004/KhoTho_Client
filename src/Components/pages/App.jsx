@@ -4,7 +4,7 @@ import { Col, Card, Table, Row } from 'react-bootstrap';
 import { API_ENDPOINT } from "../../config";
 import Footer from '../FooterDiv/Footer'
 import Jobs from '../JobDiv/Jobs'
-import NavBar from '../NavBar/NavBar'
+import NavBar from '../NavBarLogin/NavBar'
 import Search from '../SearchDiv/Search'
 import Value from '../ValueDiv/Value'
 import axios from 'axios';

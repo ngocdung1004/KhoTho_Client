@@ -48,7 +48,7 @@ export default function Login() {
         // Chuyển hướng dựa trên userType
         setTimeout(() => {
           if (response.data.userType === 0) {
-            navigate("/admindashboard");
+            navigate("/dashboard");
           } else if (response.data.userType === 1) {
             navigate("/customerdashboard");
           }
