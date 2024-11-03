@@ -10,9 +10,6 @@ import Value from '../ValueDiv/Value'
 import axios from 'axios';
 import * as config from "../../config.jsx";
 
-
-  
-
 const App = () => {
   const [workers, setWorkers] = useState([]);
   const navigate = useNavigate();

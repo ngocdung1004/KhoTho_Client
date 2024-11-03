@@ -1,0 +1,142 @@
+.start-info {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  .block_left, .block_right {
+    flex: 1;
+  }
+  
+  .block_left {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .w-45 {
+    width: 150px; /* Increased image width */
+    height: 150px;
+  }
+  
+  .fullname_verify {
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
+  .fullname {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .verify {
+    display: flex;
+    align-items: center;
+    color: #3b82f6; /* Match verified color */
+    font-weight: 500;
+    margin-top: 0.5rem;
+  }
+  
+  .block_right {
+    display: flex;
+    flex-direction: column;
+
+  }
+  
+  .messenger_book_box .book {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .rating_success {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+  
+  .biography {
+    margin-top: 1.5rem;
+  }
+  
+  .shadow-lg {
+    border-radius: 10px;
+    margin-bottom: 50px;
+  }
+
+  .mt-4 {
+    margin-top: 1.5rem; /* Increase spacing */
+  }
+  
+  .flex.items-center.gap-2 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Slightly increase gap between icon and text */
+    padding: 0.5rem 0;
+  }
+  
+  .flex.items-center.gap-2 .h-4.w-4 {
+    width: 1.5rem; /* Increase icon size */
+    height: 1.5rem;
+  }
+  
+  .font-medium.text-blue-gray-500 {
+    font-size: 1.1rem; /* Increase font size slightly */
+    font-weight: 500;
+    color: #000000; /* Optional: add a touch of color to make it stand out */
+    align-items: center;
+    justify-content: center;
+  }
+  
+
+  .rating_success {
+    display: flex;
+    gap: 1.5rem; /* Increase spacing between items */
+    padding: 1rem;
+    border-radius: 0.5rem; /* Rounded corners */
+    background-color: #f3f4f6; /* Light background for contrast */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  .rating_success .text-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .rating_success .font-bold {
+    font-size: 1.75rem; /* Make the rating larger */
+    color: #0e438d; /* Dark text color */
+  }
+  
+  .rating_success .text-blue-gray-500 {
+    color: #0b265d; /* Softer gray for small text */
+    font-size: 1rem; /* Slightly larger small text */
+  }
+  
+  .rating_success .text-yellow-400 {
+    font-size: 2rem; /* Increase icon size */
+    color: #facc15; /* Brighter yellow for emphasis */
+  }
+
+  .book {
+    padding: 0.75rem 2rem; /* Larger padding for prominence */
+    font-size: 1.25rem; /* Larger text */
+    font-weight: 600; /* Bolder text */
+    color: #ffffff; /* White text */
+    background: linear-gradient(90deg, #2a68ff, #1e40af); /* Gradient for visual interest */
+    border-radius: 0.5rem; /* Rounded corners */
+    box-shadow: 0px 4px 8px rgba(42, 104, 255, 0.4); /* Shadow for depth */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth animations */
+  }
+  
+  .book:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+    box-shadow: 0px 6px 12px rgba(42, 104, 255, 0.6); /* Stronger shadow on hover */
+  }
+  
+  .book:focus {
+    outline: none;
+    box-shadow: 0px 0px 0px 3px rgba(42, 104, 255, 0.4); /* Focus ring for accessibility */
+  }
+  
+  

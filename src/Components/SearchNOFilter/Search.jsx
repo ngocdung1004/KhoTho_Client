@@ -167,7 +167,7 @@ const Search = () => {
       <div className="bg-white rounded-xl p-6 transition-all duration-300 hover:shadow-xl">
         <div className="flex items-start gap-4">
           <img
-            src="src\Assets\images\thodien.jpg"
+            src="https://png.pngtree.com/png-vector/20240405/ourlarge/pngtree-car-mechanic-vector-icon-png-image_12264316.png"
             alt={`${user.fullName}'s profile`}
             className="w-20 h-20 rounded-xl object-cover"
           />
@@ -245,79 +245,9 @@ const Search = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="bg-white rounded-2xl shadow-xl p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-          Tìm kiếm dịch vụ
-        </h2>
-
-        <form className="space-y-6" onSubmit={handleSearch}>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <SearchBox
-              icon={BsBriefcase}
-              label="Chọn dịch vụ"
-              value={selectedJobType}
-              onChange={(e) => setSelectedJobType(e.target.value)}
-              options={jobTypes}
-              onClear={() => setSelectedJobType("")}
-            />
-
-            <SearchBox
-              icon={CiLocationOn}
-              label="Nhập địa điểm"
-              value={selectedLocation}
-              onChange={(value) => setSelectedLocation(value)} // Thay đổi ở đây
-              type="text"
-              options={[]}
-              onClear={() => setSelectedLocation("")}
-            />
-
-            <SearchBox
-              icon={MdWorkOutline}
-              label="Kinh nghiệm"
-              value={selectedExperience}
-              onChange={(e) => setSelectedExperience(e.target.value)}
-              options={Array.from({ length: 20 }, (_, i) => i + 1)}
-              onClear={() => setSelectedExperience("")}
-            />
-
-            <SearchBox
-              icon={FaStar}
-              label="Đánh giá"
-              value={selectedRating}
-              onChange={(e) => setSelectedRating(e.target.value)}
-              options={ratingRanges}
-              onClear={() => setSelectedRating("")}
-            />
-
-            <button
-              type="submit"
-              className="bg-blue-600 text-white rounded-lg px-6 py-3 font-medium hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center gap-2"
-            >
-              <AiOutlineSearch className="text-xl" />
-              Tìm kiếm
-            </button>
-          </div>
-        </form>
-
-        <div className="mt-6 flex flex-wrap gap-2">
-          <span className="text-sm text-gray-500">Gợi ý tìm kiếm:</span>
-          {jobTypes.slice(0, 4).map((job) => (
-            <button
-              key={job.jobTypeId}
-              onClick={() => setSelectedJobType(job.jobTypeName)}
-              className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors"
-            >
-              {job.jobTypeName}
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Kết quả tìm kiếm */}
       <div className="mt-8">
-        <h3 className="text-xl font-semibold mb-6">
-          Kết quả tìm kiếm ({filteredWorkers.length})
-        </h3>
 
         {loading ? (
           <div className="flex justify-center items-center min-h-[400px]">

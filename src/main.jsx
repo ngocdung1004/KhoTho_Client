@@ -11,6 +11,7 @@ import Login from './Components/pages/LoginPage/Login';
 import ForgotPassword from './Components/pages/ForgotPasswordPage/ForgotPassword';
 import AdminDashboard from './Components/pages/Dashboard/AdminDashboard';  // Updated path
 import CustomerDashboard from './Components/pages/Dashboard/CustomerDashboard';  // Updated path
+import WorkerProfile from "./Components/pages/WorkerProfile/WorkerProfile";
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -27,6 +28,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/customerdashboard" element={<CustomerDashboard />} />  
+        <Route path="/worker-profile/:workerId" element={<WorkerProfile />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

@@ -85,3 +85,48 @@
   .icon-color {
     color: #ffffff !important;
   } 
+
+
+
+    .contact-text h1 {
+      color: #333;
+    }
+
+    .highlight {
+      color: #ffbf00;
+      font-weight: bold;
+    }
+
+    .contact-social-icon {
+      display: inline-block;
+      font-size: 2rem;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      color: white;
+    }
+
+    .contact-social-icon.facebook {
+      background: #3b5998;
+    }
+
+    .contact-social-icon.messenger {
+      background: #0078ff;
+    }
+
+    .contact-social-icon.gmail {
+      background: #d93025;
+    }
+
+    .contact-social-icon.phone {
+      background: #34a853;
+    }
+
+    .contact-social-icon:hover {
+      transform: scale(1.1);
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    }
