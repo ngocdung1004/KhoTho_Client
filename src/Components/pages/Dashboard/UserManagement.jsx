@@ -53,19 +53,21 @@ const UserManagement = () => {
 
   const handleCreateNewRow = async (values) => {
     try {
-      const newUser = {
-        ...values,
-        userId: 0, // API will assign the actual ID
-        createdAt: new Date().toISOString(),
-        profilePicture: values.profilePicture || null
-      };
-      
-      const response = await axios.post(API_URL, newUser);
-      setTableData([...tableData, response.data]);
+        const newUser = {
+            ...values,
+            userId: 0, // API will assign the actual ID
+            createdAt: new Date().toISOString(),
+            profilePicture: values.profilePicture || null
+        };
+
+        console.log('Creating new user:', newUser); // Log the user data
+        const response = await axios.post(API_URL, newUser);
+        setTableData([...tableData, response.data]);
     } catch (error) {
-      console.error('Error creating user:', error);
+        console.error('Error creating user:', error.response ? error.response.data : error.message);
     }
-  };
+};
+
 
   const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
     if (Object.keys(validationErrors).length) return;
@@ -123,6 +125,14 @@ const UserManagement = () => {
         accessorKey: 'email',
         header: 'Email',
         size: 140,
+      },
+      {
+        accessorKey: 'passwordHash',
+        header: 'Password',
+        size: 140,
+        enableColumnFilter: false,
+        enableGlobalFilter: false,
+        Cell: () => '********', // Hide password in the table
       },
       {
         accessorKey: 'phoneNumber',
@@ -254,8 +264,29 @@ const CreateNewUserModal = ({ open, columns, onClose, onSubmit }) => {
               mt: 2,
             }}
           >
-            {columns.map((column) => (
-              column.accessorKey !== 'userId' && column.accessorKey !== 'createdAt' && (
+            {columns.map((column) => {
+              // Skip userId and createdAt fields
+              if (column.accessorKey === 'userId' || column.accessorKey === 'createdAt') {
+                return null;
+              }
+
+              // Special handling for password field
+              if (column.accessorKey === 'passwordHash') {
+                return (
+                  <TextField
+                    key={column.accessorKey}
+                    label="Password"
+                    name={column.accessorKey}
+                    type="password"
+                    onChange={(e) =>
+                      setValues({ ...values, [e.target.name]: e.target.value })
+                    }
+                  />
+                );
+              }
+
+              // Regular fields
+              return (
                 <TextField
                   key={column.accessorKey}
                   label={column.header}
@@ -267,8 +298,8 @@ const CreateNewUserModal = ({ open, columns, onClose, onSubmit }) => {
                 >
                   {column.muiTableBodyCellEditTextFieldProps?.children}
                 </TextField>
-              )
-            ))}
+              );
+            })}
           </Stack>
         </form>
       </DialogContent>

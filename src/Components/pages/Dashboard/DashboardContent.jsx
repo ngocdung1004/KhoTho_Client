@@ -1,21 +1,23 @@
-import { useState, useEffect } from 'react';
-import { 
-  Chart as ChartJS, 
-  ArcElement, 
+import { useState, useEffect } from "react";
+import {
+  Chart as ChartJS,
+  ArcElement,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
-  Legend
-} from 'chart.js';
-import { Pie, Bar } from 'react-chartjs-2';
+  Legend,
+} from "chart.js";
+import { Pie, Line } from "react-chartjs-2";
 
 ChartJS.register(
   ArcElement,
   CategoryScale,
-  LinearScale, 
-  BarElement,
+  LinearScale,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend
@@ -28,41 +30,50 @@ const DashboardContent = () => {
   const [jobTypes, setJobTypes] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [workersByJobType, setWorkersByJobType] = useState({});
+  const [workerJobTypes, setWorkerJobTypes] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [usersRes, workersRes, jobTypesRes, reviewsRes] = await Promise.all([
-          fetch('https://localhost:7062/api/Users'),
-          fetch('https://localhost:7062/api/Workers'),
-          fetch('https://localhost:7062/api/JobTypes'),
-          fetch('https://localhost:7062/api/Reviews')
+        const [
+          usersRes,
+          workersRes,
+          jobTypesRes,
+          reviewsRes,
+          workerJobTypesRes,
+        ] = await Promise.all([
+          fetch("https://localhost:7062/api/Users"),
+          fetch("https://localhost:7062/api/Workers"),
+          fetch("https://localhost:7062/api/JobTypes"),
+          fetch("https://localhost:7062/api/Reviews"),
+          fetch("https://localhost:7062/api/WorkerJobTypes"),
         ]);
 
         const usersData = await usersRes.json();
         const workersData = await workersRes.json();
         const jobTypesData = await jobTypesRes.json();
         const reviewsData = await reviewsRes.json();
+        const workerJobTypesData = await workerJobTypesRes.json();
 
         setUsers(usersData);
         setWorkers(workersData);
         setJobTypes(jobTypesData);
         setReviews(reviewsData);
+        setWorkerJobTypes(workerJobTypesData);
 
-        // Calculate workers per job type
+        // Calculate workers per job type using WorkerJobTypes data
         const workerCounts = {};
-        jobTypesData.forEach(jobType => {
-          // Count workers who have this job type
-          const count = workersData.filter(worker => 
-            worker.jobTypes && worker.jobTypes.some(wjt => wjt.jobTypeId === jobType.jobTypeId)
+        jobTypesData.forEach((jobType) => {
+          const count = workerJobTypesData.filter(
+            (wjt) => wjt.jobTypeId === jobType.jobTypeId
           ).length;
           workerCounts[jobType.jobTypeName] = count;
         });
         setWorkersByJobType(workerCounts);
-        
+
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
         setIsLoading(false);
       }
     };
@@ -80,38 +91,44 @@ const DashboardContent = () => {
     totalUsers: users.length,
     totalWorkers: workers.length,
     totalJobTypes: jobTypes.length,
-    totalRatings: calculateAverageRating()
+    totalRatings: calculateAverageRating(),
   };
 
   // Calculate user distribution
-  const adminCount = users.filter(user => user.userType === 0).length;
-  const customerCount = users.filter(user => user.userType === 1).length;
-  const workerCount = users.filter(user => user.userType === 2).length;
+  const adminCount = users.filter((user) => user.userType === 0).length;
+  const customerCount = users.filter((user) => user.userType === 1).length;
+  const workerCount = users.filter((user) => user.userType === 2).length;
 
   const pieData = {
-    labels: ['Khách hàng', 'Thợ', 'Admin'],
-    datasets: [{
-      data: [customerCount, workerCount, adminCount],
-      backgroundColor: [
-        'rgba(54, 162, 235, 0.8)',
-        'rgba(153, 102, 255, 0.8)',
-        'rgba(255, 99, 132, 0.8)',
-      ],
-      borderWidth: 1
-    }]
+    labels: ["Khách hàng", "Thợ đã xác minh", "Admin"],
+    datasets: [
+      {
+        data: [customerCount, workerCount, adminCount],
+        backgroundColor: [
+          "rgba(54, 162, 235, 0.8)",
+          "rgba(153, 102, 255, 0.8)",
+          "rgba(255, 99, 132, 0.8)",
+        ],
+        borderWidth: 1,
+      },
+    ],
   };
 
   const barData = {
-    labels: jobTypes.map(job => job.jobTypeName),
-    datasets: [{
-      label: 'Số lượng thợ',
-      data: jobTypes.map(job => workersByJobType[job.jobTypeName] || 0),
-      backgroundColor: 'rgba(54, 162, 235, 0.8)',
-    }]
+    labels: jobTypes.map((job) => job.jobTypeName),
+    datasets: [
+      {
+        label: "Số lượng thợ",
+        data: jobTypes.map((job) => workersByJobType[job.jobTypeName] || 0),
+        backgroundColor: "rgba(54, 162, 235, 0.8)",
+      },
+    ],
   };
 
   const StatCard = ({ title, value, icon, bgColor, textColor }) => (
-    <div className={`p-6 ${bgColor} rounded-lg shadow-sm hover:shadow-md transition-shadow`}>
+    <div
+      className={`p-6 ${bgColor} rounded-lg shadow-sm hover:shadow-md transition-shadow`}
+    >
       <h3 className="text-gray-600 text-sm font-medium mb-2">{title}</h3>
       <div className="flex items-center justify-between">
         <span className={`text-3xl font-bold ${textColor}`}>{value}</span>
@@ -119,6 +136,24 @@ const DashboardContent = () => {
       </div>
     </div>
   );
+
+  const lineData = {
+    labels: Object.keys(workersByJobType),
+    datasets: [
+      {
+        label: "Số lượng thợ",
+        data: Object.values(workersByJobType),
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+        pointBackgroundColor: "rgb(75, 192, 192)",
+        pointBorderColor: "#fff",
+        pointBorderWidth: 2,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+      },
+    ],
+  };
 
   if (isLoading) {
     return (
@@ -130,15 +165,15 @@ const DashboardContent = () => {
 
   return (
     <div className="p-6">
+      {/* ... previous JSX remains the same until the charts section */}
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-gray-800">
-          Xin chào, chào mừng trở lại 👋
+          Hello, welcome back 👋
         </h2>
         <p className="text-gray-600 mt-2">
-          Đây là tổng quan về hệ thống KhoTho
+          This is an overview of the KhoTho system
         </p>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
           title="Tổng người dùng"
@@ -176,41 +211,45 @@ const DashboardContent = () => {
             Phân bố người dùng
           </h3>
           <div className="h-[300px] flex items-center justify-center">
-            <Pie 
+            <Pie
               data={pieData}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
                   legend: {
-                    position: 'bottom'
-                  }
-                }
+                    position: "bottom",
+                  },
+                },
               }}
             />
           </div>
         </div>
-        
+
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <h3 className="text-lg font-semibold mb-6 text-gray-800">
             Thống kê thợ cho mỗi công việc
           </h3>
           <div className="h-[300px]">
-            <Bar 
-              data={barData}
+            <Line
+              data={lineData}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
                   legend: {
-                    display: false
-                  }
+                    display: true,
+                    position: "bottom",
+                  },
                 },
                 scales: {
                   y: {
-                    beginAtZero: true
-                  }
-                }
+                    beginAtZero: true,
+                    ticks: {
+                      stepSize: 1,
+                    },
+                  },
+                },
               }}
             />
           </div>
