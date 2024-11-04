@@ -11,7 +11,7 @@ import Login from './Components/pages/LoginPage/Login';
 import ForgotPassword from './Components/pages/ForgotPasswordPage/ForgotPassword';
 import AdminDashboard from './Components/pages/Dashboard/AdminDashboard';  // Updated path
 import CustomerDashboard from './Components/pages/Dashboard/CustomerDashboard';  // Updated path
-import WorkerProfile from "./Components/pages/WorkerProfile/WorkerProfile";
+import WorkerProfile from "./Components/pages/WorkerProfile/WorkerProfile"; //tested path
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
