@@ -4,6 +4,7 @@ import simple from '../../Assets/simple.png';
 import valentine from '../../Assets/valentine.png';
 import shield from '../../Assets/shield.png';
 import image1 from '../../Assets/images/1.jpg'; // Import the new image
+import "./Value.css"
 
 const Value = () => {
   return (
@@ -65,14 +66,16 @@ const Value = () => {
         </div>
       </div>
 
-      <div className="card mt-[2rem] flex justify-between bg-blueColor p-[5rem] rounded-[10px]">
-        <div>
-          <h1 className='text-blueColor text-[30px] font-bold'> Đăng kí ngay hôm nay!</h1>
+      <div className="card-container">
+        <div className="card-text">
+          <h1>Trải nghiệm ngay hôm nay!</h1>
+          <p>Nhanh chóng trải nghiệm dịch vụ tuyệt vời của chúng tôi</p>
         </div>
-        <button className='border-[2px] rounded-[10px] py-[4px] px-[50px] text-[18px] font-semibold text-blueColor hover:bg-white border-blueColor'>
-          Trải nghiệm dịch vụ của chúng tôi
+        <button className="card-button">
+          Đăng ký
         </button>
       </div>
+
     </div>
   )
 }

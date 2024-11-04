@@ -11,6 +11,7 @@ import Login from './Components/pages/LoginPage/Login';
 import ForgotPassword from './Components/pages/ForgotPasswordPage/ForgotPassword';
 import AdminDashboard from './Components/pages/Dashboard/AdminDashboard';  // Updated path
 import CustomerDashboard from './Components/pages/Dashboard/CustomerDashboard';  // Updated path
+import WorkerProfile from "./Components/pages/WorkerProfile/WorkerProfile"; //tested path
 import UserManagement from './Components/pages/Dashboard/UserManagement';
 import Dashboard from './Components/pages/Dashboard/Dashboard';  // Updated path
 import WorkerManagement from './Components/pages/Dashboard/WorkerManagement';
@@ -31,6 +32,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/customer" element={<Customer />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/customerdashboard" element={<CustomerDashboard />} />  
+        <Route path="/worker-profile/:workerId" element={<WorkerProfile />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin/usermanagement" element={<UserManagement />} />
         <Route path="/admin/customers" element={<CustomerDashboard />} />  
