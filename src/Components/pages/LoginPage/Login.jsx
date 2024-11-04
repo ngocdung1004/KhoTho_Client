@@ -50,7 +50,7 @@ export default function Login() {
           if (response.data.userType === 0) {
             navigate("/dashboard");
           } else if (response.data.userType === 1) {
-            navigate("/customerdashboard");
+            navigate("/customer");
           }
         }, 1000);
       } else {
