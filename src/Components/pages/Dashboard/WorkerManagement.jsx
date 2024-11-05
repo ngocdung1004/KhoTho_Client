@@ -82,27 +82,27 @@ const [editingRow, setEditingRow] = useState(null);
 
   const handleCreateNewRow = async (values) => {
     try {
-      const newWorker = {
-        workerId: 0,
-        userId: values.selectedUser.userId,
-        experienceYears: values.experienceYears,
-        rating: 0,
-        bio: values.bio,
-        verified: values.verified,
-        workerJobTypes: values.selectedJobTypes.map((jobType) => ({
-          jobTypeId: jobType.jobTypeId,
-          workerId: 0,
-        })),
-      };
+        const newWorker = {
+            workerId: 0,
+            userId: values.selectedUser.userId,
+            experienceYears: values.experienceYears,
+            rating: 0,
+            bio: values.bio,
+            verified: values.verified,
+            workerJobTypes: values.selectedJobTypes.map((jobType) => ({
+                jobTypeId: jobType.jobTypeId,
+                workerId: 0,
+            })),
+        };
 
-      const response = await axios.post(API_URL, newWorker);
-      setTableData([...tableData, response.data]);
-      // Refresh users list after creating new worker
-      fetchUsers();
+        const response = await axios.post(API_URL, newWorker);
+        setTableData([...tableData, response.data]);
+        fetchUsers();
     } catch (error) {
-      console.error("Error creating worker:", error);
+        console.error("Error creating worker:", error.response ? error.response.data : error.message);
     }
-  };
+};
+
 
   const handleSaveRowEdits = async ({ values, row }) => {
     try {

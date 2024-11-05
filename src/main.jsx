@@ -17,6 +17,7 @@ import Dashboard from './Components/pages/Dashboard/Dashboard';  // Updated path
 import WorkerManagement from './Components/pages/Dashboard/WorkerManagement';
 import JobTypeManagement from './Components/pages/Dashboard/JobTypeManagement';
 import ReviewManagement from './Components/pages/Dashboard/ReviewManagement';
+import WorkerDashboard from './Components/pages/Dashboard/Worker/WorkDashboard';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -41,7 +42,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/admin/workers" element={<WorkerManagement/>} />  
         <Route path="/admin/jobtypes" element={<JobTypeManagement />} />
         <Route path="/admin/reviews" element={<ReviewManagement />} />
-        
+        <Route path="/workers" element={<WorkerDashboard/>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
