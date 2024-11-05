@@ -29,6 +29,8 @@ const WorkerManagement = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [users, setUsers] = useState([]);
   const [jobTypes, setJobTypes] = useState([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+const [editingRow, setEditingRow] = useState(null);
 
   const theme = createTheme({
     palette: {
@@ -50,14 +52,15 @@ const WorkerManagement = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get("https://localhost:7062/api/Users");
-      // Chỉ lấy những user chưa là worker
-      const availableUsers = response.data.filter((user) => !user.worker);
+      // Lọc users có userType là 1 và chưa là worker
+      const availableUsers = response.data.filter(
+        (user) => user.userType === 1 && !user.worker
+      );
       setUsers(availableUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
-
   const fetchJobTypes = async () => {
     try {
       const response = await axios.get("https://localhost:7062/api/JobTypes");
@@ -101,31 +104,21 @@ const WorkerManagement = () => {
     }
   };
 
-  const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
-    if (Object.keys(validationErrors).length) return;
-
+  const handleSaveRowEdits = async ({ values, row }) => {
     try {
       const workerId = row.original.workerId;
       const updatedWorker = {
-        ...row.original,
+        workerId: workerId,
+        userId: row.original.userId,
         experienceYears: values.experienceYears,
         rating: values.rating,
         bio: values.bio,
-        verified: values.verified,
-        user: {
-          ...row.original.user,
-          fullName: values.fullName,
-          email: values.email,
-          phoneNumber: values.phoneNumber,
-          address: values.address,
-        },
+        verified: values.verified
       };
-
+  
       await axios.put(`${API_URL}/${workerId}`, updatedWorker);
-      const updatedData = [...tableData];
-      updatedData[row.index] = updatedWorker;
-      setTableData(updatedData);
-      exitEditingMode();
+      // Refresh data sau khi cập nhật
+      fetchWorkers();
     } catch (error) {
       console.error("Error updating worker:", error);
     }
@@ -247,18 +240,20 @@ const WorkerManagement = () => {
               enablePagination
               enableSelectAll
               onEditingRowSave={handleSaveRowEdits}
-              renderRowActions={({ row, table }) => (
+              renderRowActions={({ row }) => (
                 <Box sx={{ display: "flex", gap: "1rem" }}>
                   <Tooltip arrow placement="left" title="Edit">
-                    <IconButton onClick={() => table.setEditingRow(row)}>
+                    <IconButton 
+                      onClick={() => {
+                        setEditingRow(row);
+                        setIsEditModalOpen(true);
+                      }}
+                    >
                       <Edit />
                     </IconButton>
                   </Tooltip>
                   <Tooltip arrow placement="right" title="Delete">
-                    <IconButton
-                      color="error"
-                      onClick={() => handleDeleteRow(row)}
-                    >
+                    <IconButton color="error" onClick={() => handleDeleteRow(row)}>
                       <Delete />
                     </IconButton>
                   </Tooltip>
@@ -276,6 +271,17 @@ const WorkerManagement = () => {
               )}
             />
           </Box>
+          {editingRow && (
+    <EditWorkerModal
+      open={isEditModalOpen}
+      onClose={() => {
+        setIsEditModalOpen(false);
+        setEditingRow(null);
+      }}
+      onSubmit={handleSaveRowEdits}
+      row={editingRow}
+    />
+  )}
           <CreateNewWorkerModal
             open={createModalOpen}
             onClose={() => setCreateModalOpen(false)}
@@ -289,90 +295,32 @@ const WorkerManagement = () => {
   );
 };
 
-const CreateNewWorkerModal = ({ open, onClose, onSubmit, users, jobTypes }) => {
+const EditWorkerModal = ({ open, onClose, onSubmit, row }) => {
   const [values, setValues] = useState({
-    selectedUser: null,
-    selectedJobTypes: [],
-    experienceYears: "",
-    bio: "",
-    verified: false,
+    experienceYears: row.original.experienceYears,
+    rating: row.original.rating,
+    bio: row.original.bio,
+    verified: row.original.verified,
   });
 
   const handleSubmit = () => {
-    onSubmit(values);
+    onSubmit({ values, row });
     onClose();
   };
 
   return (
     <Dialog open={open} maxWidth="md" fullWidth>
-      <DialogTitle textAlign="center">Create New Worker</DialogTitle>
+      <DialogTitle textAlign="center">Edit Worker</DialogTitle>
       <DialogContent>
         <form onSubmit={(e) => e.preventDefault()}>
           <Stack spacing={3} sx={{ mt: 2 }}>
-            {/* User Selection */}
-            <TextField
-              select
-              fullWidth
-              label="Select User"
-              value={values.selectedUser || ""}
-              onChange={(e) => {
-                const selectedUser = users.find(
-                  (user) => user.userId === e.target.value
-                );
-                setValues({ ...values, selectedUser });
-              }}
-            >
-              {users.map((user) => (
-                <MenuItem key={user.userId} value={user.userId}>
-                  {user.fullName} - {user.email}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            {/* Selected User Info Display */}
-            {values.selectedUser && (
-              <Box sx={{ bgcolor: "background.paper", p: 2, borderRadius: 1 }}>
-                <Typography variant="subtitle1">
-                  Selected User Information:
-                </Typography>
-                <Typography>Email: {values.selectedUser.email}</Typography>
-                <Typography>
-                  Phone: {values.selectedUser.phoneNumber}
-                </Typography>
-                <Typography>Address: {values.selectedUser.address}</Typography>
-              </Box>
-            )}
-
-            {/* Job Types Multiple Selection */}
-            <TextField
-  fullWidth
-  label="Select Job Types"
-  value={values.selectedJobTypes.map((jt) => jt.jobTypeId)}
-  onChange={(e) => {
-    const selectedIds = e.target.value;
-    const selectedTypes = jobTypes.filter((jt) =>
-      selectedIds.includes(jt.jobTypeId)
-    );
-    setValues({ ...values, selectedJobTypes: selectedTypes });
-  }}
-  select
-  slotProps={{
-    select: {
-      multiple: true,
-      renderValue: (selected) =>
-        selected
-          .map((id) => jobTypes.find((jobType) => jobType.jobTypeId === id)?.name)
-          .join(", "),
-    },
-  }}
->
-  {jobTypes.map((jobType) => (
-    <MenuItem key={jobType.jobTypeId} value={jobType.jobTypeId}>
-      {jobType.name}
-    </MenuItem>
-  ))}
-</TextField>
-
+            <Box sx={{ bgcolor: "background.paper", p: 2, borderRadius: 1 }}>
+              <Typography variant="subtitle1">Worker Information:</Typography>
+              <Typography>Full Name: {row.original.user.fullName}</Typography>
+              <Typography>Email: {row.original.user.email}</Typography>
+              <Typography>Phone: {row.original.user.phoneNumber}</Typography>
+              <Typography>Address: {row.original.user.address}</Typography>
+            </Box>
 
             <TextField
               fullWidth
@@ -380,7 +328,18 @@ const CreateNewWorkerModal = ({ open, onClose, onSubmit, users, jobTypes }) => {
               type="number"
               value={values.experienceYears}
               onChange={(e) =>
-                setValues({ ...values, experienceYears: e.target.value })
+                setValues({ ...values, experienceYears: parseInt(e.target.value) })
+              }
+            />
+
+            <TextField
+              fullWidth
+              label="Rating"
+              type="number"
+              inputProps={{ step: "0.1", min: "0", max: "5" }}
+              value={values.rating}
+              onChange={(e) =>
+                setValues({ ...values, rating: parseFloat(e.target.value) })
               }
             />
 
@@ -410,19 +369,133 @@ const CreateNewWorkerModal = ({ open, onClose, onSubmit, users, jobTypes }) => {
       </DialogContent>
       <DialogActions sx={{ p: "1.25rem" }}>
         <Button onClick={onClose}>Cancel</Button>
-        <Button
-          color="primary"
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={
-            !values.selectedUser || values.selectedJobTypes.length === 0
-          }
-        >
+        <Button color="primary" onClick={handleSubmit} variant="contained">
+          Save Changes
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+  
+const CreateNewWorkerModal = ({ open, onClose, onSubmit, users, jobTypes }) => {
+  const [values, setValues] = useState({
+    selectedUser: null,
+    selectedJobTypes: [],
+    experienceYears: "",
+    bio: "",
+    verified: false,
+  });
+
+  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
+
+  const handleUserChange = (user) => {
+    setValues({ ...values, selectedUser: user });
+    setSelectedUserDetails(user);
+  };
+
+  const handleSubmit = () => {
+    onSubmit(values);
+    onClose();
+  };
+
+  
+
+  return (
+    <Dialog open={open} maxWidth="md" fullWidth>
+      <DialogTitle textAlign="center">Create New Worker</DialogTitle>
+      <DialogContent>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <Stack spacing={3} sx={{ mt: 2 }}>
+            {/* User selection */}
+            <TextField
+              select
+              fullWidth
+              label="Select User"
+              value={values.selectedUser || ''}
+              onChange={(e) => handleUserChange(e.target.value)}
+            >
+              {users.map((user) => (
+                <MenuItem key={user.userId} value={user}>
+                  {user.fullName}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            {/* User Details */}
+            {selectedUserDetails && (
+              <Box sx={{ bgcolor: "background.paper", p: 2, borderRadius: 1 }}>
+                <Typography variant="subtitle1">Selected User Details:</Typography>
+                <Typography>Full Name: {selectedUserDetails.fullName}</Typography>
+                <Typography>Email: {selectedUserDetails.email}</Typography>
+                <Typography>Phone: {selectedUserDetails.phoneNumber}</Typography>
+                <Typography>Address: {selectedUserDetails.address}</Typography>
+              </Box>
+            )}
+
+            {/* Job Types selection */}
+            <TextField
+              select
+              fullWidth
+              label="Select Job Types"
+              SelectProps={{
+                multiple: true,
+                renderValue: (selected) => 
+                  selected.map(job => job.jobTypeName).join(', ')
+              }}
+              value={values.selectedJobTypes}
+              onChange={(e) => setValues({ ...values, selectedJobTypes: e.target.value })}
+            >
+              {jobTypes.map((jobType) => (
+                <MenuItem key={jobType.jobTypeId} value={jobType}>
+                  {jobType.jobTypeName}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <TextField
+              fullWidth
+              label="Experience Years"
+              type="number"
+              value={values.experienceYears}
+              onChange={(e) =>
+                setValues({ ...values, experienceYears: parseInt(e.target.value) })
+              }
+            />
+
+            <TextField
+              fullWidth
+              label="Bio"
+              multiline
+              rows={4}
+              value={values.bio}
+              onChange={(e) => setValues({ ...values, bio: e.target.value })}
+            />
+
+            <TextField
+              select
+              fullWidth
+              label="Verified"
+              value={values.verified}
+              onChange={(e) =>
+                setValues({ ...values, verified: e.target.value })
+              }
+            >
+              <MenuItem value={true}>Yes</MenuItem>
+              <MenuItem value={false}>No</MenuItem>
+            </TextField>
+          </Stack>
+        </form>
+      </DialogContent>
+      <DialogActions sx={{ p: "1.25rem" }}>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button color="primary" onClick={handleSubmit} variant="contained">
           Create Worker
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
+
+
 
 export default WorkerManagement;
