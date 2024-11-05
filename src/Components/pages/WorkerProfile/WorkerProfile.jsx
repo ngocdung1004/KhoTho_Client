@@ -1,58 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Avatar, Typography, Button } from "@material-tailwind/react";
 import {
-  MapPinIcon,
-  BriefcaseIcon,
-  BuildingLibraryIcon,
-} from "@heroicons/react/24/solid";
-import { BiStar } from "react-icons/bi";
+  Container,
+  Grid,
+  Paper,
+  Avatar,
+  Typography,
+  Button,
+  Box,
+  Card,
+  CardContent,
+  Rating,
+  Divider,
+  Chip,
+  Stack,
+  IconButton,
+} from "@mui/material";
+import {
+  LocationOn,
+  Work,
+  School,
+  Phone,
+  Email,
+  Message,
+  Verified,
+  CalendarMonth,
+} from "@mui/icons-material";
 
 import { API_ENDPOINT } from "../../../config";
-
-import FeedbackSection from '../../FeedbackSection/FeedbackSection';
-
-import NavBar from '../../NavBar/NavBar';
-import Footer from '../../FooterDiv/Footer';
-import defaultImage from '../../../Assets/about/worker.png';
-
-import feedbackImage from '../../../Assets/testimonial/img1.jpg';
-
-import "./WorkerProfile.css";
-
-
-
+import NavBar from "../../NavBarLogin/NavBar";
+import Footer from "../../FooterDiv/Footer";
+import FeedbackSection from "../../FeedbackSection/FeedbackSection";
+import defaultImage from "../../../Assets/about/worker.png";
 
 const WorkerProfile = () => {
   const { workerId } = useParams();
   const [workerData, setWorkerData] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const [feedbacks, setFeedbacks] = useState([
-    {
-      userName: "Nguyễn Văn A",
-      userAvatar: feedbackImage,
-      rating: 5,
-      text: "Thợ làm rất tốt và chuyên nghiệp. Tôi rất hài lòng!",
-      date: "2024-10-20",
-    },
-    {
-      userName: "Trần Thị B",
-      userAvatar: feedbackImage,
-      rating: 4,
-      text: "Thợ có tay nghề nhưng đến hơi trễ.",
-      date: "2024-10-21",
-    },
-  ]);
-
-  const handleAddFeedback = (newFeedback) => {
-    setFeedbacks([...feedbacks, {
-      userName: "Khách hàng mới",
-      userAvatar: defaultAvatar, // Replace with user's avatar if available
-      ...newFeedback,
-    }]);
-  };
+  const [feedbacks, setFeedbacks] = useState([]);
 
   useEffect(() => {
     const fetchWorkerDetails = async () => {
@@ -70,95 +56,167 @@ const WorkerProfile = () => {
     fetchWorkerDetails();
   }, [workerId]);
 
-  if (loading) return <p className="text-center text-lg font-semibold">Loading...</p>;
-  if (!workerData) return <p className="text-center text-lg font-semibold">No worker data found.</p>;
+  const handleAddFeedback = (newFeedback) => {
+    setFeedbacks([...feedbacks, newFeedback]);
+  };
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+        <Typography variant="h5">Loading...</Typography>
+      </Box>
+    );
+  }
+
+  if (!workerData) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+        <Typography variant="h5">No worker data found.</Typography>
+      </Box>
+    );
+  }
 
   return (
-    <div className='w-[85%] m-auto'>
-      <NavBar/>
-      
-      <section className="relative bg-white py-16 shadow-lg">
-        <div className="container mx-auto">
-          <div className="flex flex-col lg:flex-row start-info">
-            <div className="block_left">
-              <div className="w-450">
-                <Avatar
-                  src={workerData.user.profileImage || defaultImage}
-                  alt="Profile picture"
-                  variant="circular"
-                  className="h-full w-full"
-                />
-              </div>
-              <div className="fullname_verify">
-                <h2 className="fullname">{workerData.user.fullName}</h2>
-                {workerData.verified && (
-                  <p className="verify">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-1"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    Đã xác minh
-                  </p>
-                )}
-              </div>
-
-              <div className="mt-4">
-                <div className="flex items-center gap-2">
-                  <MapPinIcon className="h-4 w-4 text-blue-gray-500" />
-                  <Typography className="font-medium text-blue-gray-500">Bình Định</Typography>
-                </div>
-                <div className="flex items-center gap-2">
-                  <BriefcaseIcon className="h-4 w-4 text-blue-gray-500" />
-                  <Typography className="font-medium text-blue-gray-500">Thợ sửa chữa đồ dân dụng</Typography>
-                </div>
-                <div className="flex items-center gap-2">
-                  <BuildingLibraryIcon className="h-4 w-4 text-blue-gray-500" />
-                  <Typography className="font-medium text-blue-gray-500">Kinh nghiệm {workerData.experienceYears} năm</Typography>
-                </div>
-              </div>
-            </div>
-
-            <div className="block_right">
-              <div className="messenger_book_box">
-                <Button className="book">Đặt lịch</Button>
-                
-                <div className="rating_success">
-                <div className="text-center">
-                  <Typography variant="h5" className="font-bold">
-                    {workerData.rating || 0}
+    <>
+      <NavBar />
+      <Container maxWidth="lg" sx={{ my: 4 }}>
+        <Grid container spacing={4}>
+          {/* Left Column - Profile Info */}
+          <Grid item xs={12} md={4}>
+            <Card elevation={3}>
+              <CardContent>
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Avatar
+                    src={workerData.user.profileImage || defaultImage}
+                    sx={{ width: 200, height: 200, mb: 2 }}
+                  />
+                  <Typography variant="h5" gutterBottom>
+                    {workerData.user.fullName}
+                    {workerData.verified && (
+                      <Verified color="primary" sx={{ ml: 1 }} />
+                    )}
                   </Typography>
-                  <Typography variant="small" className="text-blue-gray-500">
-                    <BiStar className="text-yellow-400" />
+                  <Rating value={workerData.rating || 0} readOnly precision={0.5} />
+                  <Typography color="text.secondary" gutterBottom>
+                    ({workerData.totalReviews || 0} đánh giá)
                   </Typography>
-                </div>
-                <div className="text-center">
-                  <Typography variant="h5" className="font-bold">10</Typography>
-                  <Typography variant="small" className="text-blue-gray-500">Hoàn thành</Typography>
-                </div>
-              </div>
-              </div>
-              
-              <div className="biography">
-                <Typography>{workerData.bio || "Thông tin tiểu sử không có sẵn."}</Typography>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-      </section>
-      <FeedbackSection feedbacks={feedbacks} onSubmitFeedback={handleAddFeedback} />
+                </Box>
+
+                <Divider sx={{ my: 2 }} />
+
+                <Stack spacing={2}>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <LocationOn color="primary" />
+                    <Typography>Bình Định</Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Work color="primary" />
+                    <Typography>Thợ sửa chữa đồ dân dụng</Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <School color="primary" />
+                    <Typography>Kinh nghiệm {workerData.experienceYears} năm</Typography>
+                  </Box>
+                </Stack>
+
+                <Box mt={3}>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    startIcon={<CalendarMonth />}
+                    sx={{ mb: 2 }}
+                  >
+                    Đặt lịch
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    startIcon={<Message />}
+                  >
+                    Nhắn tin
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* Right Column - Details & Stats */}
+          <Grid item xs={12} md={8}>
+            <Stack spacing={3}>
+              {/* About Section */}
+              <Card elevation={3}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Giới thiệu
+                  </Typography>
+                  <Typography color="text.secondary">
+                    {workerData.bio || "Chưa có thông tin giới thiệu."}
+                  </Typography>
+                </CardContent>
+              </Card>
+
+              {/* Stats Section */}
+              <Card elevation={3}>
+                <CardContent>
+                  <Grid container spacing={2}>
+                    <Grid item xs={4}>
+                      <Box textAlign="center">
+                        <Typography variant="h4" color="primary">
+                          {workerData.completedJobs || 0}
+                        </Typography>
+                        <Typography color="text.secondary">
+                          Công việc hoàn thành
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Box textAlign="center">
+                        <Typography variant="h4" color="primary">
+                          {workerData.rating || 0}
+                        </Typography>
+                        <Typography color="text.secondary">
+                          Điểm đánh giá
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Box textAlign="center">
+                        <Typography variant="h4" color="primary">
+                          {workerData.experienceYears || 0}
+                        </Typography>
+                        <Typography color="text.secondary">
+                          Năm kinh nghiệm
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+
+              {/* Skills Section */}
+              <Card elevation={3}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Kỹ năng chuyên môn
+                  </Typography>
+                  <Box display="flex" gap={1} flexWrap="wrap">
+                    {workerData.skills?.map((skill, index) => (
+                      <Chip key={index} label={skill} color="primary" variant="outlined" />
+                    )) || "Chưa có thông tin về kỹ năng."}
+                  </Box>
+                </CardContent>
+              </Card>
+            </Stack>
+          </Grid>
+        </Grid>
+
+        {/* Feedback Section */}
+        <Box mt={4}>
+          <FeedbackSection feedbacks={feedbacks} onSubmitFeedback={handleAddFeedback} />
+        </Box>
+      </Container>
       <Footer />
-    </div>
+    </>
   );
 };
 

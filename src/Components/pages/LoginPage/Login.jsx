@@ -51,6 +51,8 @@ export default function Login() {
             navigate("/dashboard");
           } else if (response.data.userType === 1) {
             navigate("/jobs");
+          } else if (response.data.userType === 2) {
+            navigate("/workers");
           }
         }, 1000);
       } else {
