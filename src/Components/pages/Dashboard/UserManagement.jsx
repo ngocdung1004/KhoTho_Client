@@ -53,21 +53,21 @@ const UserManagement = () => {
 
   const handleCreateNewRow = async (values) => {
     try {
-        const newUser = {
-            ...values,
-            userId: 0, // API will assign the actual ID
-            createdAt: new Date().toISOString(),
-            profilePicture: values.profilePicture || null
-        };
+      const newUser = {
+        ...values,
+        userId: 0,
+        createdAt: new Date().toISOString(),
+        profilePicture: values.profilePicture || null,
+        userType: parseInt(values.userType) // Ensure userType is a number
+      };
 
-        console.log('Creating new user:', newUser); // Log the user data
-        const response = await axios.post(API_URL, newUser);
-        setTableData([...tableData, response.data]);
+      console.log('Creating new user:', newUser);
+      const response = await axios.post(API_URL, newUser);
+      setTableData([...tableData, response.data]);
     } catch (error) {
-        console.error('Error creating user:', error.response ? error.response.data : error.message);
+      console.error('Error creating user:', error.response ? error.response.data : error.message);
     }
-};
-
+  };
 
   const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
     if (Object.keys(validationErrors).length) return;
@@ -78,7 +78,8 @@ const UserManagement = () => {
         ...values,
         userId: userId,
         createdAt: row.original.createdAt,
-        profilePicture: values.profilePicture || null
+        profilePicture: values.profilePicture || null,
+        userType: parseInt(values.userType) // Ensure userType is a number
       };
       
       await axios.put(`${API_URL}/${userId}`, updatedUser);
@@ -107,6 +108,18 @@ const UserManagement = () => {
     },
     [tableData],
   );
+
+  const USER_TYPES = {
+    ADMIN: 'Admin',
+    WORKER: 'Worker',
+    CUSTOMER: 'Customer'
+  };
+
+  const USER_TYPE_VALUES = {
+    [USER_TYPES.ADMIN]: 0,
+    [USER_TYPES.WORKER]: 2,
+    [USER_TYPES.CUSTOMER]: 1
+  };
 
   const columns = useMemo(
     () => [
@@ -149,16 +162,16 @@ const UserManagement = () => {
         header: 'User Type',
         muiTableBodyCellEditTextFieldProps: {
           select: true,
-          children: [
-            { value: 0, label: 'Admin' },
-            { value: 1, label: 'Customer' }
-          ].map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          children: Object.entries(USER_TYPE_VALUES).map(([label, value]) => (
+            <MenuItem key={value} value={value}>
+              {label}
             </MenuItem>
           )),
         },
-        Cell: ({ cell }) => (cell.getValue() === 0 ? 'Admin' : 'Customer'),
+        Cell: ({ cell }) => {
+          const userTypeValue = cell.getValue();
+          return Object.entries(USER_TYPE_VALUES).find(([, value]) => value === userTypeValue)?.[0] || '';
+        },
       },
       {
         accessorKey: 'createdAt',
@@ -247,7 +260,12 @@ const CreateNewUserModal = ({ open, columns, onClose, onSubmit }) => {
   );
 
   const handleSubmit = () => {
-    onSubmit(values);
+    // Convert userType to number before submitting
+    const processedValues = {
+      ...values,
+      userType: values.userType ? parseInt(values.userType) : 1 // Default to Customer (1) if not specified
+    };
+    onSubmit(processedValues);
     onClose();
   };
 

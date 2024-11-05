@@ -31,6 +31,8 @@ const DashboardContent = () => {
   const [reviews, setReviews] = useState([]);
   const [workersByJobType, setWorkersByJobType] = useState({});
   const [workerJobTypes, setWorkerJobTypes] = useState([]);
+  
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,24 +97,24 @@ const DashboardContent = () => {
   };
 
   // Calculate user distribution
-  const adminCount = users.filter((user) => user.userType === 0).length;
-  const customerCount = users.filter((user) => user.userType === 1).length;
-  const workerCount = users.filter((user) => user.userType === 2).length;
+const verifiedWorkerCount = workers.filter(worker => worker.verified).length;
+const customerCount = users.filter(user => user.userType === 1).length;
+const adminCount = users.filter(user => user.userType === 0).length;
 
-  const pieData = {
-    labels: ["Khách hàng", "Thợ đã xác minh", "Admin"],
-    datasets: [
-      {
-        data: [customerCount, workerCount, adminCount],
-        backgroundColor: [
-          "rgba(54, 162, 235, 0.8)",
-          "rgba(153, 102, 255, 0.8)",
-          "rgba(255, 99, 132, 0.8)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+const pieData = {
+  labels: ["Khách hàng", "Thợ đã xác minh", "Admin"],
+  datasets: [
+    {
+      data: [customerCount, verifiedWorkerCount, adminCount],
+      backgroundColor: [
+        "rgba(54, 162, 235, 0.8)",
+        "rgba(153, 102, 255, 0.8)",
+        "rgba(255, 99, 132, 0.8)",
+      ],
+      borderWidth: 1,
+    },
+  ],
+};
 
   const barData = {
     labels: jobTypes.map((job) => job.jobTypeName),
