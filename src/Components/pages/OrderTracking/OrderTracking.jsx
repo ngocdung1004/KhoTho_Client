@@ -22,7 +22,7 @@ import Search from '../../SearchNOFilter/Search'
 //   } from "@mui/material";
 // import { useParams } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
-import * as config from "../../../config";
+import * as config from "../../../services/config";
 import "./OrderTracking.css"
 
 

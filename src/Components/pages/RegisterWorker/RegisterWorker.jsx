@@ -4,7 +4,7 @@ import NavBar from '../../NavBar/NavBar';
 import './RegisterWorker.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import * as config from "../../../config";
+import * as config from "../../../services/config";
 
 const RegisterWorker = () => {
     const [profileImage, setProfileImage] = useState(null);
