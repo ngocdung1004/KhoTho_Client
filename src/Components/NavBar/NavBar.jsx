@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import "./styles/NavBar.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
   return (
@@ -15,6 +17,10 @@ const NavBar = () => {
       </div>
 
       <div className="menu flex gap-8">
+        <Link to="/registerworker" className="menuList highlightLink text-[#6f6f6f] hover:text-blueColor">
+          <FontAwesomeIcon icon={faStar} className="highlightIcon" />
+          Bắt đầu nhận việc
+        </Link>
         <Link to="/jobs" className="menuList text-[#6f6f6f] hover:text-blueColor">Công việc</Link>
         <Link to="/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Khách hàng</Link>
         <Link to="/about" className="menuList text-[#6f6f6f] hover:text-blueColor">Giới thiệu</Link>
