@@ -28,7 +28,7 @@ import {
   CalendarMonth,
 } from "@mui/icons-material";
 
-import { API_ENDPOINT } from "../../../config";
+import { API_ENDPOINT } from "../../../services/config";
 import NavBar from "../../NavBarLogin/NavBar";
 import Footer from "../../FooterDiv/Footer";
 import FeedbackSection from "../../FeedbackSection/FeedbackSection";

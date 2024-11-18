@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import authService from "../../../services/authService";
 import { TEInput, TERipple } from "tw-elements-react";
 import { Snackbar, Alert, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { API_ENDPOINT } from "../../../config";
 import "./Login.css";
 
 export default function Login() {
@@ -28,44 +27,41 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${API_ENDPOINT}/api/Auth/login`, {
-        email,
-        password,
-      });
-  
-      if (response.data && response.data.token) {
-        // Lưu token và thông tin user vào localStorage
-        localStorage.setItem("authToken", response.data.token);
-        localStorage.setItem("userType", response.data.userType);
-        localStorage.setItem("userData", JSON.stringify(response.data));
-  
+      const userData = await authService.login(email, password);
+
+      if (userData && userData.token) {
+        // Lưu thông tin user vào localStorage
+        localStorage.setItem("authToken", userData.token);
+        localStorage.setItem("userType", userData.userType);
+        localStorage.setItem("userData", JSON.stringify(userData));
+
         setNotification({
           open: true,
           message: "Đăng nhập thành công!",
           severity: "success",
         });
-  
-        // Chuyển hướng dựa trên userType
+
+        // Điều hướng dựa trên userType
         setTimeout(() => {
-          if (response.data.userType === 0) {
-            navigate("/dashboard");
-          } else if (response.data.userType === 1) {
-            navigate("/jobs");
-          } else if (response.data.userType === 2) {
-            navigate("/workers");
+          switch (userData.userType) {
+            case 0:
+              navigate("/dashboard");
+              break;
+            case 1:
+              navigate("/jobs");
+              break;
+            case 2:
+              navigate("/workers");
+              break;
+            default:
+              navigate("/");
           }
         }, 1000);
-      } else {
-        setNotification({
-          open: true,
-          message: "Đăng nhập thất bại! Vui lòng kiểm tra lại.",
-          severity: "error",
-        });
       }
     } catch (error) {
       setNotification({
         open: true,
-        message: "Lỗi khi đăng nhập! Vui lòng thử lại.",
+        message: error.response?.data || "Lỗi khi đăng nhập! Vui lòng thử lại.",
         severity: "error",
       });
     }
@@ -73,6 +69,7 @@ export default function Login() {
 
   return (
     <section className="flex items-center justify-center min-h-screen bg-neutral-200 dark:bg-neutral-700">
+      {/* Thông báo đăng nhập */}
       <Snackbar
         open={notification.open}
         autoHideDuration={3000}
@@ -89,6 +86,7 @@ export default function Login() {
         </Alert>
       </Snackbar>
 
+      {/* Form đăng nhập */}
       <div className="w-full max-w-md p-10">
         <div className="bg-white shadow-lg dark:bg-neutral-800 rounded-lg">
           <div className="p-8">
@@ -154,7 +152,7 @@ export default function Login() {
                 </div>
               </div>
 
-              {/* Submit button */}
+              {/* Nút Đăng nhập */}
               <div className="text-center mb-4">
                 <TERipple rippleColor="light" className="w-full">
                   <button
@@ -176,7 +174,7 @@ export default function Login() {
                 </a>
               </div>
 
-              {/* Register button */}
+              {/* Đăng ký */}
               <div className="flex items-center justify-between pb-6">
                 <p className="mb-0 mr-2 text-sm">Bạn chưa có tài khoản?</p>
                 <TERipple rippleColor="light">
