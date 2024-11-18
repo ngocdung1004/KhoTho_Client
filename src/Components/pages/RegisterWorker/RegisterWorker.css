@@ -1,0 +1,283 @@
+/* RegisterWorker.css */
+
+/* body */
+
+.body {
+    margin: 50px 0px 200px 0px;
+}
+
+.block {
+    font-size: 18px;
+}
+
+/* Global Styles */
+.white-color-sl {
+    background-color: #ffffff;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-gray-600 {
+    color: #4b5563;
+  }
+  
+  .text-gray-500 {
+    color: #6b7280;
+  }
+  
+  
+  .m-auto {
+    margin: auto;
+  }
+  
+  .flex {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .mt-6 {
+    margin-top: 1.5rem;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  
+  /* Profile Section */
+  .profile-details {
+    width: 50%;
+  }
+  
+  .profile-image-container {
+    position: relative;
+  }
+  
+/* Profile Image */
+.profile-image {
+    width: 10rem; /* Increase width */
+    height: 10rem; /* Increase height */
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #d1d5db;
+  }
+  
+  .upload-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #e5e7eb;
+    border-radius: 50%;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .upload-icon:hover {
+    background-color: #cbd5e1;
+  }
+  
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1rem;
+  }
+  
+  p {
+    color: #6b7280;
+  }
+  
+  .statistics {
+    display: flex;
+    justify-content: space-around;
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-bottom: 1rem;
+  }
+  
+  .font-semibold {
+    font-weight: 600;
+  }
+  
+  .public-profile-button {
+    background-color: #2563eb;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .public-profile-button:hover {
+    background-color: #1d4ed8;
+  }
+  
+  .profile-link {
+    display: block;
+    text-decoration: underline;
+    color: #3b82f6;
+  }
+  
+  /* left block */
+  .left-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+  }
+  /* Right Section */
+  .right-block {
+    width: 60%;
+    height: 700px;
+  }
+  
+  .settings-tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  
+  .tab {
+    padding-bottom: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: #4b5563;
+    transition: border-color 0.3s ease;
+  }
+  
+  .tab:hover {
+    border-bottom: 2px solid #2563eb;
+  }
+  
+  .tab.cursor-pointer {
+    padding-bottom: 0.5rem;
+  }
+  
+  .form-container {
+    margin-top: 1.5rem;
+  }
+  
+  /* Form Elements */
+  .form-row {
+    margin-bottom: 1rem;
+  }
+  
+  label {
+    font-size: 0.875rem;
+    color: #4b5563;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 2px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-sizing: border-box;
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: #2563eb;
+  }
+  
+  .select-field {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #d1d5db;
+    border-radius: 0.375rem;
+  }
+  
+  .update-button {
+    background-color: #2563eb;
+    color: white;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .update-button:hover {
+    background-color: #1d4ed8;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .flex {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .profile-details, .right-block {
+      width: 100%;
+      text-align: center;
+    }
+  
+    .profile-image {
+      width: 5rem;
+      height: 5rem;
+    }
+  
+    .statistics {
+      flex-direction: column;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+  
+    .public-profile-button {
+      width: 100%;
+      margin-top: 1rem;
+    }
+  
+    .form-container {
+      margin-top: 2rem;
+    }
+  }
+
+
+ /* Center the section title */
+.section-title {
+    font-size: 2rem; /* Make the title larger */
+    font-weight: 600; /* Semi-bold font weight */
+    color: #2c3e50; /* Dark color for readability */
+    text-transform: uppercase; /* Uppercase letters for emphasis */
+    letter-spacing: 2px; /* Slight letter spacing for a modern look */
+    text-align: center; /* Center text horizontally */
+    position: relative; /* For adding decoration like the underline */
+    display: flex;
+    justify-content: center; /* Horizontally center the title */
+    align-items: center; /* Vertically center the title */
+    height: 100%; /* Ensure it takes the full height of its container */
+  }
+  
+  /* Symbols and additional icons */
+  .section-title .symbol-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px; /* Space between the title and the symbols */
+  }
+  .symbol-container{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  /* Symbol styles */
+  .symbol-container span {
+    font-size: 1.5rem; /* Larger icons */
+    color: #3498db; /* Match the underline color */
+    margin: 0 10px; /* Space between symbols */
+  }
+  
+  /* Hover effect for color change */
+  .section-title:hover {
+    color: #3498db; /* Blue color on hover */
+    transition: color 0.3s ease-in-out; /* Smooth color transition */
+  }
+  
+

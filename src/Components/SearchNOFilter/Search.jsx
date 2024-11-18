@@ -244,7 +244,7 @@ const Search = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="">
 
       {/* Kết quả tìm kiếm */}
       <div className="mt-8">

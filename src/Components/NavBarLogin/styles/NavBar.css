@@ -19,12 +19,49 @@
 .logo-font-yellow{
     color: rgb(255 182 42);
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> khaihoan
 .menuList {
-    display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.menuList {
+    text-decoration: none; /* Loại bỏ gạch chân ở trạng thái mặc định */
+    color: #6f6f6f;
+    transition: color 0.3s ease;
+}
+
+.menuList:hover {
+    color: #2a68ff; /* Đổi màu khi hover */
+    text-decoration: none; /* Đảm bảo không có gạch chân khi hover */
+}
+
+.highlightLink {
+    position: relative;
+    color: #ff9800;
+    font-weight: bold;
+    align-items: center; /* Ensures both icon and text are centered vertically */
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.highlightLink:hover {
+    color: #ff9800;
+    transform: scale(1.1);
+}
+
+/* Icon styling */
+.highlightIcon {
+    margin-right: 6px; /* Adjust the spacing between icon and text */
+    color: #ff9800;
+    animation: pulse 1.5s infinite;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.5);
+    }
 }
