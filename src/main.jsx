@@ -18,6 +18,8 @@ import WorkerManagement from './Components/pages/Dashboard/WorkerManagement';
 import JobTypeManagement from './Components/pages/Dashboard/JobTypeManagement';
 import ReviewManagement from './Components/pages/Dashboard/ReviewManagement';
 import WorkerDashboard from './Components/pages/Dashboard/Worker/WorkDashboard';
+import RegisterWorker from './Components/pages/RegisterWorker/RegisterWorker'
+import OrderTracking from './Components/pages/OrderTracking/OrderTracking'
 import Profile from './Components/pages/MyProfile/Profile';
 import './index.css';
 
@@ -25,7 +27,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/khotho" element={<Jobs />} />  
+      {/* <Route path="/khotho" element={<Jobs />} />  */}
+        <Route path="/khotho" element={<OrderTracking />} />  
         <Route path="/jobs" element={<App />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
@@ -44,6 +47,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/admin/jobtypes" element={<JobTypeManagement />} />
         <Route path="/admin/reviews" element={<ReviewManagement />} />
         <Route path="/workers" element={<WorkerDashboard/>} />
+        <Route path="/registerworker" element={<RegisterWorker/>} />
+        <Route path="/ordertracking" element={<OrderTracking/>} />
+        
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
