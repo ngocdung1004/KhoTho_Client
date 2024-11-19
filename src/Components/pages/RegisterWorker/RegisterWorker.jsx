@@ -252,7 +252,7 @@ const RegisterWorker = () => {
 
             {/* Form for CCCD (Citizen ID) */}
             {activeTab === 'cccd' && (
-              <div className="form-container">
+              <div className="form-container maskA">
                 <div className="form-row mb-4">
                   <label className="block text-gray-600">Mặt trước CCCD</label>
                   <input 
