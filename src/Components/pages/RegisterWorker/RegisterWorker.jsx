@@ -5,8 +5,13 @@ import './RegisterWorker.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import * as config from "../../../services/config";
+import { API_ENDPOINT } from "../../../services/config";
 
 const RegisterWorker = () => {
+
+    const navigate = useNavigate();
+
+
     const [profileImage, setProfileImage] = useState(null);
     const [activeTab, setActiveTab] = useState('basicInfo'); // State to track active tab
     const [frontCCCD, setFrontCCCD] = useState(null);  // State for front image
@@ -24,42 +29,60 @@ const RegisterWorker = () => {
     const [yearsExperience, setYearsExperience] = useState(0);
     const [selfIntroduction, setSelfIntroduction] = useState('');
 
+    const [Workers, setWorkers] = useState(null)
 
-    // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleSubmit_ = async (e) => {
+      e.preventDefault();
+    
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          alert('Bạn cần đăng nhập để thực hiện thao tác này!');
+          return;
+        }
 
-    const formData = new FormData();
-    formData.append('profileImage', profileImage);
-    formData.append('frontCCCD', frontCCCD);
-    formData.append('backCCCD', backCCCD);
-    formData.append('name', name);
-    formData.append('lastName', lastName);
-    formData.append('phone', phone);
-    formData.append('email', email);
-    formData.append('address', address);
-    formData.append('nationality', nationality);
-    formData.append('industryGroup', industryGroup);
-    formData.append('specialization', specialization);
-    formData.append('yearsOfExperience', yearsOfExperience);
-    formData.append('selfIntroduction', selfIntroduction);
+        const userData = localStorage.getItem('userData');
+        if (!userData) {
+          alert('Không tìm thấy userData. Vui lòng đăng nhập lại!');
+          return;
+        }
 
-    try {
-      const response = await axios.post(`${config.API_URL}/api/register-worker`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+        const parsedUserData = JSON.parse(userData);
+        const userId = parsedUserData.userId;
+        if (!userId) {
+          alert('Không tìm thấy userId. Vui lòng đăng nhập lại!');
+          return;
+        }
 
-      // Handle successful response
-      console.log('Response:', response);
-      alert('Đăng ký thành công!');
-    } catch (error) {
-      // Handle error
-      console.error('Error:', error);
-      alert('Có lỗi xảy ra, vui lòng thử lại!');
-    }
-  };
+        const workerData = {
+          userID: userId,  
+          experienceYears: yearsExperience,
+          rating: 0,
+          bio: selfIntroduction,
+          verified: true,
+          jobTypeIds: [industryGroup],
+        };
+    
+    
+        const postResponse = await axios.post(
+          `${API_ENDPOINT}/api/Workers`,
+          workerData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${token}`,
+            },
+          }
+        );
+  
+        alert('Đăng ký thành công!');
+        setTimeout(() => navigate("/ordertracking"), 1000);
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Có lỗi xảy ra, vui lòng thử lại!');
+      }
+    };
+    
 
   // Handle file upload
   const handleImageUpload = (event) => {
@@ -184,7 +207,7 @@ const RegisterWorker = () => {
                   </select>
                 </div>
                 <button className="update-button bg-blue-600 text-white rounded-md px-4 py-2 w-full mt-4"
-                onClick={handleSubmit}>
+                onClick={handleSubmit_}>
                   Xác nhận thông tin
                 </button>
               </div>
