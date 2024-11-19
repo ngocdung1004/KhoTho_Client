@@ -25,6 +25,7 @@ import Search from '../../SearchNOFilter/Search'
 import * as config from "../../../services/config";
 import "./OrderTracking.css"
 
+import { useParams } from "react-router-dom";
 
 const OrderTracking = () => {
 
@@ -35,6 +36,9 @@ const OrderTracking = () => {
     const [isCompleted, setIsCompleted] = useState(false);
     const [isBoxCompleted, setIsBoxCompleted] = useState(false);
     const [isEndRating, setIsEndRating] = useState(false);
+
+    const navigate = useNavigate();
+    const { bookingID } = useParams();
     
     const handleConfirm = () => {
         setIsBoxCompleted(true);
