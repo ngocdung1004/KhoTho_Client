@@ -1,271 +1,262 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import NavBar from '../../../NavBarLogin/NavBar';
+import Footer from '../../../FooterDiv/Footer';
 import {
   Box,
   Container,
-  Typography,
   Grid,
+  Paper,
+  Typography,
   Card,
   CardContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
+  CardActions,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
+  Avatar,
   Rating,
-  Switch,
-  FormControlLabel
+  Chip,
+  Divider,
+  CircularProgress,
+  Alert
 } from '@mui/material';
-import { Edit, Delete, Add } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+
+const StatusChip = styled(Chip)(({ status }) => {
+  const statusColors = {
+    pending: { bg: '#fff3e0', color: '#f57c00' },
+    accepted: { bg: '#e8f5e9', color: '#2e7d32' },
+    rejected: { bg: '#ffebee', color: '#c62828' },
+    completed: { bg: '#e3f2fd', color: '#1565c0' }
+  };
+  const currentStatus = status?.toLowerCase() || 'pending';
+  return {
+    backgroundColor: statusColors[currentStatus].bg,
+    color: statusColors[currentStatus].color,
+    fontWeight: 'bold'
+  };
+});
 
 const WorkerDashboard = () => {
-  const [workers, setWorkers] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [selectedWorker, setSelectedWorker] = useState(null);
-  const [formData, setFormData] = useState({
-    userId: '',
-    experienceYears: 0,
-    rating: 0,
-    bio: '',
-    verified: false
-  });
+  const [bookings, setBookings] = useState([]);
+  const [worker, setWorker] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = localStorage.getItem('authToken');
 
-  useEffect(() => {
-    fetchWorkers();
-  }, []);
+    useEffect(() => {
+      const fetchWorkerData = async () => {
+        if (!token) {
+            setError('Not authenticated');
+            setLoading(false);
+            return;
+        }
+    
+        try {
+            const response = await axios.get('https://localhost:7062/api/Workers/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            console.log('Worker data:', response.data); // Add this to debug
+            setWorker(response.data);
+            
+            // Only call fetchBookings if workerId exists
+            if (response.data?.workerId) { // Note: check if it's workerID instead of workerId
+                fetchBookings(response.data.workerId);
+            } else {
+                setError('Worker ID not found');
+                setLoading(false);
+            }
+        } catch (err) {
+            if (err.response?.status === 401) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                localStorage.removeItem('userType');
+                window.location.href = '/login';
+            }
+            setError(err.message);
+            setLoading(false);
+        }
+    };
 
-  const fetchWorkers = async () => {
+        fetchWorkerData();
+    }, [token]);
+
+    const fetchBookings = async (workerId) => {
+        try {
+            const response = await axios.get(`https://localhost:7062/api/Booking/worker/${workerId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setBookings(response.data);
+            setLoading(false);
+        } catch (err) {
+            setError(err.message);
+            setLoading(false);
+        }
+    };
+
+    const handleUpdateBookingStatus = async (bookingId, newStatus) => {
     try {
-      const response = await fetch('https://localhost:7062/api/Workers');
-      const data = await response.json();
-      setWorkers(data);
-    } catch (error) {
-      console.error('Error fetching workers:', error);
+        await axios.put(`https://localhost:7062/api/Booking/${bookingId}/status`, 
+            JSON.stringify(newStatus), 
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+        // Check if worker.workerID exists before calling fetchBookings
+        if (worker?.workerId) {
+            fetchBookings(worker.workerId);
+        }
+    } catch (err) {
+        setError(err.message);
     }
-  };
+};
 
-  const handleOpen = (worker = null) => {
-    if (worker) {
-      setEditMode(true);
-      setSelectedWorker(worker);
-      setFormData({
-        userId: worker.userId,
-        experienceYears: worker.experienceYears,
-        rating: worker.rating,
-        bio: worker.bio,
-        verified: worker.verified
-      });
-    } else {
-      setEditMode(false);
-      setSelectedWorker(null);
-      setFormData({
-        userId: '',
-        experienceYears: 0,
-        rating: 0,
-        bio: '',
-        verified: false
-      });
-    }
-    setOpen(true);
-  };
+if (loading) return (
+  <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+      <CircularProgress />
+  </Box>
+);
 
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedWorker(null);
-    setFormData({
-      userId: '',
-      experienceYears: 0,
-      rating: 0,
-      bio: '',
-      verified: false
-    });
-  };
+if (error) return (
+  <Box p={3}>
+      <Alert severity="error">{error}</Alert>
+  </Box>
+);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (editMode) {
-        // Update worker
-        await fetch(`https://localhost:7062/api/Workers/${selectedWorker.workerId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...formData,
-            workerId: selectedWorker.workerId
-          }),
-        });
-      } else {
-        // Create worker
-        await fetch('https://localhost:7062/api/Workers', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-      }
-      handleClose();
-      fetchWorkers();
-    } catch (error) {
-      console.error('Error saving worker:', error);
-    }
-  };
-
-  const handleDelete = async (workerId) => {
-    if (window.confirm('Are you sure you want to delete this worker?')) {
-      try {
-        await fetch(`https://localhost:7062/api/Workers/${workerId}`, {
-          method: 'DELETE',
-        });
-        fetchWorkers();
-      } catch (error) {
-        console.error('Error deleting worker:', error);
-      }
-    }
-  };
-
-  return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h4" component="h1">
-          Worker Management
-        </Typography>
-        <Button
-          variant="contained"
-          startIcon={<Add />}
-          onClick={() => handleOpen()}
-        >
-          Add New Worker
-        </Button>
-      </Box>
-
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Worker ID</TableCell>
-                  <TableCell>Full Name</TableCell>
-                  <TableCell>Experience (Years)</TableCell>
-                  <TableCell>Rating</TableCell>
-                  <TableCell>Bio</TableCell>
-                  <TableCell>Verified</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {workers.map((worker) => (
-                  <TableRow key={worker.workerId}>
-                    <TableCell>{worker.workerId}</TableCell>
-                    <TableCell>{worker.user?.fullName}</TableCell>
-                    <TableCell>{worker.experienceYears}</TableCell>
-                    <TableCell>
-                      <Rating value={worker.rating} readOnly precision={0.1} />
-                    </TableCell>
-                    <TableCell>{worker.bio}</TableCell>
-                    <TableCell>{worker.verified ? 'Yes' : 'No'}</TableCell>
-                    <TableCell>
-                      <Button
-                        size="small"
-                        startIcon={<Edit />}
-                        onClick={() => handleOpen(worker)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        size="small"
-                        color="error"
-                        startIcon={<Delete />}
-                        onClick={() => handleDelete(worker.workerId)}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
-      </Grid>
-
-      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>{editMode ? 'Edit Worker' : 'Add New Worker'}</DialogTitle>
-        <form onSubmit={handleSubmit}>
-          <DialogContent>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="User ID"
-                  value={formData.userId}
-                  onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
-                  disabled={editMode}
-                />
+return (
+  <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <NavBar />
+      
+      <Container maxWidth="lg" sx={{ flex: 1, py: 4 }}>
+          <Grid container spacing={3}>
+              {/* Worker Profile Section */}
+              <Grid item xs={12} md={4}>
+                  <Paper elevation={3} sx={{ p: 3 }}>
+                      <Typography variant="h5" gutterBottom fontWeight="bold">
+                          Worker Profile
+                      </Typography>
+                      {worker && (
+                          <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+                              <Avatar
+                                  src={worker.user.profilePicture || 'default-avatar.png'}
+                                  sx={{ width: 120, height: 120 }}
+                              />
+                              <Typography variant="h6">
+                                  {worker.user.fullName}
+                              </Typography>
+                              <Box sx={{ width: '100%' }}>
+                                  <Typography variant="body1" gutterBottom>
+                                      Experience: {worker.experienceYears} years
+                                  </Typography>
+                                  <Box display="flex" alignItems="center" gap={1}>
+                                      <Typography>Rating:</Typography>
+                                      <Rating value={worker.rating} readOnly precision={0.5} />
+                                      <Typography>({worker.rating}/5)</Typography>
+                                  </Box>
+                                  <Typography variant="body1" sx={{ mt: 2 }}>
+                                      Bio: {worker.bio}
+                                  </Typography>
+                              </Box>
+                          </Box>
+                      )}
+                  </Paper>
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Experience Years"
-                  type="number"
-                  value={formData.experienceYears}
-                  onChange={(e) => setFormData({ ...formData, experienceYears: parseInt(e.target.value) })}
-                />
+
+              {/* Bookings Section */}
+              <Grid item xs={12} md={8}>
+                  <Paper elevation={3} sx={{ p: 3 }}>
+                      <Typography variant="h5" gutterBottom fontWeight="bold">
+                          Bookings
+                      </Typography>
+                      <Divider sx={{ mb: 2 }} />
+                      
+                      <Box display="flex" flexDirection="column" gap={2}>
+                          {bookings.map((booking) => (
+                              <Card key={booking.bookingID} elevation={2}>
+                                  <CardContent>
+                                      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                                          <Typography variant="h6">
+                                              Booking #{booking.bookingID}
+                                          </Typography>
+                                          <StatusChip
+                                              label={booking.status}
+                                              status={booking.status}
+                                          />
+                                      </Box>
+                                      
+                                      <Grid container spacing={2}>
+                                          <Grid item xs={12} sm={6}>
+                                              <Typography gutterBottom>
+                                                  Date: {new Date(booking.bookingDate).toLocaleDateString()}
+                                              </Typography>
+                                              <Typography gutterBottom>
+                                                  Time: {booking.startTime} - {booking.endTime}
+                                              </Typography>
+                                              <Typography gutterBottom>
+                                                  Total Hours: {booking.totalHours}
+                                              </Typography>
+                                          </Grid>
+                                          <Grid item xs={12} sm={6}>
+                                              <Typography gutterBottom>
+                                                  Rate: ${booking.hourlyRate}/hour
+                                              </Typography>
+                                              <Typography gutterBottom>
+                                                  Total Amount: ${booking.totalAmount}
+                                              </Typography>
+                                              <Typography gutterBottom>
+                                                  Notes: {booking.notes}
+                                              </Typography>
+                                          </Grid>
+                                      </Grid>
+                                  </CardContent>
+
+                                  <CardActions sx={{ p: 2, justifyContent: 'flex-end' }}>
+                                      {booking.status === "Pending" && (
+                                          <>
+                                              <Button
+                                                  variant="contained"
+                                                  color="success"
+                                                  onClick={() => handleUpdateBookingStatus(booking.bookingID, "Accepted")}
+                                              >
+                                                  Accept Booking
+                                              </Button>
+                                              <Button
+                                                  variant="contained"
+                                                  color="error"
+                                                  onClick={() => handleUpdateBookingStatus(booking.bookingID, "Rejected")}
+                                                  sx={{ ml: 1 }}
+                                              >
+                                                  Reject Booking
+                                              </Button>
+                                          </>
+                                      )}
+                                      {booking.status === "Accepted" && (
+                                          <Button
+                                              variant="contained"
+                                              color="primary"
+                                              onClick={() => handleUpdateBookingStatus(booking.bookingID, "Completed")}
+                                          >
+                                              Mark as Complete
+                                          </Button>
+                                      )}
+                                  </CardActions>
+                              </Card>
+                          ))}
+                      </Box>
+                  </Paper>
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Rating"
-                  type="number"
-                  inputProps={{ step: 0.1, min: 0, max: 5 }}
-                  value={formData.rating}
-                  onChange={(e) => setFormData({ ...formData, rating: parseFloat(e.target.value) })}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Bio"
-                  multiline
-                  rows={4}
-                  value={formData.bio}
-                  onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.verified}
-                      onChange={(e) => setFormData({ ...formData, verified: e.target.checked })}
-                    />
-                  }
-                  label="Verified"
-                />
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit" variant="contained">
-              {editMode ? 'Update' : 'Create'}
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </Container>
-  );
+          </Grid>
+      </Container>
+
+      <Footer />
+  </Box>
+);
 };
 
 export default WorkerDashboard;
