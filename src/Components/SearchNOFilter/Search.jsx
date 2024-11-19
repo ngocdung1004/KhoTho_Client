@@ -5,7 +5,7 @@ import { MdWorkOutline, MdVerified } from "react-icons/md";
 import { BsBriefcase } from "react-icons/bs";
 import { FaStar } from "react-icons/fa";
 import { BiStar } from "react-icons/bi";
-import { API_ENDPOINT } from "../../services/config";
+import { API_ENDPOINT } from "../../config";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";

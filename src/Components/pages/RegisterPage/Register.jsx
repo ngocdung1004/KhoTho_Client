@@ -4,7 +4,7 @@ import axios from "axios";
 import { TEInput, TERipple } from "tw-elements-react";
 import { Snackbar, Alert, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { API_ENDPOINT } from "../../../services/config";
+import { API_ENDPOINT } from "../../../config";
 import "./Register.css";
 
 export default function Register() {

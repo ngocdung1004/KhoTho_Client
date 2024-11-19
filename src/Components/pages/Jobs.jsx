@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Footer from '../FooterDiv/Footer';
 import NavBar from '../NavBar/NavBar';
-import * as config from "../../services/config.jsx"; // Ensure this file contains the correct API URL
+import * as config from "../../config.jsx"; // Ensure this file contains the correct API URL
 import { useNavigate } from "react-router-dom";
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
