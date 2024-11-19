@@ -1,125 +1,154 @@
-import React from 'react'
-import {BiTimeFive} from 'react-icons/bi'
-
-import logo1 from '../../Assets/logo1.png'
-import logo2 from '../../Assets/logo2.png'
-import logo3 from '../../Assets/logo3.png'
-import logo4 from '../../Assets/logo4.png'
-import logo5 from '../../Assets/logo5.png'
-import logo6 from '../../Assets/logo6.png'
-import logo7 from '../../Assets/logo7.png'
-import logo8 from '../../Assets/logo8.png'
-
-
-const Data = [
-  {
-    id:1,
-    image:logo1,
-    title: 'App Developer',
-    time: '12H',
-    location: 'Canada',
-    desc: ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    company: 'Apple Inc.',
-  },
-  {
-    id:2,
-    image:logo2,
-    title: 'web Developer',
-    time: '2d',
-    location: 'America',
-    desc: ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    company: 'Microsoft',
-  },
-  {
-    id:3,
-    image:logo3,
-    title: 'UI Designer',
-    time: 'Now',
-    location: 'Australia',
-    desc: ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    company: 'ORACLE',
-  },
-  {
-    id:4,
-    image:logo4,
-    title: 'Software Engineer',
-    time: '5d',
-    location: 'London',
-    desc: ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    company: 'IBM',
-  },
-  {
-    id:5,
-    image:logo5,
-    title: 'Data Analyst',
-    time: '5H',
-    location: 'France',
-    desc: ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    company: 'Adobe',
-  },
-  {
-    id:6,
-    image:logo6,
-    title: 'Product Designer',
-    time: '14H',
-    location: 'Germany',
-    desc: ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    company: 'DELL',
-  },
-  {
-    id:7,
-    image:logo7,
-    title: 'UI/UX Designer',
-    time: 'Now',
-    location: 'Turkey',
-    desc: ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    company: 'Google',
-  },
-  {
-    id:8,
-    image:logo8,
-    title: 'Java Developer',
-    time: '2H',
-    location: 'Moscow',
-    desc: ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    company: 'hp',
-  }
-]
+import React, { useEffect, useState } from 'react';
+import { BiTimeFive, BiStar } from 'react-icons/bi';
+import { MdVerified, MdLocationOn } from 'react-icons/md';
+import { BsBriefcase } from 'react-icons/bs';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 const Jobs = () => {
-  return (
-    <div>
-      <div className="jobContainer flex gap-10 justify-center flex-wrap items-center py-10">
-        {
-          Data.map(({id,image,title,time,location,desc,company}) => {
-            return (
-              <div key={id} className="group group/item singleJob w-[250px] p-[20px] bg-white rounded-[10px] hover:bg-blueColor shadow-lg shadow-greyIsh-400/700 hover:shadow-lg">
+  const [workers, setWorkers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const workersPerPage = 8;
 
-          <span className='flex justify-between items-center gap-4'>
-            <h1 className='text-[16px] font-semibold text-textColor group-hover:text-white'>{title}</h1>
-            <span className='flex items-center text-[#ccc] gap-1' >
-              <BiTimeFive/> {time}
-            </span>
-          </span>
-          <h6 className='text-[#ccc]'> {location} </h6>
-          <p className='text-[13px] text-[#959595] pt-[20px] border-t-[2px] mt-[]20px group-hover:text-white'>
-          {desc}
-          </p>
+  useEffect(() => {
+    setLoading(true);
+    fetch('https://localhost:7062/api/Workers')
+      .then(response => response.json())
+      .then(data => {
+        setWorkers(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching workers:', error);
+        setLoading(false);
+      });
+  }, []);
 
-          <div className='company flex items-center gap-2'>
-            <img src={image} alt="Company Logo" className='w-[15%]'/>
-            <span className='text-[14px] py-[1rem] block group-hover:text-white' >{company}</span>
+  // Tính toán các worker cho trang hiện tại
+  const indexOfLastWorker = currentPage * workersPerPage;
+  const indexOfFirstWorker = indexOfLastWorker - workersPerPage;
+  const currentWorkers = workers.slice(indexOfFirstWorker, indexOfLastWorker);
+  const totalPages = Math.ceil(workers.length / workersPerPage);
+
+  // Xử lý chuyển trang
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Component cho nút phân trang
+  const PaginationButton = ({ page, isActive, onClick }) => (
+    <button
+      onClick={onClick}
+      className={`px-4 py-2 mx-1 rounded-lg transition-all duration-200 ${
+        isActive 
+          ? 'bg-blue-600 text-white'
+          : 'bg-white text-gray-600 hover:bg-blue-50'
+      }`}
+    >
+      {page}
+    </button>
+  );
+
+  const WorkerCard = ({ worker }) => {
+    const { user, experienceYears, bio, rating, verified } = worker;
+    
+    return (
+      <div className="bg-white rounded-xl p-6 transition-all duration-300 hover:shadow-xl">
+        <div className="flex items-start gap-4">
+          <img
+            src="src\Assets\images\thodien.jpg"
+            alt={`${user.fullName}'s profile`}
+            className="w-20 h-20 rounded-xl object-cover"
+          />
+          <div className="flex-1">
+            <h2 className="text-xl font-semibold text-gray-800">{user.fullName}</h2>
+            <div className="flex items-center gap-2 mt-1 text-gray-600">
+              <MdLocationOn className="text-gray-400" />
+              <span className="text-sm">{user.address || 'Chưa cập nhật địa chỉ'}</span>
+            </div>
+            <div className="flex items-center gap-4 mt-2">
+              <div className="flex items-center gap-1">
+                <BsBriefcase className="text-blue-500" />
+                <span className="text-sm text-gray-600">{experienceYears} năm kinh nghiệm</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <BiStar className="text-yellow-400" />
+                <span className="text-sm text-gray-600">{rating}/5 đánh giá</span>
+              </div>
+              {verified && (
+                <div className="flex items-center gap-1 text-green-500">
+                  <MdVerified />
+                  <span className="text-sm">Đã xác minh</span>
+                </div>
+              )}
+            </div>
           </div>
-          <button className='border-[2px] rounded-[10px] block p-[10px] w-full text-[14px] font-semibold text-textColor hover:bg-white group-hover/item:text-textColor group-hover:text-textColor' > Apply Now </button>
-
         </div>
-            )
-          })
-        }
-        
-      </div>
-    </div>
-  )
-}
 
-export default Jobs
+        <p className="mt-4 text-gray-600 text-sm line-clamp-2">{bio}</p>
+
+        <div className="mt-4 flex gap-2">
+          <button className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            Liên hệ ngay
+          </button>
+          <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
+            Xem hồ sơ
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-800">Danh sách thợ ({workers.length})</h1>
+        <p className="text-gray-600 mt-2">Tìm kiếm thợ phù hợp với nhu cầu của bạn</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {currentWorkers.map((worker) => (
+          <WorkerCard key={worker.workerId} worker={worker} />
+        ))}
+      </div>
+
+      {/* Phân trang */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-8">
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="p-2 rounded-lg bg-white text-gray-600 hover:bg-blue-50 disabled:opacity-50"
+          >
+            <IoIosArrowBack />
+          </button>
+
+          {[...Array(totalPages)].map((_, index) => (
+            <PaginationButton
+              key={index + 1}
+              page={index + 1}
+              isActive={currentPage === index + 1}
+              onClick={() => paginate(index + 1)}
+            />
+          ))}
+
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="p-2 rounded-lg bg-white text-gray-600 hover:bg-blue-50 disabled:opacity-50"
+          >
+            <IoIosArrowForward />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Jobs;

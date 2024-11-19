@@ -1,0 +1,81 @@
+/* Định dạng CSS cho trang đăng ký */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+h4 {
+    color: #333;
+    font-weight: bold;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+form p {
+    color: #666;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+input, button {
+    font-size: 1rem;
+    border-radius: 0.375rem;
+}
+
+button {
+    transition: all 0.3s ease;
+    background-color: #ee7724;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #d8363a;
+    transform: scale(1.05);
+}
+
+.text-red-500 {
+    color: #e3342f;
+    font-weight: bold;
+}
+
+a {
+    color: #3490dc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #1d68a7;
+}
+
+/* Phần nền gradient cho cột bên phải */
+.right-column-bg {
+    background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* Tối ưu hóa CSS cho màn hình lớn hơn */
+@media (min-width: 768px) {
+    .gradient-form {
+        height: 100vh;
+    }
+}
+
+@media (min-width: 769px) {
+    .gradient-custom-2 {
+        border-top-right-radius: .3rem;
+        border-bottom-right-radius: .3rem;
+    }
+}

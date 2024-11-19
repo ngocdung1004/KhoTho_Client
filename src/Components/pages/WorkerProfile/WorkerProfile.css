@@ -1,0 +1,143 @@
+/* Overlay background */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Làm tối hơn */
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease-in-out; /* Hiệu ứng mờ dần */
+}
+
+/* Popup content */
+.modal-content {
+  position: relative;
+  background-color: #f9f9f9; /* Màu sáng nhẹ */
+  padding: 30px;
+  width: 40%;
+  max-width: 600px; /* Đảm bảo không quá lớn */
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* Tạo bóng đẹp hơn */
+  z-index: 1001;
+  animation: slideUp 0.4s ease-in-out; /* Hiệu ứng trượt lên */
+  font-family: 'Arial', sans-serif; /* Font dễ đọc */
+}
+
+/* Popup header */
+.schedule-popup-header {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Form container */
+.schedule-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Khoảng cách giữa các phần tử */
+}
+
+/* Form group */
+.schedule-form div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Căn về bên trái */
+}
+
+/* Form labels */
+.schedule-label {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 8px;
+  font-weight: bold;
+  text-transform: capitalize; /* Chuyển chữ đầu thành in hoa */
+}
+
+/* Form inputs */
+.schedule-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.schedule-input:focus {
+  outline: none;
+  border-color: #007bff; /* Màu khi chọn */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+}
+
+/* Textarea for notes */
+textarea.schedule-input {
+  resize: none;
+  height: 120px;
+}
+
+/* Buttons container */
+.schedule-form div:last-child {
+  display: flex;
+  justify-content: flex-end; /* Canh phải các nút */
+  gap: 10px; /* Khoảng cách giữa các nút */
+}
+
+/* Buttons */
+.schedule-btn-confirm,
+.popup-btn-cancel {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.schedule-btn-confirm {
+  background-color: #28a745; /* Màu xanh thành công */
+  color: white;
+}
+
+.schedule-btn-confirm:hover {
+  background-color: #218838;
+  transform: scale(1.05); /* Phóng to nhẹ */
+}
+
+.popup-btn-cancel {
+  background-color: #dc3545; /* Màu đỏ */
+  color: white;
+}
+
+.popup-btn-cancel:hover {
+  background-color: #c82333;
+  transform: scale(1.05); /* Phóng to nhẹ */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
