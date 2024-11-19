@@ -17,7 +17,6 @@ const App = () => {
     // Gọi API để lấy danh sách người dùng
     axios.get(`${API_ENDPOINT}/api/Workers`)
       .then(response => {
-        console.log(response.data)
         setWorkers(response.data);
       })
       .catch(error => {

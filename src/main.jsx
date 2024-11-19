@@ -27,8 +27,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-      {/* <Route path="/khotho" element={<Jobs />} />  */}
-        <Route path="/khotho" element={<OrderTracking />} />  
+        <Route path="/khotho" element={<Jobs />} /> 
+        <Route path="/ordertracking" element={<OrderTracking />} />  
         <Route path="/jobs" element={<App />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
