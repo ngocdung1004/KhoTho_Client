@@ -20,7 +20,6 @@ import ReviewManagement from './Components/pages/Dashboard/ReviewManagement';
 import WorkerDashboard from './Components/pages/Dashboard/Worker/WorkDashboard';
 import RegisterWorker from './Components/pages/RegisterWorker/RegisterWorker'
 import OrderTracking from './Components/pages/OrderTracking/OrderTracking'
-import Profile from './Components/pages/MyProfile/Profile';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -50,7 +49,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/registerworker" element={<RegisterWorker/>} />
         <Route path="/ordertracking" element={<OrderTracking/>} />
         
-        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

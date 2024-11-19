@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Col, Card, Table, Row } from 'react-bootstrap';
-import { API_ENDPOINT } from "../../services/config.jsx";
+import { API_ENDPOINT } from "../../config";
 import Footer from '../FooterDiv/Footer'
 import Jobs from '../JobDiv/Jobs'
 import NavBar from '../NavBarLogin/NavBar'
 import Search from '../SearchDiv/Search'
 import Value from '../ValueDiv/Value'
 import axios from 'axios';
-import * as config from "../../services/config.jsx";
+import * as config from "../../config.jsx";
 
 const App = () => {
   const [workers, setWorkers] = useState([]);

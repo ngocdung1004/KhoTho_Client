@@ -8,8 +8,8 @@ import NavBar from "../NavBarLogin/NavBar";
 import avatar1 from "../../Assets/user/avatar-1.jpg";
 import avatar2 from "../../Assets/user/avatar-2.jpg";
 import avatar3 from "../../Assets/user/avatar-3.jpg";
-import * as config from "../../services/config.jsx";
-import { API_ENDPOINT } from "../../services/config.jsx";
+import * as config from "../../config.jsx";
+import { API_ENDPOINT } from "../../config";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 
