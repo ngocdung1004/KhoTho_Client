@@ -21,8 +21,8 @@ const NavBar = () => {
           <FontAwesomeIcon icon={faStar} className="highlightIcon" />
           Bắt đầu nhận việc
         </Link>
-        <Link to="/jobs" className="menuList text-[#6f6f6f] hover:text-blueColor">Công việc</Link>
-        <Link to="/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Khách hàng</Link>
+        {/* <Link to="/jobs" className="menuList text-[#6f6f6f] hover:text-blueColor">Công việc</Link>
+        <Link to="/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Khách hàng</Link> */}
         <Link to="/about" className="menuList text-[#6f6f6f] hover:text-blueColor">Giới thiệu</Link>
         <Link to="/contact" className="menuList text-[#6f6f6f] hover:text-blueColor">Liên hệ</Link>
         <Link to="/login" className="menuList text-[#6f6f6f] hover:text-blueColor">Đăng nhập</Link>

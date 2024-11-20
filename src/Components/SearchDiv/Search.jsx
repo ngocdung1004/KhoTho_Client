@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-import React, { useEffect, useState } from 'react';
-=======
 import React, { useEffect, useState } from "react";
 import { AiOutlineCloseCircle, AiOutlineSearch } from "react-icons/ai";
 import { CiLocationOn } from "react-icons/ci";
@@ -12,18 +9,11 @@ import { API_ENDPOINT } from "../../services/config";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
->>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
 
 const Search = () => {
   
   const [jobTypes, setJobTypes] = useState([]);
   const [workers, setWorkers] = useState([]);
-<<<<<<< HEAD
-  const [selectedJobType, setSelectedJobType] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState('');
-  const [selectedExperience, setSelectedExperience] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-=======
   const [filteredWorkers, setFilteredWorkers] = useState([]);
   const [selectedJobType, setSelectedJobType] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -45,17 +35,11 @@ const Search = () => {
     { label: "3-4 sao", min: 3, max: 4 },
     { label: "4-5 sao", min: 4, max: 5 },
   ];
->>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-<<<<<<< HEAD
-        const response = await fetch('https://localhost:7062/api/JobTypes');
-        const data = await response.json();
-        setJobTypes(data);
-=======
         const [jobTypesResponse, workersResponse, workerJobTypesResponse] =
           await Promise.all([
             axios.get(`${API_ENDPOINT}/api/JobTypes`),
@@ -67,7 +51,6 @@ const Search = () => {
         setWorkers(workersResponse.data);
         setWorkerJobTypes(workerJobTypesResponse.data);
         setFilteredWorkers(workersResponse.data);
->>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -75,22 +58,7 @@ const Search = () => {
       }
     };
 
-<<<<<<< HEAD
-    const fetchWorkers = async () => {
-      try {
-        const response = await fetch('https://localhost:7062/api/Workers');
-        const data = await response.json();
-        setWorkers(data);
-      } catch (error) {
-        console.error('Error fetching workers:', error);
-      }
-    };
-
-    fetchJobTypes();
-    fetchWorkers();
-=======
     fetchData();
->>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
   }, []);
 
   const handleSearch = (e) => {
@@ -275,125 +243,7 @@ const Search = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Filter workers based on selected criteria
-  const handleSearch = () => {
-    const filteredWorkers = workers.filter(worker => {
-      const matchesJobType = selectedJobType ? worker.jobType === selectedJobType : true;
-      const matchesLocation = selectedLocation ? worker.user.address === selectedLocation : true;
-      const matchesExperience = selectedExperience ? worker.experienceYears === parseInt(selectedExperience) : true;
-      return matchesJobType && matchesLocation && matchesExperience;
-    });
-    setSearchResults(filteredWorkers);
-  };
-
   return (
-<<<<<<< HEAD
-    <div className="searchDiv grid gap-10 bg-greyIsh rounded-[10px] p-[3rem]">
-      <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-lg">
-        {/* Dịch vụ Dropdown */}
-        <div className="flex gap-2 items-center">
-          <select
-            className="bg-transparent text-blue-500 focus:outline-none"
-            value={selectedJobType}
-            onChange={(e) => setSelectedJobType(e.target.value)}
-          >
-            {selectedJobType === '' && <option value="">Dịch vụ</option>}
-            {jobTypes.map((job) => (
-              <option key={job.jobTypeId} value={job.jobTypeName}>{job.jobTypeName}</option>
-            ))}
-          </select>
-          <button
-            className="text-[#a5a6a6] hover:text-textColor"
-            onClick={() => setSelectedJobType('')}
-          >
-            &times;
-          </button>
-        </div>
-
-        {/* Vị trí Dropdown */}
-        <div className="flex gap-2 items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            className="text-[20px]"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-            />
-          </svg>
-          <select
-            className="bg-transparent text-blue-500 focus:outline-none"
-            value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
-          >
-            {selectedLocation === '' && <option value="">Vị trí</option>}
-            {uniqueLocations.map((location, index) => (
-              <option key={index} value={location}>{location}</option>
-            ))}
-          </select>
-          <button
-            className="text-[#a5a6a6] hover:text-textColor"
-            onClick={() => setSelectedLocation('')}
-          >
-            &times;
-          </button>
-        </div>
-
-        {/* Kinh nghiệm Dropdown */}
-        <div className="flex gap-2 items-center">
-          <select
-            className="bg-transparent text-blue-500 focus:outline-none"
-            value={selectedExperience}
-            onChange={(e) => setSelectedExperience(e.target.value)}
-          >
-            {selectedExperience === '' && <option value="">Kinh nghiệm</option>}
-            {uniqueExperienceYears.map((year, index) => (
-              <option key={index} value={year}>{year} years</option>
-            ))}
-          </select>
-          <button
-            className="text-[#a5a6a6] hover:text-textColor"
-            onClick={() => setSelectedExperience('')}
-          >
-            &times;
-          </button>
-        </div>
-
-        <button
-          type="button"
-          className="bg-blueColor px-6 py-2 rounded-lg text-white cursor-pointer hover:bg-blue-300"
-          onClick={handleSearch}
-        >
-          Tìm kiếm
-        </button>
-      </div>
-
-      {/* Display search results */}
-      <div className="results mt-5">
-        {searchResults.length > 0 ? (
-          <ul>
-            {searchResults.map((worker) => (
-              <li key={worker.id} className="p-3 bg-white shadow rounded mb-3">
-                <p><strong>Tên:</strong> {worker.user.name}</p>
-                <p><strong>Dịch vụ:</strong> {worker.jobType}</p>
-                <p><strong>Vị trí:</strong> {worker.user.address}</p>
-                <p><strong>Kinh nghiệm:</strong> {worker.experienceYears} years</p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p></p>
-=======
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="bg-white rounded-2xl shadow-xl p-6">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
@@ -520,7 +370,6 @@ const Search = () => {
               </div>
             )}
           </>
->>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
         )}
       </div>
     </div>
