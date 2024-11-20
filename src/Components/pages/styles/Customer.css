@@ -112,3 +112,13 @@
     height: 100px;
 }
 
+
+.logo-flex {
+    display: flex;
+    align-items: center;
+  }
+  
+.logo-flex .flex {
+display: flex;
+gap: 4px; /* Khoảng cách giữa "Kho" và "Tho" */
+}

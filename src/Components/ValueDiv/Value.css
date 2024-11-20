@@ -1,0 +1,50 @@
+/* Card Container */
+.card-container {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #61a0e9, #50e3c2);
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    color: white;
+  }
+  
+  /* Text Section */
+  .card-text {
+    max-width: 600px;
+  }
+  
+  .card-text h1 {
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .card-text p {
+    font-size: 18px;
+    margin-top: 0.5rem;
+    color: white;
+  }
+  
+  /* Button Styling */
+  .card-button {
+    background-color: white;
+    color: #1a73e8; /* Use a shade of blue that matches the theme */
+    padding: 0.75rem 2rem;
+    border-radius: 9999px; /* Fully rounded */
+    font-weight: 600;
+    font-size: 18px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .card-button:hover {
+    background-color: #e0f2ff;
+    color: #1a5bb8;
+  }
+  

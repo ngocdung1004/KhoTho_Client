@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { TEInput, TERipple } from "tw-elements-react";
+import { Snackbar, Alert, IconButton } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { API_ENDPOINT } from "../../../services/config";
 import "./Register.css";
 
 export default function Register() {
@@ -10,31 +13,83 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
-  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
   const navigate = useNavigate();
+
+  const handleCloseNotification = () => {
+    setNotification({ ...notification, open: false });
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleRegister = async (event) => {
     event.preventDefault();
-    const userData = { fullName, email, password, phoneNumber, address, userType: 1 };
+    const userData = {
+      fullName,
+      email,
+      password,
+      phoneNumber,
+      address,
+      userType: 1,
+    };
 
     try {
-      const response = await axios.post("https://localhost:7062/api/Auth/register", userData, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await axios.post(
+        `${API_ENDPOINT}/api/Auth/register`,
+        userData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (response.status === 200) {
-        alert("Đăng ký thành công!");
-        navigate("/login");
+        setNotification({
+          open: true,
+          message: "Đăng ký thành công!",
+          severity: "success",
+        });
+        setTimeout(() => navigate("/login"), 2000);
       } else {
-        setError("Lỗi đăng ký: " + response.data.message);
+        setNotification({
+          open: true,
+          message: "Đăng ký thất bại! Vui lòng kiểm tra lại thông tin.",
+          severity: "error",
+        });
       }
     } catch (error) {
-      setError("Đã xảy ra lỗi: " + error.message);
+      setNotification({
+        open: true,
+        message: "Đăng ký thất bại! Vui lòng kiểm tra lại thông tin.",
+        severity: "error",
+      });
     }
   };
 
   return (
     <section className="flex items-center justify-center min-h-screen bg-neutral-200 dark:bg-neutral-700">
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={3000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
+
       <div className="w-full max-w-md p-10">
         <div className="bg-white shadow-lg dark:bg-neutral-800 rounded-lg">
           <div className="p-8">
@@ -44,14 +99,18 @@ export default function Register() {
                 src="..\src\Assets\logokhotho.png"
                 alt="logo"
               />
-              <h4 className="mt-4 text-xl font-semibold">VIỆC LÀM GẤP, THỢ TỚI TẤP</h4>
+              <h4 className="mt-4 text-xl font-semibold">
+                VIỆC LÀM GẤP, THỢ TỚI TẤP
+              </h4>
             </div>
 
             <form onSubmit={handleRegister}>
               <p className="mb-4 text-center">Vui lòng đăng ký tài khoản mới</p>
 
               <div className="input-container mb-4">
-                <label className="input-label" htmlFor="fullName">Họ và tên</label>
+                <label className="input-label" htmlFor="fullName">
+                  Họ và tên
+                </label>
                 <TEInput
                   type="text"
                   id="fullName"
@@ -63,7 +122,9 @@ export default function Register() {
               </div>
 
               <div className="input-container mb-4">
-                <label className="input-label" htmlFor="email">Email</label>
+                <label className="input-label" htmlFor="email">
+                  Email
+                </label>
                 <TEInput
                   type="email"
                   id="email"
@@ -75,19 +136,39 @@ export default function Register() {
               </div>
 
               <div className="input-container mb-4">
-                <label className="input-label" htmlFor="password">Mật khẩu</label>
-                <TEInput
-                  type="password"
-                  id="password"
-                  placeholder="Nhập mật khẩu"
-                  className="input-field"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <label className="input-label" htmlFor="password">
+                  Mật khẩu
+                </label>
+                <div className="relative">
+                  <TEInput
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    placeholder="Nhập mật khẩu"
+                    className="input-field"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-2">
+                    <IconButton
+                      onClick={togglePasswordVisibility}
+                      edge="end"
+                      size="small"
+                      style={{ color: "#666" }}
+                    >
+                      {showPassword ? (
+                        <VisibilityOff fontSize="small" />
+                      ) : (
+                        <Visibility fontSize="small" />
+                      )}
+                    </IconButton>
+                  </div>
+                </div>
               </div>
 
               <div className="input-container mb-4">
-                <label className="input-label" htmlFor="phoneNumber">Số điện thoại</label>
+                <label className="input-label" htmlFor="phoneNumber">
+                  Số điện thoại
+                </label>
                 <TEInput
                   type="text"
                   id="phoneNumber"
@@ -99,7 +180,9 @@ export default function Register() {
               </div>
 
               <div className="input-container mb-4">
-                <label className="input-label" htmlFor="address">Địa chỉ</label>
+                <label className="input-label" htmlFor="address">
+                  Địa chỉ
+                </label>
                 <TEInput
                   type="text"
                   id="address"
@@ -124,8 +207,6 @@ export default function Register() {
                   </button>
                 </TERipple>
               </div>
-
-              {error && <p className="text-red-500 text-center mt-4">{error}</p>}
             </form>
 
             <div className="flex items-center justify-between pb-6">

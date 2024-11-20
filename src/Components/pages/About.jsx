@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Footer from '../FooterDiv/Footer'
-import NavBar from '../NavBar/NavBar'
+import NavBar from '../NavBarLogin/NavBar'
 import Gallery from '../Gallery/Gallery';
 
 import Logo from "../common/logo";
 import "./styles/About.css"
-import { width } from '@fortawesome/free-brands-svg-icons/fa42Group';
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
 import {  
   Grid, 
@@ -181,7 +181,7 @@ const About = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     textAlign: 'center', 
-                    border: '1px solid #ccc'
+                    border: '1px solid #ccc',
                 }}>
                     <CardContent>
                         <IconButton>
@@ -218,7 +218,7 @@ const About = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     textAlign: 'center',
-                }}>
+                }} >
                     <CardContent>
                         <ArrowCircleRightIcon
                         fontSize="large"
@@ -325,8 +325,156 @@ const About = () => {
         </Grid>
         
         </React.Fragment>
-        <Gallery/>
-        
+
+        <section id="testimonial" className="testimonial section-padding py-10">
+    <div className='text-center mb-12'>
+        <h2 className='text-4xl font-bold mb-2'>FIFTYM</h2>
+        <p className='text-xl text-gray-600'>Những người sáng lập nên nền tảng</p>
+    </div>
+    
+    <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* CEO Card */}
+            <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
+                <div className="flex flex-col items-center">
+                    <div className="w-24 h-24 mb-4">
+                        <img src="src/Assets/testimonial/img1.jpg" 
+                             alt="Hà Khải Hoàn" 
+                             className="w-full h-full rounded-full object-cover"/>
+                    </div>
+                    <h2 className="text-xl font-bold">Hà Khải Hoàn</h2>
+                    <h3 className="text-gray-600 font-semibold mb-2">CEO</h3>
+                    <p className="text-gray-700 text-center mb-4">
+                        Người lãnh đạo cao nhất, chịu trách nhiệm định hướng chiến lược tổng thể, quản lý hoạt động chung
+                    </p>
+                    <div className="flex text-yellow-400">
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                    </div>
+                </div>
+            </div>
+
+            {/* CFO Card */}
+            <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
+                <div className="flex flex-col items-center">
+                    <div className="w-24 h-24 mb-4">
+                        <img src="src/Assets/testimonial/img2.jpg" 
+                             alt="Hồ Thị Kính" 
+                             className="w-full h-full rounded-full object-cover"/>
+                    </div>
+                    <h2 className="text-xl font-bold">Hồ Thị Kính</h2>
+                    <h3 className="text-gray-600 font-semibold mb-2">CFO</h3>
+                    <p className="text-gray-700 text-center mb-4">
+                        Quản lý tài chính, lập kế hoạch tài chính, kiểm soát ngân sách, và đảm bảo dòng tiền ổn định cho hoạt động
+                    </p>
+                    <div className="flex text-yellow-400">
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                    </div>
+                </div>
+            </div>
+
+            {/* CSMO Card */}
+            <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
+                <div className="flex flex-col items-center">
+                    <div className="w-24 h-24 mb-4">
+                        <img src="src/Assets/testimonial/img3.jpg" 
+                             alt="Võ T.Thu Thảo" 
+                             className="w-full h-full rounded-full object-cover"/>
+                    </div>
+                    <h2 className="text-xl font-bold">Võ T.Thu Thảo</h2>
+                    <h3 className="text-gray-600 font-semibold mb-2">CSMO</h3>
+                    <p className="text-gray-700 text-center mb-4">
+                        Định hướng và thực hiện chiến lược bán hàng và marketing, phát triển thương hiệu và mở rộng thị trường
+                    </p>
+                    <div className="flex text-yellow-400">
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                    </div>
+                </div>
+            </div>
+
+            {/* CPO Card */}
+            <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
+                <div className="flex flex-col items-center">
+                    <div className="w-24 h-24 mb-4">
+                        <img src="src/Assets/testimonial/img4.jpg" 
+                             alt="Nguyễn Trọng Nghĩa" 
+                             className="w-full h-full rounded-full object-cover"/>
+                    </div>
+                    <h2 className="text-xl font-bold">Nguyễn Trọng Nghĩa</h2>
+                    <h3 className="text-gray-600 font-semibold mb-2">CPO</h3>
+                    <p className="text-gray-700 text-center mb-4">
+                        Quản lý phát triển sản phẩm, tập trung vào việc cải thiện và đảm bảo sản phẩm đáp ứng nhu cầu thị trường và khách hàng
+                    </p>
+                    <div className="flex text-yellow-400">
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                    </div>
+                </div>
+            </div>
+
+            {/* CTO Card */}
+            <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
+                <div className="flex flex-col items-center">
+                    <div className="w-24 h-24 mb-4">
+                        <img src="src/Assets/testimonial/img5.jpg" 
+                             alt="Nguyễn Ngọc Dũng" 
+                             className="w-full h-full rounded-full object-cover"/>
+                    </div>
+                    <h2 className="text-xl font-bold">Nguyễn Ngọc Dũng</h2>
+                    <h3 className="text-gray-600 font-semibold mb-2">CTO</h3>
+                    <p className="text-gray-700 text-center mb-4">
+                        Chịu trách nhiệm phát triển và quản lý công nghệ, định hướng về kỹ thuật để đảm bảo sản phẩm đạt chất lượng
+                    </p>
+                    <div className="flex text-yellow-400">
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                    </div>
+                </div>
+            </div>
+
+            {/* COO Card */}
+            <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
+                <div className="flex flex-col items-center">
+                    <div className="w-24 h-24 mb-4">
+                        <img src="src/Assets/testimonial/img6.jpg" 
+                             alt="Võ T.Kim Chung" 
+                             className="w-full h-full rounded-full object-cover"/>
+                    </div>
+                    <h2 className="text-xl font-bold">Võ T.Kim Chung</h2>
+                    <h3 className="text-gray-600 font-semibold mb-2">COO</h3>
+                    <p className="text-gray-700 text-center mb-4">
+                        Quản lý vận hành hàng ngày của công ty, đảm bảo các quy trình hoạt động hiệu quả và tối ưu hóa nguồn lực
+                    </p>
+                    <div className="flex text-yellow-400">
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
         
 
         <Footer/>

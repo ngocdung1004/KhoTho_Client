@@ -4,6 +4,10 @@ import simple from '../../Assets/simple.png';
 import valentine from '../../Assets/valentine.png';
 import shield from '../../Assets/shield.png';
 import image1 from '../../Assets/images/1.jpg'; // Import the new image
+<<<<<<< HEAD
+=======
+import "./Value.css"
+>>>>>>> efd02e0aa208b7717ce08e7602d9a6cdcd6c16a8
 
 const Value = () => {
   return (
@@ -12,7 +16,11 @@ const Value = () => {
       {/* Centering the h1 inside a flex container */}
       <div className="flex justify-center mb-[2rem]">
         <h1 className='text-red-500 text-[40px] font-bold w-[700px] text-center'>
+<<<<<<< HEAD
           An tâm với sự lựa chọn của bạn 
+=======
+          VIỆC LÀM GẤP, THỢ TỚI TẤP
+>>>>>>> efd02e0aa208b7717ce08e7602d9a6cdcd6c16a8
         </h1>
         
       </div>
@@ -65,16 +73,30 @@ const Value = () => {
         </div>
       </div>
 
+<<<<<<< HEAD
       <div className="card mt-[2rem] flex justify-between bg-blueColor p-[5rem] rounded-[10px]">
         <div>
           <h1 className='text-blueColor text-[30px] font-bold'> Ready to switch a career</h1>
         </div>
         <button className='border-[2px] rounded-[10px] py-[4px] px-[50px] text-[18px] font-semibold text-blueColor hover:bg-white border-blueColor'>
           Get Started 
+=======
+      <div className="card-container">
+        <div className="card-text">
+          <h1>Trải nghiệm ngay hôm nay!</h1>
+          <p>Nhanh chóng trải nghiệm dịch vụ tuyệt vời của chúng tôi</p>
+        </div>
+        <button className="card-button">
+          Đăng ký
+>>>>>>> efd02e0aa208b7717ce08e7602d9a6cdcd6c16a8
         </button>
       </div>
     </div>
   )
 }
 
+<<<<<<< HEAD
 export default Value;
+=======
+export default Value;
+>>>>>>> efd02e0aa208b7717ce08e7602d9a6cdcd6c16a8
