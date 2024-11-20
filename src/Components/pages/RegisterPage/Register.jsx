@@ -1,19 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { TEInput, TERipple } from "tw-elements-react";
-import { Snackbar, Alert, IconButton } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { API_ENDPOINT } from "../../../services/config";
-import "./Register.css";
+import authService from "../../../services/authService";
+import { Snackbar, Alert } from "@mui/material";
+import bgrLogin from "../../../Assets/bgr-login.jpg";
 
-export default function Register() {
-  const [fullName, setFullName] = useState("");
+const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [notification, setNotification] = useState({
     open: false,
     message: "",
@@ -25,55 +19,58 @@ export default function Register() {
     setNotification({ ...notification, open: false });
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    const userData = {
-      fullName,
-      email,
-      password,
-      phoneNumber,
-      address,
-      userType: 1,
-    };
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      setNotification({
+        open: true,
+        message: "Mật khẩu không khớp!",
+        severity: "error",
+      });
+      return;
+    }
 
     try {
-      const response = await axios.post(
-        `${API_ENDPOINT}/api/Auth/register`,
-        userData,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const userData = await authService.register(email, password);
+      if (userData && userData.token) {
+        localStorage.setItem("authToken", userData.token);
+        localStorage.setItem("userType", userData.userType);
+        localStorage.setItem("userData", JSON.stringify(userData));
 
-      if (response.status === 200) {
         setNotification({
           open: true,
           message: "Đăng ký thành công!",
           severity: "success",
         });
-        setTimeout(() => navigate("/login"), 2000);
-      } else {
-        setNotification({
-          open: true,
-          message: "Đăng ký thất bại! Vui lòng kiểm tra lại thông tin.",
-          severity: "error",
-        });
+
+        setTimeout(() => {
+          switch (userData.userType) {
+            case 0: navigate("/dashboard"); break;
+            case 1: navigate("/jobs"); break;
+            case 2: navigate("/workers"); break;
+            default: navigate("/");
+          }
+        }, 1000);
       }
     } catch (error) {
       setNotification({
         open: true,
-        message: "Đăng ký thất bại! Vui lòng kiểm tra lại thông tin.",
+        message: error.response?.data || "Lỗi khi đăng ký! Vui lòng thử lại.",
         severity: "error",
       });
     }
   };
 
   return (
-    <section className="flex items-center justify-center min-h-screen bg-neutral-200 dark:bg-neutral-700">
+    <section 
+      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat"
+      style={{ 
+        backgroundImage: `url(${bgrLogin})`,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundBlendMode: 'overlay',
+        filter: 'brightness(1)',
+        opacity: 0.85,
+      }}
+    >
       <Snackbar
         open={notification.open}
         autoHideDuration={3000}
@@ -90,140 +87,88 @@ export default function Register() {
         </Alert>
       </Snackbar>
 
-      <div className="w-full max-w-md p-10">
-        <div className="bg-white shadow-lg dark:bg-neutral-800 rounded-lg">
+      <div className="w-full max-w-md">
+        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden">
           <div className="p-8">
             <div className="text-center mb-8">
               <img
-                className="mx-auto w-24"
-                src="..\src\Assets\logokhotho.png"
+                className="mx-auto w-24 h-24 object-contain"
+                src="../src/Assets/logokhotho.png"
                 alt="logo"
               />
-              <h4 className="mt-4 text-xl font-semibold">
+              <h4 className="mt-4 text-2xl font-bold text-gray-800">
                 VIỆC LÀM GẤP, THỢ TỚI TẤP
               </h4>
             </div>
 
-            <form onSubmit={handleRegister}>
-              <p className="mb-4 text-center">Vui lòng đăng ký tài khoản mới</p>
+            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <p className="text-center text-gray-600">
+                Vui lòng đăng ký tài khoản của bạn
+              </p>
 
-              <div className="input-container mb-4">
-                <label className="input-label" htmlFor="fullName">
-                  Họ và tên
-                </label>
-                <TEInput
-                  type="text"
-                  id="fullName"
-                  placeholder="Nhập họ và tên"
-                  className="input-field"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                />
-              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white/80"
+                    placeholder="Nhập email của bạn"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
 
-              <div className="input-container mb-4">
-                <label className="input-label" htmlFor="email">
-                  Email
-                </label>
-                <TEInput
-                  type="email"
-                  id="email"
-                  placeholder="Nhập email"
-                  className="input-field"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-
-              <div className="input-container mb-4">
-                <label className="input-label" htmlFor="password">
-                  Mật khẩu
-                </label>
-                <div className="relative">
-                  <TEInput
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    placeholder="Nhập mật khẩu"
-                    className="input-field"
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Mật khẩu
+                  </label>
+                  <input
+                    type="password"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white/80"
+                    placeholder="Nhập mật khẩu của bạn"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-2">
-                    <IconButton
-                      onClick={togglePasswordVisibility}
-                      edge="end"
-                      size="small"
-                      style={{ color: "#666" }}
-                    >
-                      {showPassword ? (
-                        <VisibilityOff fontSize="small" />
-                      ) : (
-                        <Visibility fontSize="small" />
-                      )}
-                    </IconButton>
-                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Xác nhận mật khẩu
+                  </label>
+                  <input
+                    type="password"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white/80"
+                    placeholder="Xác nhận mật khẩu của bạn"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
                 </div>
               </div>
 
-              <div className="input-container mb-4">
-                <label className="input-label" htmlFor="phoneNumber">
-                  Số điện thoại
-                </label>
-                <TEInput
-                  type="text"
-                  id="phoneNumber"
-                  placeholder="Nhập số điện thoại"
-                  className="input-field"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                />
-              </div>
+              <button
+                className="w-full py-2 px-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold rounded-lg shadow-md hover:from-orange-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 transition-all duration-300"
+                onClick={handleRegister}
+              >
+                Đăng ký
+              </button>
 
-              <div className="input-container mb-4">
-                <label className="input-label" htmlFor="address">
-                  Địa chỉ
-                </label>
-                <TEInput
-                  type="text"
-                  id="address"
-                  placeholder="Nhập địa chỉ"
-                  className="input-field"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-              </div>
-
-              <div className="text-center mb-4">
-                <TERipple rippleColor="light" className="w-full">
-                  <button
-                    className="inline-block w-full rounded px-6 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow-lg transition duration-150 ease-in-out"
-                    style={{
-                      background:
-                        "linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593)",
-                    }}
-                    type="submit"
-                  >
-                    Đăng ký
-                  </button>
-                </TERipple>
-              </div>
-            </form>
-
-            <div className="flex items-center justify-between pb-6">
-              <p className="mb-0 mr-2 text-sm">Bạn đã có tài khoản?</p>
-              <TERipple rippleColor="light">
+              <div className="flex items-center justify-between mt-6">
+                <p className="text-sm text-gray-600">Bạn đã có tài khoản?</p>
                 <button
-                  type="button"
-                  className="inline-block rounded border-2 border-danger px-6 py-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-danger-600"
+                  className="px-4 py-2 text-sm font-medium text-pink-500 border-2 border-pink-500 rounded-lg hover:bg-pink-50 transition-colors duration-300"
                   onClick={() => navigate("/login")}
                 >
                   Đăng nhập
                 </button>
-              </TERipple>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default Register;
