@@ -97,7 +97,7 @@ const Schedules = ({ workerId }) => {
     const { schedules: daySchedules, bookings: dayBookings } = getScheduleForDate(selectedDate);
 
     if (daySchedules.length === 0) {
-      return <Typography>No schedules for this date</Typography>;
+      return <Typography>Không có lịch trình cho ngày này</Typography>;
     }
 
     return (
@@ -105,14 +105,14 @@ const Schedules = ({ workerId }) => {
         {daySchedules.map((schedule, index) => (
           <Box key={index} sx={{ mt: 1 }}>
             <Typography>
-              Time: {schedule.startTime.slice(0, -3)} - {schedule.endTime.slice(0, -3)}
+              Thời gian: {schedule.startTime.slice(0, -3)} - {schedule.endTime.slice(0, -3)}
             </Typography>
           </Box>
         ))}
         {dayBookings.map((booking, index) => (
           <Box key={`booking-${index}`} sx={{ mt: 1 }}>
             <Typography>
-              Booking Status: {booking.status}
+              Trạng thái công việc: {booking.status}
             </Typography>
           </Box>
         ))}
@@ -139,7 +139,7 @@ const Schedules = ({ workerId }) => {
   return (
     <Paper elevation={3} sx={{ mt: 3, p: 3 }}>
       <Typography variant="h6" gutterBottom>
-        Work Schedule
+        Lịch ngày
       </Typography>
 
       <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }}>
@@ -151,7 +151,7 @@ const Schedules = ({ workerId }) => {
         <Grid item xs>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
-              label="Select Date"
+              label="Chọn ngày"
               value={selectedDate}
               onChange={(newValue) => setSelectedDate(newValue)}
               renderInput={(params) => <TextField {...params} fullWidth />}
@@ -225,7 +225,7 @@ const Schedules = ({ workerId }) => {
       
       <Box sx={{ mt: 2 }}>
         <Typography variant="subtitle1" gutterBottom>
-          Schedule for {format(selectedDate, 'MMMM dd, yyyy')}:
+          Lịch làm việc: {format(selectedDate, 'MMMM dd, yyyy')}:
         </Typography>
         {renderScheduleInfo()}
       </Box>
