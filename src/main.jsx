@@ -21,8 +21,16 @@ import WorkerDashboard from './Components/pages/Dashboard/Worker/WorkDashboard';
 import RegisterWorker from './Components/pages/RegisterWorker/RegisterWorker'
 import OrderTracking from './Components/pages/OrderTracking/OrderTracking'
 import Profile from './Components/pages/MyProfile/Profile';
+<<<<<<< HEAD
 import './index.css';
 
+=======
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+import './index.css';
+
+>>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>

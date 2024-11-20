@@ -30,6 +30,10 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.6",
     "cors": "^2.8.5",
+<<<<<<< HEAD
+=======
+    "date-fns": "^2.29.3",
+>>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
     "dayjs": "^1.11.13",
     "framer-motion": "^11.11.15",
     "gh-pages": "^5.0.0",
@@ -55,8 +59,8 @@
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.14",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15",
     "vite": "^4.5.5"
   }
 }

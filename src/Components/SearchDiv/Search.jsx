@@ -1,6 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 =======
+=======
+>>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
 import React, { useEffect, useState } from "react";
 import { AiOutlineCloseCircle, AiOutlineSearch } from "react-icons/ai";
 import { CiLocationOn } from "react-icons/ci";
@@ -12,18 +15,24 @@ import { API_ENDPOINT } from "../../services/config";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 >>>>>>> efd02e0aa208b7717ce08e7602d9a6cdcd6c16a8
+=======
+>>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
 
 const Search = () => {
   
   const [jobTypes, setJobTypes] = useState([]);
   const [workers, setWorkers] = useState([]);
 <<<<<<< HEAD
+<<<<<<< HEAD
   const [selectedJobType, setSelectedJobType] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedExperience, setSelectedExperience] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 =======
+=======
+>>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
   const [filteredWorkers, setFilteredWorkers] = useState([]);
   const [selectedJobType, setSelectedJobType] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -45,17 +54,23 @@ const Search = () => {
     { label: "3-4 sao", min: 3, max: 4 },
     { label: "4-5 sao", min: 4, max: 5 },
   ];
+<<<<<<< HEAD
 >>>>>>> efd02e0aa208b7717ce08e7602d9a6cdcd6c16a8
+=======
+>>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
 <<<<<<< HEAD
+<<<<<<< HEAD
         const response = await fetch('https://localhost:7062/api/JobTypes');
         const data = await response.json();
         setJobTypes(data);
 =======
+=======
+>>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
         const [jobTypesResponse, workersResponse, workerJobTypesResponse] =
           await Promise.all([
             axios.get(`${API_ENDPOINT}/api/JobTypes`),
@@ -67,7 +82,10 @@ const Search = () => {
         setWorkers(workersResponse.data);
         setWorkerJobTypes(workerJobTypesResponse.data);
         setFilteredWorkers(workersResponse.data);
+<<<<<<< HEAD
 >>>>>>> efd02e0aa208b7717ce08e7602d9a6cdcd6c16a8
+=======
+>>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -75,6 +93,7 @@ const Search = () => {
       }
     };
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     const fetchWorkers = async () => {
       try {
@@ -91,6 +110,9 @@ const Search = () => {
 =======
     fetchData();
 >>>>>>> efd02e0aa208b7717ce08e7602d9a6cdcd6c16a8
+=======
+    fetchData();
+>>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
   }, []);
 
   const handleSearch = (e) => {
@@ -274,6 +296,7 @@ const Search = () => {
   const totalPages = Math.ceil(filteredWorkers.length / workersPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+<<<<<<< HEAD
 
   // Filter workers based on selected criteria
   const handleSearch = () => {
@@ -394,6 +417,10 @@ const Search = () => {
         ) : (
           <p></p>
 =======
+=======
+
+  return (
+>>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="bg-white rounded-2xl shadow-xl p-6">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
@@ -520,7 +547,10 @@ const Search = () => {
               </div>
             )}
           </>
+<<<<<<< HEAD
 >>>>>>> efd02e0aa208b7717ce08e7602d9a6cdcd6c16a8
+=======
+>>>>>>> 4af0bedb18ab875ad243f9b4a3cf34c5efccac5a
         )}
       </div>
     </div>
