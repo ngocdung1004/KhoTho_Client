@@ -117,7 +117,7 @@ const WorkerDashboard = () => {
           <Grid item xs={12} md={4}>
             <Paper elevation={3} sx={{ p: 3 }}>
               <Typography variant="h5" gutterBottom fontWeight="bold">
-                Worker Profile
+                Thông tin của tôi
               </Typography>
 
              
@@ -132,15 +132,15 @@ const WorkerDashboard = () => {
                   </Typography>
                   <Box sx={{ width: '100%' }}>
                     <Typography variant="body1" gutterBottom>
-                      Experience: {worker.experienceYears} years
+                      Kinh nghiệm: {worker.experienceYears} năm.
                     </Typography>
                     <Box display="flex" alignItems="center" gap={1}>
-                      <Typography>Rating:</Typography>
+                      <Typography>Đánh giá:</Typography>
                       <Rating value={worker.rating} readOnly precision={0.5} />
                       <Typography>({worker.rating}/5)</Typography>
                     </Box>
                     <Typography variant="body1" sx={{ mt: 2 }}>
-                      Bio: {worker.bio}
+                      Giới thiệu: {worker.bio}
                     </Typography>
                   </Box>
                 </Box>
