@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
 import {
   Dialog, DialogActions, DialogContent, DialogTitle, TextField,
   Container,
@@ -59,7 +64,14 @@ const WorkerProfile = () => {
       setLoading(true);
       console.log(`Worker ID updated: ${workerId}`);
       try {
-        const response = await axios.get(`${API_ENDPOINT}/api/Workers/${workerId}`);
+        const response = await axios.get(`${API_ENDPOINT}/api/Workers/${workerId}`, 
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setWorkerData(response.data);
       } catch (error) {
         console.error("Error fetching worker details:", error);
@@ -77,7 +89,8 @@ const WorkerProfile = () => {
       try {
         const response = await axios.get(`${API_ENDPOINT}/api/Booking`, {
           headers: {
-            accept: 'text/plain',
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         });
         setBookings(response.data);
@@ -91,7 +104,7 @@ const WorkerProfile = () => {
   useEffect(() => {
     if (workerId && Array.isArray(bookings) && bookings.length > 0) {
       const filtered = bookings.filter((booking) => 
-        booking.workerID.toString() === workerId.toString() && booking.status !== "Rejected"
+        booking.workerID.toString() === workerId.toString() && (booking.status === "Pending" || booking.status === "Accepted") 
       );
       setFilteredBookings(filtered);
     }
@@ -114,14 +127,14 @@ const WorkerProfile = () => {
 
   const userData = localStorage.getItem('userData');
   if (!userData) {
-    alert('Không tìm thấy userData. Vui lòng đăng nhập lại!');
+    toast.error('Không tìm thấy userData. Vui lòng đăng nhập lại!', { position: "top-left", autoClose: 3000 });
     return;
   }
 
   const parsedUserData = JSON.parse(userData);
   const userId = parsedUserData.userId;
   if (!userId) {
-    alert('Không tìm thấy userId. Vui lòng đăng nhập lại!');
+    toast.error('Không tìm thấy userId. Vui lòng đăng nhập lại!', { position: "top-left", autoClose: 3000 });
     return;
   }
 
@@ -136,37 +149,22 @@ const WorkerProfile = () => {
     notes: "",
   });
 
-  useEffect(() => {
-    // Reset bookingDetails khi chuyển hướng trang
-    return () => {
-      setBookingDetails({
-        customerID: userId,
-        workerID: workerId,
-        jobTypeID: 1,
-        bookingDate: "",
-        startTime: "",
-        endTime: "",
-        hourlyRate: 50000,
-        notes: "",
-      });
-    };
-  }, [navigate]); 
+  // useEffect(() => {
+  //   // Reset bookingDetails khi chuyển hướng trang
+  //   return () => {
+  //     setBookingDetails({
+  //       customerID: userId,
+  //       workerID: workerId,
+  //       jobTypeID: 1,
+  //       bookingDate: "",
+  //       startTime: "",
+  //       endTime: "",
+  //       hourlyRate: 50000,
+  //       notes: "",
+  //     });
+  //   };
+  // }, [navigate]); 
 
-
-  const checkBookingConflict = (startTime, endTime, bookingDate) => {
-    const selectedStart = new Date(`${bookingDate}T${startTime}`);
-    const selectedEnd = new Date(`${bookingDate}T${endTime}`);
-  
-    return filteredBookings.some((booking) => {
-      const existingStart = new Date(`${booking.bookingDate}T${booking.startTime}`);
-      const existingEnd = new Date(`${booking.bookingDate}T${booking.endTime}`);
-  
-      // Kiểm tra xem có trùng với bất kỳ khoảng thời gian nào trong danh sách lịch booking
-      return (
-        (selectedStart < existingEnd && selectedEnd > existingStart) // Kiểm tra trùng lịch
-      );
-    });
-  };
 
   useEffect(() => {
     setBookingDetails((prevDetails) => ({
@@ -204,25 +202,6 @@ const WorkerProfile = () => {
 
   const handleConfirmBooking = async () => {
     try {
-
-      const { startTime, endTime, bookingDate } = bookingDetails;
-
-      // Kiểm tra trùng lặp lịch
-      if (checkBookingConflict(startTime, endTime, bookingDate)) {
-        // Nếu có trùng lặp, hiển thị cảnh báo
-        alert("Thời gian bạn chọn bị trùng với lịch đã đặt. Vui lòng chọn lại thời gian.");
-        
-        // Đặt lại giá trị để người dùng nhập lại thông tin
-        setBookingDetails({
-          bookingDate: "",
-          startTime: "",
-          endTime: "",
-          hourlyRate: 0,
-          notes: "",
-        });
-  
-        return; // Ngừng thực hiện các bước tiếp theo nếu có trùng lặp
-      }
       // Chuyển đổi dữ liệu phù hợp với định dạng API yêu cầu
       const formattedBookingDetails = {
         ...bookingDetails,
@@ -233,21 +212,24 @@ const WorkerProfile = () => {
         hourlyRate: bookingDetails.hourlyRate || 50000, // Đặt giá trị mặc định nếu cần
       };
   
-      // Gửi dữ liệu đã được chuyển đổi
-      console.log("-------", formattedBookingDetails);
-      await axios.post(`${API_ENDPOINT}/api/Booking`, formattedBookingDetails, {
+      const response = await axios.post(`${API_ENDPOINT}/api/Booking`, formattedBookingDetails, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
+  
+      // Lấy data trả về từ API
+      const responseData = response.data;
+      console.log("Dữ liệu trả về từ API:", responseData);
+  
       console.log("Booking confirmed");
-      alert("Đặt lịch thành công!");
+      toast.success("Đặt lịch thành công!", { position: "top-left", autoClose: 3000 });
       setIsModalOpen(false);
-      setTimeout(() => navigate("/ordertracking"), 1000);
+      setTimeout(() => navigate("/ordertracking", { state: responseData.bookingID }), 1000);
     } catch (error) {
       console.error("Error confirming booking:", error);
-      alert("Đặt lịch thất bại. Vui lòng thử lại!");
+      toast.error("Đặt lịch thất bại. Vui lòng thử lại!", { position: "top-left", autoClose: 3000 });
     }
   };
 
@@ -291,6 +273,7 @@ const WorkerProfile = () => {
   return (
     
     <div className="w-[85%] m-auto white-color-sl">
+      <ToastContainer position="top-right" autoClose={3000} />
       <NavBar />
       <Container maxWidth="lg" sx={{ my: 4 }}>
         <Grid container spacing={4}>

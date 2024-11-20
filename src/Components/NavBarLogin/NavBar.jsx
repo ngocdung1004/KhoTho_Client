@@ -48,6 +48,12 @@ const NavBar = () => {
                 Thông tin cá nhân
               </Link>
               <Link 
+                to="/ordermanagement" 
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Quản lí đơn
+              </Link>
+              <Link 
                 to="/settings" 
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >

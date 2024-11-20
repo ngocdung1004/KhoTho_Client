@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Footer from '../../FooterDiv/Footer';
-import NavBar from '../../NavBar/NavBar';
+import NavBar from '../../NavBarLogin/NavBar';
 import './RegisterWorker.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -8,21 +8,20 @@ import * as config from "../../../services/config";
 import { API_ENDPOINT } from "../../../services/config";
 
 const RegisterWorker = () => {
+    const USERnow = JSON.parse(localStorage.getItem("userData"));
+    // Sử dụng useState để khởi tạo giá trị cho các trường
+    const [name, setName] = useState(USERnow ? USERnow.fullName : "");
+    const [phone, setPhone] = useState(USERnow ? USERnow.phoneNumber : "");
+    const [email, setEmail] = useState(USERnow ? USERnow.email : "");
+    const [address, setAddress] = useState(USERnow ? USERnow.address : "");
 
     const navigate = useNavigate();
-
 
     const [profileImage, setProfileImage] = useState(null);
     const [activeTab, setActiveTab] = useState('basicInfo'); // State to track active tab
     const [frontCCCD, setFrontCCCD] = useState(null);  // State for front image
     const [backCCCD, setBackCCCD] = useState(null);    // State for back image
 
-
-    const [name, setName] = useState('');
-    const [surname, setSurname] = useState('');
-    const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
-    const [address, setAddress] = useState('');
     const [nationality, setNationality] = useState('Vietnam'); // default value
     const [industryGroup, setIndustryGroup] = useState('');
     const [specialization, setSpecialization] = useState('');
@@ -163,7 +162,7 @@ const RegisterWorker = () => {
                 className={`tab cursor-pointer pb-2 ${activeTab === 'introductionInfo' ? 'border-b-2 border-blue-500' : ''}`}
                 onClick={() => handleTabChange('introductionInfo')}
               >
-                Introduction
+                Giới thiệu
               </div>
 
               <div
@@ -180,23 +179,19 @@ const RegisterWorker = () => {
               <div className="form-container">
                 <div className="form-row mb-4">
                   <label className="block text-gray-600">Tên</label>
-                  <input type="text" placeholder="Khải Hoàn" className="input-field" value={name} onChange={(e) => setName(e.target.value)}/>
-                </div>
-                <div className="form-row mb-4">
-                  <label className="block text-gray-600">Họ</label>
-                  <input type="text" placeholder="Hà" className="input-field" value={surname} onChange={(e) => setSurname(e.target.value)}/>
+                  <input type="text" className="input-field" value={name} onChange={(e) => setName(e.target.value)}/>
                 </div>
                 <div className="form-row mb-4">
                   <label className="block text-gray-600">Số điện thoại</label>
-                  <input type="text" placeholder="0123456789" className="input-field" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                  <input type="text" className="input-field" value={phone} onChange={(e) => setPhone(e.target.value)} />
                 </div>
                 <div className="form-row mb-4">
                   <label className="block text-gray-600">Email</label>
-                  <input type="email" placeholder="tcook@apple.com" className="input-field" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                  <input type="email" className="input-field" value={email} onChange={(e) => setEmail(e.target.value)}/>
                 </div>
                 <div className="form-row mb-4">
                   <label className="block text-gray-600">Nơi thường trú</label>
-                  <input type="text" placeholder="Xã Nhơn Tân - Thị xã An Nhơn - Tỉnh Bình Định" className="input-field" value={address} onChange={(e) => setAddress(e.target.value)}/>
+                  <input type="text" className="input-field" value={address} onChange={(e) => setAddress(e.target.value)}/>
                 </div>
                 <div className="form-row mb-4">
                   <label className="block text-gray-600">Quốc tịch</label>

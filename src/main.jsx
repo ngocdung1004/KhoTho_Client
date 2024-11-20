@@ -21,6 +21,7 @@ import WorkerDashboard from './Components/pages/Dashboard/Worker/WorkDashboard';
 import RegisterWorker from './Components/pages/RegisterWorker/RegisterWorker'
 import OrderTracking from './Components/pages/OrderTracking/OrderTracking'
 import Profile from './Components/pages/MyProfile/Profile';
+import OrderManagement from './Components/pages/OrderManagement/OrderManagement';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/khotho" element={<Jobs />} /> 
         <Route path="/ordertracking" element={<OrderTracking />} />  
+        <Route path="/ordermanagement" element={<OrderManagement />} />  
         <Route path="/jobs" element={<App />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
