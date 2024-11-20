@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import authService from "../../../services/authService";
-import { Snackbar, Alert } from "@mui/material";
+import axios from "axios";
+import { TEInput, TERipple } from "tw-elements-react";
+import { Snackbar, Alert, IconButton } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { API_ENDPOINT } from "../../../services/config";
 import bgrLogin from "../../../Assets/bgr-login.jpg";
+import "./Register.css";
 
-const Register = () => {
+export default function Register() {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [notification, setNotification] = useState({
     open: false,
     message: "",
@@ -19,42 +26,50 @@ const Register = () => {
     setNotification({ ...notification, open: false });
   };
 
-  const handleRegister = async () => {
-    if (password !== confirmPassword) {
-      setNotification({
-        open: true,
-        message: "Mật khẩu không khớp!",
-        severity: "error",
-      });
-      return;
-    }
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleRegister = async (event) => {
+    event.preventDefault();
+    const userData = {
+      fullName,
+      email,
+      password,
+      phoneNumber,
+      address,
+      userType: 1,
+    };
 
     try {
-      const userData = await authService.register(email, password);
-      if (userData && userData.token) {
-        localStorage.setItem("authToken", userData.token);
-        localStorage.setItem("userType", userData.userType);
-        localStorage.setItem("userData", JSON.stringify(userData));
+      const response = await axios.post(
+        `${API_ENDPOINT}/api/Auth/register`,
+        userData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
+      console.log("Response:", response);
+
+      if (response.status === 200) {
         setNotification({
           open: true,
           message: "Đăng ký thành công!",
           severity: "success",
         });
-
-        setTimeout(() => {
-          switch (userData.userType) {
-            case 0: navigate("/dashboard"); break;
-            case 1: navigate("/jobs"); break;
-            case 2: navigate("/workers"); break;
-            default: navigate("/");
-          }
-        }, 1000);
+        setTimeout(() => navigate("/login"), 2000);
+      } else {
+        setNotification({
+          open: true,
+          message: "Đăng ký thất bại! Vui lòng kiểm tra lại thông tin.",
+          severity: "error",
+        });
       }
     } catch (error) {
       setNotification({
         open: true,
-        message: error.response?.data || "Lỗi khi đăng ký! Vui lòng thử lại.",
+        message: "Đăng ký thất bại! Vui lòng kiểm tra lại thông tin.",
         severity: "error",
       });
     }
@@ -101,74 +116,130 @@ const Register = () => {
               </h4>
             </div>
 
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-6" onSubmit={handleRegister}>
               <p className="text-center text-gray-600">
                 Vui lòng đăng ký tài khoản của bạn
               </p>
 
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white/80"
-                    placeholder="Nhập email của bạn"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Họ và tên
+                </label>
+                <input
+                  type="text"
+                  id="fullName"
+                  placeholder="Nhập họ và tên"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white/80"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Mật khẩu
-                  </label>
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Nhập email"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white/80"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Mật khẩu
+                </label>
+                <div className="relative">
                   <input
-                    type="password"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white/80"
-                    placeholder="Nhập mật khẩu của bạn"
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    placeholder="Nhập mật khẩu"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white/80 pr-10"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Xác nhận mật khẩu
-                  </label>
-                  <input
-                    type="password"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white/80"
-                    placeholder="Xác nhận mật khẩu của bạn"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-2">
+                    <IconButton
+                      onClick={togglePasswordVisibility}
+                      edge="end"
+                      size="small"
+                      style={{ color: "#666" }}
+                    >
+                      {showPassword ? (
+                        <VisibilityOff fontSize="small" />
+                      ) : (
+                        <Visibility fontSize="small" />
+                      )}
+                    </IconButton>
+                  </div>
                 </div>
               </div>
+              
 
-              <button
-                className="w-full py-2 px-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold rounded-lg shadow-md hover:from-orange-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 transition-all duration-300"
-                onClick={handleRegister}
-              >
-                Đăng ký
-              </button>
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Số điện thoại
+                </label>
+                <input
+                  type="text"
+                  id="phoneNumber"
+                  placeholder="Nhập số điện thoại"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white/80"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+              </div>
 
-              <div className="flex items-center justify-between mt-6">
-                <p className="text-sm text-gray-600">Bạn đã có tài khoản?</p>
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Địa chỉ
+                </label>
+                <input
+                  type="text"
+                  id="address"
+                  placeholder="Nhập địa chỉ"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-white/80"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
+              
+
+              <div className="text-center mb-4">
+                <TERipple rippleColor="light" className="w-full">
+                  <button
+                    className="inline-block w-full rounded px-6 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow-lg transition duration-150 ease-in-out"
+                    style={{
+                      background:
+                        "linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593)",
+                    }}
+                    type="submit"
+                  >
+                    Đăng ký
+                  </button>
+                </TERipple>
+              </div>
+            </form>
+
+            <div className="flex items-center justify-between pb-6">
+              <p className="mb-0 mr-2 text-sm">Bạn đã có tài khoản?</p>
+              <TERipple rippleColor="light">
                 <button
-                  className="px-4 py-2 text-sm font-medium text-pink-500 border-2 border-pink-500 rounded-lg hover:bg-pink-50 transition-colors duration-300"
+                  type="button"
+                  className="inline-block rounded border-2 border-danger px-6 py-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-danger-600"
                   onClick={() => navigate("/login")}
                 >
                   Đăng nhập
                 </button>
-              </div>
-            </form>
+              </TERipple>
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
-};
-
-export default Register;
+}
