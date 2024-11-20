@@ -1,0 +1,87 @@
+/* Footer Container */
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+    padding: 3rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg,#010976, #61a0e9);
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    color: white;
+  }
+  
+  /* Individual Footer Section */
+  .footer-section {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Logo Section */
+  .footer-logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 1rem;
+  }
+  
+  /* Description Text */
+  .footer-description {
+    font-size: 16px;
+    line-height: 1.5;
+    opacity: 0.85;
+  }
+  
+  /* Title for Links Section */
+  .footer-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Links List */
+  .footer-links {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-links li {
+    font-size: 15px;
+    opacity: 0.75;
+    transition: opacity 0.3s;
+  }
+  
+  .footer-links li:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+  
+  /* Contact Email */
+  .contact-email {
+    font-size: 14px;
+    margin-top: 1rem;
+    display: block;
+  }
+  
+  /* Social Icons */
+  .social-icons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .icon {
+    background-color: white;
+    color: #1a73e8;
+    padding: 8px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    transition: transform 0.3s, background-color 0.3s;
+  }
+  
+  .icon:hover {
+    transform: scale(1.1);
+    background-color: #e0f2ff;
+  }
+  

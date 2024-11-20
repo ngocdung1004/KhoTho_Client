@@ -4,6 +4,44 @@
     z-index: 1;
     text-transform: uppercase;
   }
+
+  .cta-section {
+    background: linear-gradient(135deg, #61a0e9, #50e3c2);
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    color: #fff;
+  }
+
+  .cta-text-h4 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffffff;
+  }
+
+  
+
+  .cta-text-p {
+    font-size: 1.1rem;
+    color: #707b7c;
+  }
+
+  .cta-btn {
+    background-color: #ffbf00;
+    color: #fff;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .cta-btn:hover {
+    background-color: #ff9f00;
+    box-shadow: 0px 5px 15px rgba(255, 191, 0, 0.3);
+  }
   
   .btn-common:hover {
     color: #0d6efd;
@@ -62,3 +100,125 @@
     font-size: 17px;
     color: #545353;
   }
+
+  #pricing {
+    text-align: center;
+  }
+
+  .width_default {
+    width: 350px;
+  }
+
+  .height_default {
+    height: 600px;
+  }
+  
+  #pricing .title {
+    padding-top: 20px;
+    color: #333;
+    font-size: 18px;
+    text-transform: uppercase;
+  }
+  
+  #pricing .table {
+    margin-top: 15px;
+    padding: 30px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  #pricing .table:hover {
+    background: #ffffff;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
+  }
+  
+  #pricing .table .icon-box {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #EBEDEF;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  #pricing .table:hover .icon-box {
+    background: rgb(255 182 42);
+  }
+  
+  #pricing .table .icon-box i {
+    color: rgb(255 182 42);
+    font-size: 30px;
+    transition: color 0.3s ease;
+  }
+  
+  #pricing .table:hover .icon-box i {
+    color: #fff;
+  }
+  
+  #pricing .pricing-header {
+    /* margin-bottom: 15px; */
+    color: rgb(255 182 42);
+    font-size: 24px;
+    font-weight: 700;
+  }
+  
+  #pricing .pricing-header .price-value span {
+    font-size: 15px;
+    color: #abacae;
+    font-weight: 400;
+  }
+  
+  #pricing .description {
+    padding: 0 20px;
+    list-style: none;
+    text-decoration: none;
+  }
+  
+  #pricing .description li {
+    font-size: 14px;
+    color: #555;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f1f1;
+  }
+
+  #pricing .description li:hover {
+    text-decoration: none;
+  }
+  
+  #pricing .description li:last-child {
+    border-bottom: none;
+    text-decoration: none;
+
+  }
+  
+  #pricing #active-tb {
+    background: #ffffff;
+    box-shadow: 0 10px 22px rgba(27, 38, 49, 0.1);
+  }
+  
+  #pricing #active-tb .icon-box {
+    background: rgb(255 182 42);
+  }
+  
+  #pricing #active-tb .icon-box i {
+    color: #fff;
+  }
+  
+  .btn.btn-common {
+    background: rgb(255 182 42);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn.btn-common:hover {
+    background: rgb(255 182 42);
+  }
+  
