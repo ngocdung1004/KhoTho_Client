@@ -24,13 +24,11 @@ import {
   Logout,
   ChevronLeft,
   ChevronRight,
-  BookOnline,
-  Schedule,
 } from '@mui/icons-material';
 import { useState } from 'react';
 import { API_ENDPOINT } from "../../../services/config";
 
-// Styled components remain the same
+// Styled components
 const DrawerHeader = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -100,16 +98,6 @@ const Sidebar = () => {
       icon: <Work />
     },
     {
-      path: '/admin/bookings',
-      name: 'Booking',
-      icon: <BookOnline />
-    },
-    // {
-    //   path: '/admin/workerschedule',
-    //   name: 'Worker Schedule',
-    //   icon: <Schedule />
-    // },
-    {
       path: '/admin/jobtypes',
       name: 'Job Types',
       icon: <Category />
@@ -131,6 +119,7 @@ const Sidebar = () => {
 
   return (
     <DrawerComponent variant="permanent">
+      
       <DrawerHeader>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Avatar
@@ -147,6 +136,18 @@ const Sidebar = () => {
             </Box>
           )}
         </Box>
+        {/* <IconButton
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          sx={{
+            color: 'inherit',
+            position: 'absolute',
+            right: -12,
+            bgcolor: 'primary.main',
+            '&:hover': { bgcolor: 'primary.dark' },
+          }}
+        >
+          {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
+        </IconButton> */}
       </DrawerHeader>
 
       <Divider />
