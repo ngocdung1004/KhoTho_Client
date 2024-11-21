@@ -8,14 +8,7 @@ import "./OrderManagement.css";
 
 const OrderManagement = () => {
 
-    const jobTypeMapping = {
-        1: "Dọn dẹp",
-        2: "Giữ trẻ",
-        3: "Sửa chữa",
-        4: "Nấu ăn",
-        5: "Lái xe",
-        6: "Giao hàng",
-        };
+  const [jobTypeMapping, setJobTypeMapping] = useState({});
 
   const navigate = useNavigate();
   const USERnow = JSON.parse(localStorage.getItem("userData"));
@@ -26,18 +19,32 @@ const OrderManagement = () => {
   const [activeTab, setActiveTab] = useState("Pending");
 
   const [workers, setWorkers] = useState({});
-  console.log("----",workers)
 
   useEffect(() => {
     const fetchALLBookingDetails = async () => {
       try {
-        const ALL_book = await axios.get(`${API_ENDPOINT}/api/Booking`, {
+        const ALL_book = await axios.get(`${API_ENDPOINT}/api/Booking/customer/${userID}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
+        const ALL_jobtype = await axios.get(`${API_ENDPOINT}/api/JobTypes`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const jobTypeData = ALL_jobtype.data;
+        const mapping = jobTypeData.reduce((acc, job) => {
+            acc[job.jobTypeId] = job.jobTypeName;
+            return acc;
+        }, {});
+
+        setJobTypeMapping(mapping); 
+
         const filteredBookings = ALL_book.data.filter(
           (booking) => booking.customerID === userID
         );
@@ -49,7 +56,7 @@ const OrderManagement = () => {
           if (booking.workerID) {
             try {
               const workerResponse = await axios.get(
-                `https://localhost:7062/api/Workers/${booking.workerID}`,
+                `${API_ENDPOINT}/api/Workers/${booking.workerID}`,
                 {
                   headers: {
                     "Authorization": `Bearer ${token}`,
@@ -88,8 +95,6 @@ const OrderManagement = () => {
   const filterBookingsByStatus = (status) => {
     return bookings.filter((booking) => booking.status === status);
   };
-
-  console.log(bookings)
 
   return (
     <div className="w-[85%] m-auto white-color-sl">
@@ -163,7 +168,7 @@ const OrderManagement = () => {
           <p>{`Đánh giá: ${workers[booking.workerID].rating}`}</p>
           <p>{`Giới thiệu: ${workers[booking.workerID].bio}`}</p>
           {/* <h2 className="job">{`Chuyên môn: ${jobTypeMapping[workers[booking.workerID].user.userType]}`}</h2> */}
-          <h2 className="Expertise">{`Chuyên môn: Dọn dẹp`}</h2>
+          <h2 className="Expertise">{jobTypeMapping[workers[booking.workerID].user.userType]}</h2>
         </div>
       )}
     </div>

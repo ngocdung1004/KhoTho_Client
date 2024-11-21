@@ -12,14 +12,7 @@ import "./OrderTracking.css"
 import { useParams, useLocation } from "react-router-dom";
 
 const OrderTracking = () => {
-    const jobTypeMapping = {
-        1: "Dọn dẹp",
-        2: "Giữ trẻ",
-        3: "Sửa chữa",
-        4: "Nấu ăn",
-        5: "Lái xe",
-        6: "Giao hàng",
-    };
+    const [jobTypeMapping, setJobTypeMapping] = useState({});
     
     const [isModalOpen, setModalOpen] = useState(false);
     const [isRatingStep, setRatingStep] = useState(false);
@@ -33,7 +26,7 @@ const OrderTracking = () => {
     const userDataString = JSON.parse(localStorage.getItem("userData"));
     const token = localStorage.getItem('authToken')
     const location = useLocation();
-    const  bookingid = location.state;
+    const booking_id = location.state;
 
     const [dataBookingOrder, setDataBookingOrder] = useState(null);
     const [dataWorkerOrder, setDataWorkerOrder] = useState(null);
@@ -47,16 +40,19 @@ const OrderTracking = () => {
             .replace(/\s+/g, "") // Xóa khoảng trắng
             .toUpperCase(); // Chuyển tất cả chữ thành viết hoa
     };
-    
+
+
     useEffect(() => {
         const fetchBookingDetails = async () => {
             try {
-                const response_book = await axios.get(`${API_ENDPOINT}/api/Booking/${bookingid}`, {
+                const response_book = await axios.get(`${API_ENDPOINT}/api/Booking/${booking_id}`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                     },
                 });
+
+                console.log("+++++",response_book.data)
 
                 const response_worker = await axios.get(
                     `${API_ENDPOINT}/api/Workers/${response_book.data.workerID}`,
@@ -67,6 +63,25 @@ const OrderTracking = () => {
                         },
                     }
                 );
+
+                const response_jobtype = await axios.get(
+                    `${API_ENDPOINT}/api/JobTypes`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const jobTypeData =  response_jobtype.data;
+
+                const mapping = jobTypeData.reduce((acc, job) => {
+                    acc[job.jobTypeId] = job.jobTypeName;
+                    return acc;
+                }, {});
+
+                setJobTypeMapping(mapping);
                 setDataBookingOrder(response_book.data);
                 setDataWorkerOrder(response_worker.data);
                 setLoading(false);
@@ -76,7 +91,7 @@ const OrderTracking = () => {
             }
         };
         fetchBookingDetails()
-    }, [bookingid, token]);
+    }, [booking_id, token]);
 
     if (loading) {
         return (
@@ -121,14 +136,52 @@ const OrderTracking = () => {
         setRatingStep(true);
         setIsCompleted(true);
     }
+    console.log(dataBookingOrder)
+    const handleSubmitRating = async () => {
+        try {
 
-    const handleSubmitRating = () => {
-        console.log('Rating:', rating);
-        console.log('Comment:', comment);
-        handleCloseModal();
+            const payload = {
+                workerId: dataBookingOrder.workerID,  
+                customerId: dataBookingOrder.customerID,  
+                rating: rating,  
+                comments: comment,  
+            };
+    
+            // Gửi POST request
+            const response_rating = await axios.post(
+                `${API_ENDPOINT}/api/Reviews`, 
+                payload,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`, 
+                    },
+                }
+            );
 
+            const status = "Completed"; 
+            const response_status = await axios.put(
+                `${API_ENDPOINT}/api/Booking/${booking_id}/status`,  
+                `${status}`, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',  
+                        'Authorization': `Bearer ${token}`,  
+                    }
+                }
+            );
+
+
+
+            console.log("----", response_rating.data)
+            console.log("----", response_status.data)
+    
+            setIsEndRating(true);  
+            handleCloseModal();  
+        } catch (error) {
+            console.error("Lỗi khi gửi đánh giá:", error);
+        }
     };
-
 
     const getStepClass = (status, step) => {
         if (status === "Rejected") {
@@ -178,7 +231,6 @@ const OrderTracking = () => {
         return "green"; // Màu xanh khi hoàn thành
       };
 
-    console.log(dataBookingOrder.status)
 
     return (
         <div className="w-[85%] m-auto white-color-sl">
@@ -230,7 +282,7 @@ const OrderTracking = () => {
                             <span className="totalAmount">đ̲{dataBookingOrder.totalAmount}</span>
                         </div>
                         <div className='button-block'>
-                            {dataBookingOrder.status !== "Rejected" && (
+                            {dataBookingOrder.status !== ("Rejected" && "Completed") && (
                             <>
                                 {!isCompleted && (
                                 <button className="placeOrderButton" onClick={handleConfirm}>
@@ -274,7 +326,6 @@ const OrderTracking = () => {
                             <div className="cardContent">
                                 <p>{WORKER_name}</p>
                                 <p>{WORKER_address}</p>
-                                <p>Việt Nam</p>
                                 <p>{WORKER_phone}</p>
                             </div>
                         </div>
@@ -286,7 +337,6 @@ const OrderTracking = () => {
                             </div>
                             <div className="cardContent">
                                 <p>{userDataString.address}</p>
-                                <p>Việt Nam</p>
                                 <p>{userDataString.phoneNumber}</p>
                             </div>
                         </div>
@@ -326,7 +376,7 @@ const OrderTracking = () => {
                             </div>
                         </div>
                         <span>{WORKER_address}</span>
-                        <span>Dọn dẹp</span>
+                        <span>{jobTypeMapping[dataBookingOrder.jobTypeID]}</span>
                         <span>{dataBookingOrder.totalHours}</span>
                         <span>{dataBookingOrder.hourlyRate}</span>
                         <span>{dataBookingOrder.totalAmount}</span>

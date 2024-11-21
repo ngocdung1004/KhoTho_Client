@@ -223,7 +223,6 @@ const WorkerProfile = () => {
       const responseData = response.data;
       console.log("Dữ liệu trả về từ API:", responseData);
   
-      console.log("Booking confirmed");
       toast.success("Đặt lịch thành công!", { position: "top-left", autoClose: 3000 });
       setIsModalOpen(false);
       setTimeout(() => navigate("/ordertracking", { state: responseData.bookingID }), 1000);
