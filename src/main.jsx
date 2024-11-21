@@ -17,6 +17,8 @@ import Dashboard from './Components/pages/Dashboard/Dashboard';  // Updated path
 import WorkerManagement from './Components/pages/Dashboard/WorkerManagement';
 import JobTypeManagement from './Components/pages/Dashboard/JobTypeManagement';
 import ReviewManagement from './Components/pages/Dashboard/ReviewManagement';
+import BookingManagement from './Components/pages/Dashboard/BookingManagement';
+import WorkerScheduleManagement from './Components/pages/Dashboard/WorkerScheduleManagement';
 import WorkerDashboard from './Components/pages/Dashboard/Worker/WorkDashboard';
 import RegisterWorker from './Components/pages/RegisterWorker/RegisterWorker'
 import OrderTracking from './Components/pages/OrderTracking/OrderTracking'
@@ -53,6 +55,20 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/khotho/workers" element={<WorkerDashboard/>} />
         <Route path="/khotho/registerworker" element={<RegisterWorker/>} />
         <Route path="/khotho/ordertracking" element={<OrderTracking/>} />
+        <Route path="/customerdashboard" element={<CustomerDashboard />} />  
+        <Route path="/worker-profile/:workerId" element={<WorkerProfile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin/usermanagement" element={<UserManagement />} />
+        <Route path="/admin/customers" element={<CustomerDashboard />} />  
+        <Route path="/admin/users" element={<UserManagement />} />  
+        <Route path="/admin/workers" element={<WorkerManagement/>} />  
+        <Route path="/admin/jobtypes" element={<JobTypeManagement />} />
+        <Route path="/admin/bookings" element={<BookingManagement />} />
+        <Route path="/admin/reviews" element={<ReviewManagement />} />
+        <Route path="/admin/workerschedule" element={<WorkerScheduleManagement />} />
+        <Route path="/workers" element={<WorkerDashboard/>} />
+        <Route path="/registerworker" element={<RegisterWorker/>} />
+        <Route path="/ordertracking" element={<OrderTracking/>} />
         
         <Route path="/khotho/profile" element={<Profile />} />
       </Routes>
