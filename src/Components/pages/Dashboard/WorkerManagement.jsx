@@ -53,7 +53,8 @@ const WorkerManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("https://localhost:7062/api/Users");
+      // const response = await axios.get("https://localhost:7062/api/Users");
+      const response = await axios.get(`${API_ENDPOINT}/api/Users`);
       const availableUsers = response.data.filter(
         (user) => user.userType === 1 && !user.worker
       );
@@ -66,7 +67,8 @@ const WorkerManagement = () => {
   // Thêm hàm fetch WorkerJobTypes
 const fetchWorkerJobTypes = async (workerId) => {
   try {
-    const response = await axios.get(`https://localhost:7062/api/WorkerJobTypes/worker/${workerId}`);
+    // const response = await axios.get(`https://localhost:7062/api/WorkerJobTypes/worker/${workerId}`);
+    const response = await axios.get(`${API_ENDPOINT}/api/WorkerJobTypes/worker/${workerId}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching worker job types:", error);
@@ -78,7 +80,8 @@ const fetchWorkerJobTypes = async (workerId) => {
 
   const fetchJobTypes = async () => {
     try {
-      const response = await axios.get("https://localhost:7062/api/JobTypes");
+      // const response = await axios.get("https://localhost:7062/api/JobTypes");
+      const response = await axios.get(`${API_ENDPOINT}/api/JobTypes`);
       console.log("Job Types:", response.data);
       setJobTypes(response.data);
     } catch (error) {
@@ -152,7 +155,8 @@ const fetchWorkerJobTypes = async (workerId) => {
   
       // Thêm worker job types
       for (const jobType of values.selectedJobTypes) {
-        await axios.post('https://localhost:7062/api/WorkerJobTypes', {
+        // await axios.post('https://localhost:7062/api/WorkerJobTypes', {
+        await axios.post(`${API_ENDPOINT}/api/WorkerJobTypes`, {
           workerId: createdWorker.workerId,
           jobTypeId: jobType.jobTypeId
         });
@@ -468,7 +472,9 @@ const EditWorkerModal = ({ open, onClose, onSubmit, row, jobTypes }) => {
       await axios.put(`${API_URL}/${row.original.workerId}`, updatedWorker);
   
       console.log("Deleting old job types...");
-      await axios.delete(`https://localhost:7062/api/WorkerJobTypes/worker/${row.original.workerId}`);
+      // await axios.delete(`https://localhost:7062/api/WorkerJobTypes/worker/${row.original.workerId}`);
+      await axios.delete(`${API_ENDPOINT}/api/WorkerJobTypes/worker/${row.original.workerId}`);
+
   
       const newWorkerJobType = {
         workerId: row.original.workerId,
@@ -476,7 +482,9 @@ const EditWorkerModal = ({ open, onClose, onSubmit, row, jobTypes }) => {
       };
       
       console.log("Adding new job type:", newWorkerJobType);
-      await axios.post('https://localhost:7062/api/WorkerJobTypes', newWorkerJobType);
+      // await axios.post('https://localhost:7062/api/WorkerJobTypes', newWorkerJobType);
+      await axios.post(`${API_ENDPOINT}/api/WorkerJobTypes`, newWorkerJobType);
+
   
       console.log("Update completed successfully");
       onClose();

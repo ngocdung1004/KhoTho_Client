@@ -17,9 +17,10 @@ import {
 import { Delete, Edit, Add } from '@mui/icons-material';
 import Sidebar from '../Dashboard/Sidebar';
 import axios from 'axios';
+import { API_ENDPOINT } from "../../../services/config";
 
-const API_URL = 'https://localhost:7062/api/WorkerSchedule';
-
+// const API_URL = 'https://localhost:7062/api/WorkerSchedule';
+const API_URL = `${API_ENDPOINT}/api/WorkerSchedule`;
 const WorkerScheduleManagement = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
