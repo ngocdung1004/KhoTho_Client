@@ -19,8 +19,10 @@ import { Delete, Edit, Add } from '@mui/icons-material';
 import Sidebar from '../Dashboard/Sidebar';
 import axios from 'axios';
 import { format } from 'date-fns';
+import { API_ENDPOINT } from "../../../services/config";
 
-const API_URL = 'https://localhost:7062/api/Booking';
+// const API_URL = 'https://localhost:7062/api/Booking';
+const API_URL = `${API_ENDPOINT}/api/Booking`;
 
 const BookingManagement = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -57,7 +59,8 @@ const BookingManagement = () => {
 
   const fetchWorkers = async () => {
     try {
-      const response = await axios.get('https://localhost:7062/api/Workers');
+      const response = await axios.get(`${API_ENDPOINT}/api/Workers`);
+      // const response = await axios.get('https://localhost:7062/api/Workers');
       setWorkers(response.data);
     } catch (error) {
       console.error('Error fetching workers:', error);
@@ -66,7 +69,8 @@ const BookingManagement = () => {
 
   const fetchJobTypes = async () => {
     try {
-      const response = await axios.get('https://localhost:7062/api/JobTypes');
+      const response = await axios.get(`${API_ENDPOINT}/api/JobTypes`);
+      // const response = await axios.get('https://localhost:7062/api/JobTypes');
       setJobTypes(response.data);
     } catch (error) {
       console.error('Error fetching job types:', error);

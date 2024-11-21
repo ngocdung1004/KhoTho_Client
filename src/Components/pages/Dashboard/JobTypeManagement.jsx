@@ -19,7 +19,8 @@ import Sidebar from '../Dashboard/Sidebar';
 import axios from 'axios';
 import { API_ENDPOINT } from "../../../services/config";
 
-const API_URL = 'https://localhost:7062/api/JobTypes';
+// const API_URL = 'https://localhost:7062/api/JobTypes';
+const API_URL = `${API_ENDPOINT}/api/JobTypes`;
 
 const JobTypeManagement = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -113,7 +114,8 @@ const JobTypeManagement = () => {
 
   const fetchWorkerJobTypes = async () => {
     try {
-      const response = await axios.get('https://localhost:7062/api/WorkerJobTypes');
+      const response = await axios.get(`${API_ENDPOINT}/api/WorkerJobTypes`);
+      // const response = await axios.get('https://localhost:7062/api/WorkerJobTypes');
       const workerJobTypes = response.data;
   
       // Đếm số lượng nhân viên cho mỗi Job Type
