@@ -100,7 +100,7 @@ const Sidebar = () => {
       icon: <Work />
     },
     {
-      path: '/admin/bookings',
+      path: '/khotho/admin/bookings',
       name: 'Booking',
       icon: <BookOnline />
     },
@@ -110,7 +110,7 @@ const Sidebar = () => {
     //   icon: <Schedule />
     // },
     {
-      path: '/admin/jobtypes',
+      path: '/khotho/admin/jobtypes',
       name: 'Job Types',
       icon: <Category />
     },
