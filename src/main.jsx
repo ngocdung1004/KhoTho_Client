@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './Components/pages/App';
 import About from './Components/pages/About';
+import AboutLogin from './Components/pages/AboutLogin';
 import Contact from './Components/pages/Contact';
+import ContactLogin from './Components/pages/ContactLogin';
 import Customer from './Components/pages/Customer';
 import Jobs from './Components/pages/Jobs';
 import Register from './Components/pages/RegisterPage/Register';  
@@ -34,7 +36,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/ordertracking" element={<OrderTracking />} />  
         <Route path="/jobs" element={<App />} />
         <Route path="/about" element={<About />} />
+        <Route path="/aboutlogin" element={<AboutLogin />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/contactlogin" element={<ContactLogin />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/customer" element={<Customer />} />

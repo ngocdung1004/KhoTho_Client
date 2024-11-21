@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
+  const isLoggedIn = !!localStorage.getItem('authToken');
   return (
     <div className='navBar flex justify-between items-center p-[3rem]'>
       <div className="logoDiv">

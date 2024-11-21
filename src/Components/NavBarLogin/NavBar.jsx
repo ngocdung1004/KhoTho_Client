@@ -7,11 +7,11 @@ import avatar1 from '../../Assets/user/avatar-1.jpg';
 
 const NavBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const isLoggedIn = !!localStorage.getItem('authToken');
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
-
   return (
     <div className='navBar flex justify-between items-center p-[3rem]'>
       <div className="logoDiv">
@@ -30,8 +30,8 @@ const NavBar = () => {
         </Link>
         <Link to="/jobs" className="menuList text-[#6f6f6f] hover:text-blueColor">Công việc</Link>
         <Link to="/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Khách hàng</Link>
-        <Link to="/about" className="menuList text-[#6f6f6f] hover:text-blueColor">Tổng quan</Link>
-        <Link to="/contact" className="menuList text-[#6f6f6f] hover:text-blueColor">Liên hệ</Link>
+        <Link to="/aboutlogin"  className="menuList text-[#6f6f6f] hover:text-blueColor">Giới thiệu</Link>
+        <Link to="/contactlogin" className="menuList text-[#6f6f6f] hover:text-blueColor">Liên hệ</Link>
         <div className="relative">
           <img
             className="rounded-full w-10 mr-2 cursor-pointer"

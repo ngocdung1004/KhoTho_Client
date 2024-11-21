@@ -1,5 +1,5 @@
 // import React from 'react'
-import NavBar from '../NavBar/NavBar'
+import NavBar from '../NavBarLogin/NavBar'
 import ContactForm from '../Contact/Contact';
 import Social from '../Contact/Social';
 import Footer from '../FooterDiv/Footer'
@@ -27,7 +27,7 @@ const Contact = () => {
 
   return (
     <div className='w-[85%] m-auto white-color-sl'>
-     <NavBar />
+     <NavBarLogin />
         <Container className='white-color-sl'>
           <ContactForm />
           <section id="contact" className="section-padding bg-gray">
@@ -178,4 +178,4 @@ const Contact = () => {
   )
 }
 
-export default Contact
+export default Contac
