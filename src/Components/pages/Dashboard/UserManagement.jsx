@@ -18,8 +18,9 @@ import {
 import { Delete, Edit, Add } from '@mui/icons-material';
 import Sidebar from '../Dashboard/Sidebar';
 import axios from 'axios';
+import { API_ENDPOINT } from "../../../services/config";
 
-const API_URL = 'https://localhost:7062/api/Users';
+const API_URL = `${API_ENDPOINT}/api/Users`;
 
 const UserManagement = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);

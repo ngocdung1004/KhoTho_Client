@@ -3,6 +3,7 @@ import Sidebar from './Sidebar';
 import DashboardContent from './DashboardContent';
 import NavBar from '../../NavBarLogin/NavBar';
 import Footer from '../../FooterDiv/Footer';
+import { API_ENDPOINT } from "../../../services/config";
 
 const Dashboard = () => {
   return (

@@ -26,6 +26,7 @@ import {
   ChevronRight,
 } from '@mui/icons-material';
 import { useState } from 'react';
+import { API_ENDPOINT } from "../../../services/config";
 
 // Styled components
 const DrawerHeader = styled(Box)(({ theme }) => ({
@@ -82,27 +83,27 @@ const Sidebar = () => {
 
   const menuItems = [
     {
-      path: '/dashboard',
+      path: '/khotho/dashboard',
       name: 'Dashboard',
       icon: <Dashboard />
     },
     {
-      path: '/admin/users',
+      path: '/khotho/admin/users',
       name: 'Users',
       icon: <People />
     },
     {
-      path: '/admin/workers',
+      path: '/khotho/admin/workers',
       name: 'Workers',
       icon: <Work />
     },
     {
-      path: '/admin/jobtypes',
+      path: '/khotho/admin/jobtypes',
       name: 'Job Types',
       icon: <Category />
     },
     {
-      path: '/admin/reviews',
+      path: '/khotho/admin/reviews',
       name: 'Reviews',
       icon: <Star />
     }
@@ -111,7 +112,7 @@ const Sidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   const handleLogout = () => {
-    navigate('/login');
+    navigate('/khotho/login');
   };
 
   const DrawerComponent = isCollapsed ? CollapsedDrawer : StyledDrawer;

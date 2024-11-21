@@ -20,8 +20,9 @@ import {
 import { Delete, Edit, Add } from "@mui/icons-material";
 import Sidebar from "../Dashboard/Sidebar";
 import axios from "axios";
+import { API_ENDPOINT } from "../../../services/config";
 
-const API_URL = "https://localhost:7062/api/Workers";
+const API_URL = `${API_ENDPOINT}/api/Workers`;
 
 const WorkerManagement = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -52,7 +53,8 @@ const WorkerManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("https://localhost:7062/api/Users");
+      const response = await axios.get(`${API_ENDPOINT}/api/Users`);
+      // Lọc users có userType là 1 và chưa là worker
       const availableUsers = response.data.filter(
         (user) => user.userType === 1 && !user.worker
       );
@@ -77,8 +79,8 @@ const fetchWorkerJobTypes = async (workerId) => {
 
   const fetchJobTypes = async () => {
     try {
-      const response = await axios.get("https://localhost:7062/api/JobTypes");
-      console.log("Job Types:", response.data);
+      const response = await axios.get(`${API_ENDPOINT}/api/JobTypes`);
+      console.log("Job Types:", response.data); // Thêm dòng này để kiểm tra
       setJobTypes(response.data);
     } catch (error) {
       console.error("Error fetching job types:", error);
