@@ -17,6 +17,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import axios from 'axios';
 import { format, addMonths, subMonths } from 'date-fns';
+import { API_ENDPOINT } from "../../../../services/config";
 
 const Schedules = ({ workerId }) => {
   const [schedules, setSchedules] = useState([]);
@@ -31,10 +32,10 @@ const Schedules = ({ workerId }) => {
       try {
         const token = localStorage.getItem('authToken');
         const [schedulesResponse, bookingsResponse] = await Promise.all([
-          axios.get(`https://localhost:7062/api/WorkerSchedule/worker/${workerId}`, {
+          axios.get(`${API_ENDPOINT}/api/WorkerSchedule/worker/${workerId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
           }),
-          axios.get(`https://localhost:7062/api/Booking/worker/${workerId}`, {
+          axios.get(`${API_ENDPOINT}/api/Booking/worker/${workerId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
           })
         ]);
