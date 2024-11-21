@@ -173,8 +173,7 @@ const OrderTracking = () => {
 
 
 
-            console.log("----", response_rating.data)
-            console.log("----", response_status.data)
+
     
             setIsEndRating(true);  
             handleCloseModal();  

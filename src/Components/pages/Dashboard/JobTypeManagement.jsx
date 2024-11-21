@@ -21,10 +21,11 @@ import {
 import { Delete, Edit, Add } from '@mui/icons-material';
 import Sidebar from '../Dashboard/Sidebar';
 import axios from 'axios';
+import { API_ENDPOINT } from "../../../services/config";
 
-const API_URL = 'https://localhost:7062/api/WorkerJobTypes';
-const WORKERS_API_URL = 'https://localhost:7062/api/Workers';
-const JOBTYPES_API_URL = 'https://localhost:7062/api/JobTypes';
+const API_URL = `${API_ENDPOINT}/api/WorkerJobTypes`;
+const WORKERS_API_URL = `${API_ENDPOINT}/api/Workers`;
+const JOBTYPES_API_URL = `${API_ENDPOINT}/api/JobTypes`;
 
 const JobTypeManagement = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);

@@ -24,6 +24,8 @@ ChartJS.register(
   Legend
 );
 
+import { API_ENDPOINT } from "../../../services/config";
+
 const DashboardContent = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -41,7 +43,7 @@ const DashboardContent = () => {
       const userType = localStorage.getItem("userType");
 
       if (!token || userType !== "0") {
-        navigate("/login");
+        navigate("/khotho/login");
         return false;
       }
       return true;
@@ -64,11 +66,11 @@ const DashboardContent = () => {
           reviewsRes,
           workerJobTypesRes,
         ] = await Promise.all([
-          fetch("https://localhost:7062/api/Users", { headers }),
-          fetch("https://localhost:7062/api/Workers", { headers }),
-          fetch("https://localhost:7062/api/JobTypes", { headers }),
-          fetch("https://localhost:7062/api/Reviews", { headers }),
-          fetch("https://localhost:7062/api/WorkerJobTypes", { headers }),
+          fetch(`${API_ENDPOINT}/api/Users`, { headers }),
+          fetch(`${API_ENDPOINT}/api/Workers`, { headers }),
+          fetch(`${API_ENDPOINT}/api/JobTypes`, { headers }),
+          fetch(`${API_ENDPOINT}/api/Reviews`, { headers }),
+          fetch(`${API_ENDPOINT}/api/WorkerJobTypes`, { headers }),
         ]);
 
         // Kiểm tra response status
@@ -102,7 +104,7 @@ const DashboardContent = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
         if (error.message === 'Unauthorized access') {
-          navigate('/login');
+          navigate('/khotho/login');
         }
         setIsLoading(false);
       }
