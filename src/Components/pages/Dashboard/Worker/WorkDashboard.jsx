@@ -15,6 +15,7 @@ import {
   CircularProgress,
   Alert
 } from '@mui/material';
+import { API_ENDPOINT } from "../../../../services/config";
 
 const WorkerDashboard = () => {
   const [bookings, setBookings] = useState([]);
@@ -32,7 +33,7 @@ const WorkerDashboard = () => {
       }
 
       try {
-        const response = await axios.get('https://localhost:7062/api/Workers/me', {
+        const response = await axios.get(`${API_ENDPOINT}/api/Workers/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -63,7 +64,7 @@ const WorkerDashboard = () => {
 
   const fetchBookings = async (workerId) => {
     try {
-      const response = await axios.get(`https://localhost:7062/api/Booking/worker/${workerId}`, {
+      const response = await axios.get(`${API_ENDPOINT}/api/Booking/worker/${workerId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -78,7 +79,7 @@ const WorkerDashboard = () => {
 
   const handleUpdateBookingStatus = async (bookingId, newStatus) => {
     try {
-      await axios.put(`https://localhost:7062/api/Booking/${bookingId}/status`,
+      await axios.put(`${API_ENDPOINT}/api/Booking/${bookingId}/status`,
         JSON.stringify(newStatus),
         {
           headers: {
