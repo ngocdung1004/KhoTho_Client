@@ -109,7 +109,7 @@ const WorkerDashboard = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box className = "w-[85%] m-auto white-color-sl" sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <NavBar />
       
       <Container maxWidth="lg" sx={{ flex: 1, py: 4 }}>
