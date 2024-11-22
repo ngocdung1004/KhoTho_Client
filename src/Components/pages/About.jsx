@@ -11,6 +11,7 @@ import {
   IconButton,
   Card,
   CardContent,
+  Box
 } from "@mui/material";
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
@@ -137,11 +138,12 @@ const About = () => {
               sx={{
                 fontWeight: '400',
                 paddingTop: 1,
+                textAlign: 'left',
               }}
             >
               <div style={{fontSize: "35px", fontWeight: "800"}}>Chúng tôi đang cung cấp những gì?</div>
               <div style={{fontWeight: "500"}}>Nền tảng quảng bá mạnh mẽ</div>
-              <div style={{fontSize: "14px", fontWeight: "300", width: "80%"}}>Cùng hệ thống tương tác hai chiều, dễ dàng đặt lịch để nhân viên đến hỗ trợ nhanh chóng cho công việc của bạn, hoặc chính bạn sẽ trở thành người làm việc để mang lại những nguồn thu nhập tuyệt vời cho chính bản thân.</div>
+              <div style={{fontSize: "15px", fontWeight: "300", width: "80%"}}>Cùng hệ thống tương tác hai chiều, dễ dàng đặt lịch để nhân viên đến hỗ trợ nhanh chóng cho công việc của bạn, hoặc chính bạn sẽ trở thành người làm việc để mang lại những nguồn thu nhập tuyệt vời cho chính bản thân.</div>
             </Typography>
           </Grid>
           

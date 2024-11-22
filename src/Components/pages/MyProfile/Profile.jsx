@@ -1,47 +1,22 @@
 import React, { useState, useEffect } from "react";
 import authService from "../../../services/authService";
-import {
-  TextField,
-  Button,
-  Snackbar,
-  Alert,
-  Typography,
-  Card,
-  CardContent,
-  Box,
-  Grid,
-  Avatar,
-  Divider,
-} from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import EditIcon from "@mui/icons-material/Edit";
-import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
-import StarRateIcon from "@mui/icons-material/StarRate";
+import "./Profile.css";
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#1976d2",
-    },
-    secondary: {
-      main: "#f50057",
-    },
-  },
-});
+import NavBar from '../../NavBarLogin/NavBar'
+import Footer from '../../FooterDiv/Footer'
+import avatar1 from '../../../Assets/user/avatar-1.jpg';
 
-const Profile = () => {
+export default function Profile() {
+  const [profileImage, setProfileImage] = useState(null);
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
-  const [avatarFile, setAvatarFile] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null);
   const [notification, setNotification] = useState({
     open: false,
     message: "",
     severity: "success",
   });
 
-  // Fetch user data on component mount
   useEffect(() => {
     loadUserData();
   }, []);
@@ -53,7 +28,6 @@ const Profile = () => {
         console.log(userData)
         setUser(userData);
         setFormData(userData);
-        setAvatarPreview(userData.avatarUrl);
       }
     } catch (error) {
       setNotification({
@@ -71,35 +45,12 @@ const Profile = () => {
     });
   };
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setAvatarFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const formDataToSend = new FormData();
-      Object.keys(formData).forEach((key) => {
-        formDataToSend.append(key, formData[key]);
-      });
-
-      if (avatarFile) {
-        formDataToSend.append("avatar", avatarFile);
-      }
-
-      const updatedUser = await authService.updateProfile(formDataToSend);
+      const updatedUser = await authService.updateProfile(formData);
       setUser(updatedUser);
       setIsEditing(false);
-      setAvatarFile(null);
       setNotification({
         open: true,
         message: "Cập nhật thông tin thành công!",
@@ -123,170 +74,127 @@ const Profile = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ mt: 4, mx: "auto", maxWidth: 900 }}>
-        {/* Notification Snackbar */}
-        <Snackbar
-          open={notification.open}
-          autoHideDuration={3000}
-          onClose={() => setNotification({ ...notification, open: false })}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert
-            onClose={() => setNotification({ ...notification, open: false })}
-            severity={notification.severity}
+    <div className="w-[85%] m-auto white-color-sl">
+      <NavBar/>
+      {notification.open && (
+        <div className={`notification ${notification.severity}`}>
+          <span>{notification.message}</span>
+          <button
+            className="close-btn"
+            onClick={() => setNotification({ ...notification, open: false })}
           >
-            {notification.message}
-          </Alert>
-        </Snackbar>
+            X
+          </button>
+        </div>
+      )}
 
-        <Card elevation={4} sx={{ mb: 4, borderRadius: 2 }}>
-          <CardContent>
-            {/* Profile Header */}
-            <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-              <input
-                accept="image/*"
-                style={{ display: "none" }}
-                id="avatar-upload"
-                type="file"
-                onChange={handleAvatarChange}
-                disabled={!isEditing}
-              />
-              <label htmlFor="avatar-upload">
-                <Avatar
-                  alt="Profile Picture"
-                  src={avatarPreview || "/default-avatar.png"}
-                  sx={{
-                    width: 150,  // Increased size
-                    height: 150,  // Increased size
-                    mr: 2,
-                    cursor: isEditing ? "pointer" : "default",
-                  }}
-                />
-                {isEditing && (
-                  <PhotoCameraIcon
-                    color="primary"
-                    sx={{
-                      position: "absolute",
-                      top: "100px", // Adjusted position
-                      left: "140px", // Adjusted position
-                      cursor: "pointer",
-                    }}
-                  />
-                )}
-              </label>
-              <Box>
-                <Typography variant="h4" component="div">
-                  {user.fullName}
-                </Typography>
-                <Typography variant="body1" color="textSecondary">
-                  {user.email}
-                </Typography>
-              </Box>
-            </Box>
+      {!user ? (
+        <p className="loading-text">Đang tải dữ liệu...</p>
+      ) : (
+        <div className="profile-content">
+          <div className="block-above">
+            <div className="profile-image-container relative inline-block mb-6">
+                          <img
+                          src={profileImage || avatar1}
+                          alt="Profile"
+                          className="profile-image w-60 h-60 rounded-full border-4 border-gray-300 shadow-lg transition-all duration-300 hover:scale-105"
+                          />
+                          <input
+                          type="file"
+                          id="fileUpload"
+                          style={{ display: 'none' }}
+                          onChange={handleImageUpload}
+                          />
+                          <label
+                          htmlFor="fileUpload"
+                          className="upload-icon absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-3 cursor-pointer transition-all duration-300 transform hover:scale-110"
+                          >
+                          📷
+                          </label>
+                      </div>
+            <div className="profile-header">
+              <h1>Thông tin cá nhân</h1>
+            </div>
+          </div>
+          <div className="profile-body">
+            <div className="info-card">
+              <h2>Thông tin chính</h2>
+              <div className="info-row">
+                <span className="info-label">Họ và tên:</span>
+                <span>{user.fullName}</span>
+              </div>
+              <div className="info-row">
+                <span className="info-label">Email:</span>
+                <span>{user.email}</span>
+              </div>
+              <div className="info-row">
+                <span className="info-label">Số điện thoại:</span>
+                <span>{user.phoneNumber}</span>
+              </div>
+            </div>
 
-            {/* Rating Section */}
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <Typography variant="body1">
-                <strong>Đánh giá:</strong>
-              </Typography>
-              <Box sx={{ ml: 1 }}>
-                {[...Array(user.rating || 0)].map((_, index) => (
-                  <StarRateIcon key={index} color="primary" />
-                ))}
-              </Box>
-            </Box>
+            <div className="info-card">
+              <h2>Địa chỉ</h2>
+              <p>{user.address}</p>
+            </div>
+          </div>
 
-            <Divider sx={{ mb: 3 }} />
-
-            {/* Social Media Links */}
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" component="div">Mạng xã hội:</Typography>
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Typography variant="body1">
-                  <strong>Twitter:</strong> {user.twitter || "Chưa có"}
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Facebook:</strong> {user.facebook || "Chưa có"}
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Instagram:</strong> {user.instagram || "Chưa có"}
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* User Info */}
-            {!isEditing ? (
-              <Box>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="body1">
-                      <strong>Số điện thoại:</strong> {user.phoneNumber}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="body1">
-                      <strong>Địa chỉ:</strong> {user.address}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="body1">
-                      <strong>Website:</strong> {user.website || "Chưa có"}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="body1">
-                      <strong>Loại người dùng:</strong> 
-                      {user.userType === 1 ? "Quản trị viên" : "Người dùng thông thường"}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="body1">
-                      <strong>Ngày tạo:</strong> {new Date(user.createdAt).toLocaleDateString("vi-VN")}
-                    </Typography>
-                  </Grid>
-                </Grid>
-
-                <Box textAlign="center" sx={{ mt: 3 }}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<EditIcon />}
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Chỉnh sửa thông tin
-                  </Button>
-                </Box>
-              </Box>
-            ) : (
+          {isEditing ? (
+            <div className="form-container">
+              <h2>Chỉnh sửa thông tin</h2>
               <form onSubmit={handleSubmit}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      label="Họ và tên"
-                      name="fullName"
-                      value={formData.fullName}
-                      onChange={handleInputChange}
-                      variant="outlined"
-                    />
-                  </Grid>
-                  {/* Additional input fields can be added here */}
-                </Grid>
-
-                <Box textAlign="center" sx={{ mt: 3 }}>
-                  <Button variant="contained" color="primary" type="submit">
-                    Cập nhật thông tin
-                  </Button>
-                </Box>
+                <div className="form-group">
+                  <label htmlFor="fullName">Họ và tên</label>
+                  <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    value={formData.fullName || ""}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="phoneNumber">Số điện thoại</label>
+                  <input
+                    type="text"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    value={formData.phoneNumber || ""}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="address">Địa chỉ</label>
+                  <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    value={formData.address || ""}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="form-actions">
+                  <button type="submit" className="btn save-btn">
+                    Lưu thay đổi
+                  </button>
+                  <button
+                    type="button"
+                    className="btn cancel-btn"
+                    onClick={() => setIsEditing(false)}
+                  >
+                    Hủy
+                  </button>
+                </div>
               </form>
-            )}
-          </CardContent>
-        </Card>
-      </Box>
-    </ThemeProvider>
-
+            </div>
+          ) : (
+            <button className="btn edit-btn" onClick={() => setIsEditing(true)}>
+              Chỉnh sửa thông tin
+            </button>
+          )}
+        </div>
+      )}
+    {/* <Footer/> */}
+    </div>
   );
-};
-
-export default Profile;
+}

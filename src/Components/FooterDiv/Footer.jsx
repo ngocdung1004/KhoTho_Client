@@ -49,7 +49,9 @@ const Footer = () => {
         <small className="contact-email">khotho.24h@gmail.com</small>
         <div className="social-icons">
           <AiFillInstagram className="icon" />
+          <a href="https://www.facebook.com/profile.php?id=61567859981143" target="_blank" rel="noopener noreferrer">
           <BsFacebook className="icon" />
+          </a>
           <BsLinkedin className="icon" />
         </div>
       </div>

@@ -152,7 +152,7 @@ const Login = () => {
 
               <div className="text-center mt-4">
                 <a
-                  onClick={() => navigate("/forgot-password")}
+                  onClick={() => navigate("/khotho/forgot-password")}
 
                   className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
                 >
