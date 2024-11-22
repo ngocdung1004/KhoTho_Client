@@ -24,14 +24,14 @@ const NavBar = () => {
       </div>
 
       <div className="menu flex gap-8">
-        <Link to="/registerworker" className="menuList highlightLink text-[#6f6f6f] hover:text-blueColor">
+        <Link to="/khotho/registerworker" className="menuList highlightLink text-[#6f6f6f] hover:text-blueColor">
           <FontAwesomeIcon icon={faStar} className="highlightIcon" />
           Bắt đầu nhận việc
         </Link>
-        <Link to="/jobs" className="menuList text-[#6f6f6f] hover:text-blueColor">Công việc</Link>
-        <Link to="/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Khách hàng</Link>
-        <Link to="/aboutlogin"  className="menuList text-[#6f6f6f] hover:text-blueColor">Giới thiệu</Link>
-        <Link to="/contactlogin" className="menuList text-[#6f6f6f] hover:text-blueColor">Liên hệ</Link>
+        <Link to="/khotho/jobs" className="menuList text-[#6f6f6f] hover:text-blueColor">Công việc</Link>
+        <Link to="/khotho/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Khách hàng</Link>
+        <Link to="/khotho/aboutlogin"  className="menuList text-[#6f6f6f] hover:text-blueColor">Giới thiệu</Link>
+        <Link to="/khotho/contactlogin" className="menuList text-[#6f6f6f] hover:text-blueColor">Liên hệ</Link>
         <div className="relative">
           <img
             className="rounded-full w-10 mr-2 cursor-pointer"
