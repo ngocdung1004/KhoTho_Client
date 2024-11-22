@@ -63,7 +63,7 @@ const WorkerProfile = () => {
   useEffect(() => {
     const fetchWorkerDetails = async () => {
       setLoading(true);
-      console.log(`Worker ID updated: ${workerId}`);
+      // console.log(`Worker ID updated: ${workerId}`);
       try {
         const response = await axios.get(`${API_ENDPOINT}/api/Workers/${workerId}`, 
           {
@@ -181,23 +181,29 @@ const WorkerProfile = () => {
   };
 
   const handleInputChange = (event) => {
-
     const { name, value } = event.target;
   
     setBookingDetails((prevDetails) => {
       let updatedDetails = { ...prevDetails, [name]: value };
   
-      if (name === "startTime" && value > prevDetails.endTime) {
-        // Nếu startTime thay đổi và lớn hơn endTime, cập nhật endTime
-        updatedDetails.endTime = value;
-      } else if (name === "endTime" && value < prevDetails.startTime) {
-        // Nếu endTime thay đổi và nhỏ hơn startTime, giữ endTime bằng startTime
-        updatedDetails.endTime = prevDetails.startTime;
+      if (name === "startTime") {
+        // Nếu giờ bắt đầu thay đổi, đảm bảo giờ kết thúc lớn hơn giờ bắt đầu
+        if (value >= prevDetails.endTime) {
+          updatedDetails.endTime = `${String(Number(value.split(":")[0]) + 1).padStart(2, "0")}:00`;
+        }
+      } else if (name === "endTime") {
+        // Nếu giờ kết thúc thay đổi, không cho phép nhỏ hơn hoặc bằng giờ bắt đầu
+        if (value <= prevDetails.startTime) {
+          updatedDetails.endTime = `${String(Number(prevDetails.startTime.split(":")[0]) + 1).padStart(2, "0")}:00`;
+        }
       }
   
       return updatedDetails;
     });
   };
+  
+  
+  
 
   const handleConfirmBooking = async () => {
     try {
@@ -211,7 +217,7 @@ const WorkerProfile = () => {
         endTime: `${bookingDetails.endTime}:00`, // Thêm giây vào endTime
         hourlyRate: bookingDetails.hourlyRate || 50000, // Đặt giá trị mặc định nếu cần
       };
-      console.log("----",formattedBookingDetails)
+
       const response = await axios.post(`${API_ENDPOINT}/api/Booking`, formattedBookingDetails, {
         headers: {
           "Content-Type": "application/json",
@@ -221,7 +227,6 @@ const WorkerProfile = () => {
   
       // Lấy data trả về từ API
       const responseData = response.data;
-      console.log("Dữ liệu trả về từ API:", responseData);
   
       toast.success("Đặt lịch thành công!", { position: "top-left", autoClose: 3000 });
       setIsModalOpen(false);
@@ -234,16 +239,30 @@ const WorkerProfile = () => {
 
   const calculateBookingDetails = () => {
     const { startTime, endTime, hourlyRate } = bookingDetails;
+  
     if (startTime && endTime) {
-      const start = new Date(`1970-01-01T${startTime}:00`);
-      const end = new Date(`1970-01-01T${endTime}:00`);
-      const diff = (end - start) / (1000 * 60); // Chênh lệch tính bằng phút
-      const totalHours = Math.ceil(diff / 60); // Làm tròn lên thành giờ
-      const totalCost = totalHours * hourlyRate; // Tính thành tiền
+      // Chuyển startTime và endTime từ định dạng "HH:00" sang số nguyên
+      const startHour = parseInt(startTime.split(":")[0], 10);
+      const endHour = parseInt(endTime.split(":")[0], 10);
+  
+      // Kiểm tra thời gian hợp lệ
+      if (endHour <= startHour) {
+        // Nếu giờ kết thúc nhỏ hơn hoặc bằng giờ bắt đầu
+        return { totalHours: 0, totalCost: 0 };
+      }
+  
+      // Tính tổng số giờ và chi phí
+      const totalHours = endHour - startHour; // Chỉ chênh lệch giờ
+      const totalCost = totalHours * hourlyRate;
+  
       return { totalHours, totalCost };
     }
+    
+    // Nếu thiếu dữ liệu
     return { totalHours: 0, totalCost: 0 };
   };
+  
+  
 
   
   
@@ -435,25 +454,36 @@ const WorkerProfile = () => {
                     />
                   </div>
                   <div>
-                    <label className="schedule-label">Giờ Bắt Đầu</label>
-                    <input
-                      type="time"
-                      className="schedule-input"
-                      name="startTime"
-                      value={bookingDetails.startTime}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div>
-                    <label className="schedule-label">Giờ Kết Thúc</label>
-                    <input
-                      type="time"
-                      className="schedule-input"
-                      name="endTime"
-                      value={bookingDetails.endTime}
-                      onChange={handleInputChange}
-                    />
-                  </div>
+                      <label className="schedule-label">Giờ Bắt Đầu</label>
+                      <select
+                        className="schedule-input"
+                        name="startTime"
+                        value={bookingDetails.startTime}
+                        onChange={handleInputChange}
+                      >
+                        {Array.from({ length: 24 }, (_, i) => (
+                          <option key={i} value={`${String(i).padStart(2, "0")}:00`}>
+                            {`${String(i).padStart(2, "0")}:00`}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="schedule-label">Giờ Kết Thúc</label>
+                      <select
+                        className="schedule-input"
+                        name="endTime"
+                        value={bookingDetails.endTime}
+                        onChange={handleInputChange}
+                      >
+                        {Array.from({ length: 24 }, (_, i) => (
+                          <option key={i} value={`${String(i).padStart(2, "0")}:00`}>
+                            {`${String(i).padStart(2, "0")}:00`}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
 
                   <div>
                     <label className="schedule-label">Đơn Giá (1 giờ)</label>
