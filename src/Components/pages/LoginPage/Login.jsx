@@ -40,9 +40,9 @@ const Login = () => {
 
         setTimeout(() => {
           switch (userData.userType) {
-            case 0: navigate("/dashboard"); break;
-            case 1: navigate("/jobs"); break;
-            case 2: navigate("/workers"); break;
+            case 0: navigate("/khotho/dashboard"); break;
+            case 1: navigate("/khotho/jobs"); break;
+            case 2: navigate("/khotho/workers"); break;
             default: navigate("/");
           }
         }, 1000);
@@ -152,7 +152,8 @@ const Login = () => {
 
               <div className="text-center mt-4">
                 <a
-                  onClick={() => navigate("/forgot-password")}
+                  onClick={() => navigate("/khotho/forgot-password")}
+
                   className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
                 >
                   Quên mật khẩu
@@ -163,7 +164,7 @@ const Login = () => {
                 <p className="text-sm text-gray-600">Bạn chưa có tài khoản?</p>
                 <button
                   className="px-4 py-2 text-sm font-medium text-pink-500 border-2 border-pink-500 rounded-lg hover:bg-pink-50 transition-colors duration-300"
-                  onClick={() => navigate("/register")}
+                  onClick={() => navigate("/khotho/register")}
                 >
                   Đăng ký
                 </button>

@@ -17,6 +17,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import axios from 'axios';
 import { format, addMonths, subMonths } from 'date-fns';
+import { API_ENDPOINT } from "../../../../services/config";
 
 const Schedules = ({ workerId }) => {
   const [schedules, setSchedules] = useState([]);
@@ -31,10 +32,10 @@ const Schedules = ({ workerId }) => {
       try {
         const token = localStorage.getItem('authToken');
         const [schedulesResponse, bookingsResponse] = await Promise.all([
-          axios.get(`https://localhost:7062/api/WorkerSchedule/worker/${workerId}`, {
+          axios.get(`${API_ENDPOINT}/api/WorkerSchedule/worker/${workerId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
           }),
-          axios.get(`https://localhost:7062/api/Booking/worker/${workerId}`, {
+          axios.get(`${API_ENDPOINT}/api/Booking/worker/${workerId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
           })
         ]);
@@ -97,7 +98,7 @@ const Schedules = ({ workerId }) => {
     const { schedules: daySchedules, bookings: dayBookings } = getScheduleForDate(selectedDate);
 
     if (daySchedules.length === 0) {
-      return <Typography>No schedules for this date</Typography>;
+      return <Typography>Không có lịch trình cho ngày này</Typography>;
     }
 
     return (
@@ -105,14 +106,14 @@ const Schedules = ({ workerId }) => {
         {daySchedules.map((schedule, index) => (
           <Box key={index} sx={{ mt: 1 }}>
             <Typography>
-              Time: {schedule.startTime.slice(0, -3)} - {schedule.endTime.slice(0, -3)}
+              Thời gian: {schedule.startTime.slice(0, -3)} - {schedule.endTime.slice(0, -3)}
             </Typography>
           </Box>
         ))}
         {dayBookings.map((booking, index) => (
           <Box key={`booking-${index}`} sx={{ mt: 1 }}>
             <Typography>
-              Booking Status: {booking.status}
+              Trạng thái công việc: {booking.status}
             </Typography>
           </Box>
         ))}
@@ -139,7 +140,7 @@ const Schedules = ({ workerId }) => {
   return (
     <Paper elevation={3} sx={{ mt: 3, p: 3 }}>
       <Typography variant="h6" gutterBottom>
-        Work Schedule
+        Lịch ngày
       </Typography>
 
       <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }}>
@@ -151,7 +152,7 @@ const Schedules = ({ workerId }) => {
         <Grid item xs>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
-              label="Select Date"
+              label="Chọn ngày"
               value={selectedDate}
               onChange={(newValue) => setSelectedDate(newValue)}
               renderInput={(params) => <TextField {...params} fullWidth />}
@@ -225,7 +226,7 @@ const Schedules = ({ workerId }) => {
       
       <Box sx={{ mt: 2 }}>
         <Typography variant="subtitle1" gutterBottom>
-          Schedule for {format(selectedDate, 'MMMM dd, yyyy')}:
+          Lịch làm việc: {format(selectedDate, 'MMMM dd, yyyy')}:
         </Typography>
         {renderScheduleInfo()}
       </Box>

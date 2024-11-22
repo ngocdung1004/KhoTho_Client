@@ -15,6 +15,7 @@ import {
   CircularProgress,
   Alert
 } from '@mui/material';
+import { API_ENDPOINT } from "../../../../services/config";
 
 const WorkerDashboard = () => {
   const [bookings, setBookings] = useState([]);
@@ -32,7 +33,7 @@ const WorkerDashboard = () => {
       }
 
       try {
-        const response = await axios.get('https://localhost:7062/api/Workers/me', {
+        const response = await axios.get(`${API_ENDPOINT}/api/Workers/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -63,7 +64,7 @@ const WorkerDashboard = () => {
 
   const fetchBookings = async (workerId) => {
     try {
-      const response = await axios.get(`https://localhost:7062/api/Booking/worker/${workerId}`, {
+      const response = await axios.get(`${API_ENDPOINT}/api/Booking/worker/${workerId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -78,7 +79,7 @@ const WorkerDashboard = () => {
 
   const handleUpdateBookingStatus = async (bookingId, newStatus) => {
     try {
-      await axios.put(`https://localhost:7062/api/Booking/${bookingId}/status`,
+      await axios.put(`${API_ENDPOINT}/api/Booking/${bookingId}/status`,
         JSON.stringify(newStatus),
         {
           headers: {
@@ -108,7 +109,7 @@ const WorkerDashboard = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box className = "w-[85%] m-auto white-color-sl" sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <NavBar />
       
       <Container maxWidth="lg" sx={{ flex: 1, py: 4 }}>
@@ -117,7 +118,7 @@ const WorkerDashboard = () => {
           <Grid item xs={12} md={4}>
             <Paper elevation={3} sx={{ p: 3 }}>
               <Typography variant="h5" gutterBottom fontWeight="bold">
-                Worker Profile
+                Thông tin của tôi
               </Typography>
 
              
@@ -132,15 +133,15 @@ const WorkerDashboard = () => {
                   </Typography>
                   <Box sx={{ width: '100%' }}>
                     <Typography variant="body1" gutterBottom>
-                      Experience: {worker.experienceYears} years
+                      Kinh nghiệm: {worker.experienceYears} năm.
                     </Typography>
                     <Box display="flex" alignItems="center" gap={1}>
-                      <Typography>Rating:</Typography>
+                      <Typography>Đánh giá:</Typography>
                       <Rating value={worker.rating} readOnly precision={0.5} />
                       <Typography>({worker.rating}/5)</Typography>
                     </Box>
                     <Typography variant="body1" sx={{ mt: 2 }}>
-                      Bio: {worker.bio}
+                      Giới thiệu: {worker.bio}
                     </Typography>
                   </Box>
                 </Box>

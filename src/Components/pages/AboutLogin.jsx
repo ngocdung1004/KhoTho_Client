@@ -123,6 +123,7 @@ const About = () => {
               sx={{
                 fontWeight: '400',
                 paddingTop: 1,
+                textAlign: 'left',
               }}
             >
               <div style={{fontSize: "35px", fontWeight: "800"}}>Chúng tôi đang cung cấp những gì?</div>

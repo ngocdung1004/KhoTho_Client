@@ -50,6 +50,7 @@ const Profile = () => {
     try {
       const userData = await authService.getCurrentUser();
       if (userData) {
+        console.log(userData)
         setUser(userData);
         setFormData(userData);
         setAvatarPreview(userData.avatarUrl);
@@ -113,9 +114,13 @@ const Profile = () => {
     }
   };
 
-  if (!user) {
-    return <Typography variant="h6" textAlign="center">Loading...</Typography>;
-  }
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImage(imageUrl);
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -280,6 +285,7 @@ const Profile = () => {
         </Card>
       </Box>
     </ThemeProvider>
+
   );
 };
 

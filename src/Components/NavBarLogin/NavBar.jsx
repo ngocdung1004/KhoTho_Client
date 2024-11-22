@@ -42,13 +42,19 @@ const NavBar = () => {
           {showDropdown && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
               <Link 
-                to="/profile" 
+                to="/khotho/profile" 
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Thông tin cá nhân
               </Link>
               <Link 
-                to="/settings" 
+                to="/khotho/ordermanagement" 
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Quản lí đơn
+              </Link>
+              <Link 
+                to="/khotho/settings" 
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Cài đặt

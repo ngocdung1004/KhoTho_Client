@@ -19,6 +19,7 @@ import {
   Stack
 } from '@mui/material';
 import { AccessTime, AttachMoney, Notes, FilterList, Sort } from '@mui/icons-material';
+import { API_ENDPOINT } from "../../../../services/config";
 
 const StatusChip = styled(Box)(({ status }) => {
   const statusColors = {
@@ -96,42 +97,42 @@ const Bookings = ({ bookings, handleUpdateBookingStatus }) => {
   return (
     <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
       <Typography variant="h5" gutterBottom fontWeight="bold" color="primary">
-        My Bookings
+        Lịch đặt chỗ
       </Typography>
       <Divider sx={{ mb: 3 }} />
 
       {/* Filters and Search */}
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
         <FormControl size="small" sx={{ minWidth: 120 }}>
-          <InputLabel>Status</InputLabel>
+          <InputLabel>Lọc lịch</InputLabel>
           <Select
             value={statusFilter}
             label="Status"
             onChange={(e) => setStatusFilter(e.target.value)}
           >
-            <MenuItem value="all">All</MenuItem>
-            <MenuItem value="pending">Pending</MenuItem>
-            <MenuItem value="accepted">Accepted</MenuItem>
-            <MenuItem value="rejected">Rejected</MenuItem>
-            <MenuItem value="completed">Completed</MenuItem>
+            <MenuItem value="all">Tất cả</MenuItem>
+            <MenuItem value="pending">Chờ xác nhận</MenuItem>
+            <MenuItem value="accepted">Đồng ý</MenuItem>
+            <MenuItem value="rejected">Không đồng ý</MenuItem>
+            <MenuItem value="completed">Hoàn thành</MenuItem>
           </Select>
         </FormControl>
 
         <FormControl size="small" sx={{ minWidth: 120 }}>
-          <InputLabel>Sort by Date</InputLabel>
+          <InputLabel>Xếp theo ngày</InputLabel>
           <Select
             value={dateSort}
             label="Sort by Date"
             onChange={(e) => setDateSort(e.target.value)}
           >
-            <MenuItem value="desc">Newest First</MenuItem>
-            <MenuItem value="asc">Oldest First</MenuItem>
+            <MenuItem value="desc">Mới nhất</MenuItem>
+            <MenuItem value="asc">Cũ nhất</MenuItem>
           </Select>
         </FormControl>
 
         <TextField
           size="small"
-          label="Search bookings"
+          label="Tìm kiếm lịch"
           variant="outlined"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -145,7 +146,7 @@ const Bookings = ({ bookings, handleUpdateBookingStatus }) => {
             <CardContent>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
                 <Typography variant="h6" color="primary" fontWeight="medium">
-                  Booking #{booking.bookingID}
+                  Đặt chỗ số #{booking.bookingID}
                 </Typography>
                 <StatusChip status={booking.status}>
                   {booking.status}
@@ -157,19 +158,19 @@ const Bookings = ({ bookings, handleUpdateBookingStatus }) => {
                   <IconText>
                     <AccessTime color="action" />
                     <Typography>
-                      Date: {new Date(booking.bookingDate).toLocaleDateString()}
+                      Ngày: {new Date(booking.bookingDate).toLocaleDateString()}
                     </Typography>
                   </IconText>
                   <IconText>
                     <AccessTime color="action" />
                     <Typography>
-                      Time: {booking.startTime} - {booking.endTime}
+                      Giờ: {booking.startTime} - {booking.endTime}
                     </Typography>
                   </IconText>
                   <IconText>
                     <AccessTime color="action" />
                     <Typography>
-                      Duration: {booking.totalHours} hours
+                      Khoảng thời gian: {booking.totalHours} giờ
                     </Typography>
                   </IconText>
                 </Grid>
@@ -177,19 +178,19 @@ const Bookings = ({ bookings, handleUpdateBookingStatus }) => {
                   <IconText>
                     <AttachMoney color="action" />
                     <Typography>
-                      Rate: ${booking.hourlyRate}/hour
+                      Giá: {booking.hourlyRate}.VND/Giờ
                     </Typography>
                   </IconText>
                   <IconText>
                     <AttachMoney color="action" />
                     <Typography>
-                      Total: ${booking.totalAmount}
+                      Thành tiền: ${booking.totalAmount}
                     </Typography>
                   </IconText>
                   <IconText>
                     <Notes color="action" />
                     <Typography>
-                      Notes: {booking.notes || 'No notes provided'}
+                      Ghi chú: {booking.notes || 'Không có ghi chú nào được cung cấp'}
                     </Typography>
                   </IconText>
                 </Grid>
@@ -209,7 +210,7 @@ const Bookings = ({ bookings, handleUpdateBookingStatus }) => {
                       fontWeight: 'bold'
                     }}
                   >
-                    Accept Booking
+                    Đồng ý nhận việc
                   </Button>
                   <Button
                     variant="contained"
@@ -221,7 +222,7 @@ const Bookings = ({ bookings, handleUpdateBookingStatus }) => {
                       fontWeight: 'bold'
                     }}
                   >
-                    Reject Booking
+                    Từ chối nhận việc
                   </Button>
                 </>
               )}
@@ -236,7 +237,7 @@ const Bookings = ({ bookings, handleUpdateBookingStatus }) => {
                     fontWeight: 'bold'
                   }}
                 >
-                  Mark as Complete
+                  Đánh dấu hoàn thành
                 </Button>
               )}
             </CardActions>
