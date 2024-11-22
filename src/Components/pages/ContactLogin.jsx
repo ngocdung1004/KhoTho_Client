@@ -8,7 +8,7 @@ import { FaGift, FaBox, FaStar, FaCalendarAlt } from 'react-icons/fa';
 import React from 'react';
 import "./styles/Contact2.css"
 
-const Contact = () => {
+const ContactLogin = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // useEffect(() => {
@@ -27,7 +27,7 @@ const Contact = () => {
 
   return (
     <div className='w-[85%] m-auto white-color-sl'>
-     <NavBarLogin />
+     <NavBar />
         <Container className='white-color-sl'>
           <ContactForm />
           <section id="contact" className="section-padding bg-gray">
@@ -178,4 +178,4 @@ const Contact = () => {
   )
 }
 
-export default Contac
+export default ContactLogin

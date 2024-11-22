@@ -150,13 +150,13 @@ const Login = () => {
                 Đăng nhập
               </button>
 
-              <div className="text-center">
-                <button
+              <div className="text-center mt-4">
+                <a
                   onClick={() => navigate("/forgot-password")}
                   className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
                 >
-                  Quên mật khẩu?
-                </button>
+                  Quên mật khẩu
+                </a>
               </div>
 
               <div className="flex items-center justify-between mt-6">
