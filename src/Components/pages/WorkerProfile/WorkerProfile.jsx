@@ -58,6 +58,7 @@ const WorkerProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const token = localStorage.getItem('authToken');
+  const [isJobType, setIsJobType] = useState(null);
 
   useEffect(() => {
     const fetchWorkerDetails = async () => {
@@ -72,6 +73,17 @@ const WorkerProfile = () => {
             },
           }
         );
+
+        const response_data_wokerJOB = await axios.get(`${API_ENDPOINT}/api/WorkerJobTypes/worker/${workerId}`, 
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setIsJobType(response_data_wokerJOB.data[0].jobTypeId)
+
         setWorkerData(response.data);
       } catch (error) {
         console.error("Error fetching worker details:", error);
@@ -138,10 +150,12 @@ const WorkerProfile = () => {
     return;
   }
 
+
+
   const [bookingDetails, setBookingDetails] = useState({
     customerID: userId,
     workerID: workerId,
-    jobTypeID: 1,
+    jobTypeID: null,
     bookingDate: "",
     startTime: "",
     endTime: "",
@@ -149,22 +163,7 @@ const WorkerProfile = () => {
     notes: "",
   });
 
-  // useEffect(() => {
-  //   // Reset bookingDetails khi chuyển hướng trang
-  //   return () => {
-  //     setBookingDetails({
-  //       customerID: userId,
-  //       workerID: workerId,
-  //       jobTypeID: 1,
-  //       bookingDate: "",
-  //       startTime: "",
-  //       endTime: "",
-  //       hourlyRate: 50000,
-  //       notes: "",
-  //     });
-  //   };
-  // }, [navigate]); 
-
+  
 
   useEffect(() => {
     setBookingDetails((prevDetails) => ({
@@ -205,13 +204,14 @@ const WorkerProfile = () => {
       // Chuyển đổi dữ liệu phù hợp với định dạng API yêu cầu
       const formattedBookingDetails = {
         ...bookingDetails,
+        jobTypeID: isJobType,
         workerID: parseInt(bookingDetails.workerID, 10), // Chuyển workerID sang số
         bookingDate: `${bookingDetails.bookingDate}T00:00:00.000Z`, // Thêm thời gian vào bookingDate
         startTime: `${bookingDetails.startTime}:00`, // Thêm giây vào startTime
         endTime: `${bookingDetails.endTime}:00`, // Thêm giây vào endTime
         hourlyRate: bookingDetails.hourlyRate || 50000, // Đặt giá trị mặc định nếu cần
       };
-  
+      console.log("----",formattedBookingDetails)
       const response = await axios.post(`${API_ENDPOINT}/api/Booking`, formattedBookingDetails, {
         headers: {
           "Content-Type": "application/json",
