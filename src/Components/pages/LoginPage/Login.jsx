@@ -55,7 +55,7 @@ const Login = () => {
       });
     }
   };
-
+  
   return (
     <section 
       className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat"
@@ -150,13 +150,14 @@ const Login = () => {
                 Đăng nhập
               </button>
 
-              <div className="text-center">
-                <button
-                  onClick={() => navigate("/khotho/forgot-password")}
+              <div className="text-center mt-4">
+                <a
+                  onClick={() => navigate("/forgot-password")}
+
                   className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
                 >
-                  Quên mật khẩu?
-                </button>
+                  Quên mật khẩu
+                </a>
               </div>
 
               <div className="flex items-center justify-between mt-6">
