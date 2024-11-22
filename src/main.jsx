@@ -11,7 +11,7 @@ import Jobs from './Components/pages/Jobs';
 import Register from './Components/pages/RegisterPage/Register';  
 import Login from './Components/pages/LoginPage/Login';
 import ForgotPassword from './Components/pages/ForgotPasswordPage/ForgotPassword';
-import AdminDashboard from './Components/pages/Dashboard/AdminDashboard';  // Updated path
+// import AdminDashboard from './Components/pages/Dashboard/AdminDashboard';  // Updated path
 import CustomerDashboard from './Components/pages/Dashboard/CustomerDashboard';  // Updated path
 import WorkerProfile from "./Components/pages/WorkerProfile/WorkerProfile"; //tested path
 import UserManagement from './Components/pages/Dashboard/UserManagement';
@@ -19,13 +19,15 @@ import Dashboard from './Components/pages/Dashboard/Dashboard';  // Updated path
 import WorkerManagement from './Components/pages/Dashboard/WorkerManagement';
 import JobTypeManagement from './Components/pages/Dashboard/JobTypeManagement';
 import ReviewManagement from './Components/pages/Dashboard/ReviewManagement';
+import BookingManagement from './Components/pages/Dashboard/BookingManagement';
+import WorkerScheduleManagement from './Components/pages/Dashboard/WorkerScheduleManagement';
 import WorkerDashboard from './Components/pages/Dashboard/Worker/WorkDashboard';
 import RegisterWorker from './Components/pages/RegisterWorker/RegisterWorker'
 import OrderTracking from './Components/pages/OrderTracking/OrderTracking'
 import Profile from './Components/pages/MyProfile/Profile';
+import OrderManagement from './Components/pages/OrderManagement/OrderManagement';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -54,10 +56,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/admin/jobtypes" element={<JobTypeManagement />} />
         <Route path="/admin/reviews" element={<ReviewManagement />} />
         <Route path="/workers" element={<WorkerDashboard/>} />
-        <Route path="/registerworker" element={<RegisterWorker/>} />
-        <Route path="/ordertracking" element={<OrderTracking/>} />
         
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/khotho/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
