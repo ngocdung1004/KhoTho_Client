@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import NavBar from '../../../NavBarLogin/NavBar';
+import NavBar from '../../../NavBarLogin/NavBarWorker';
 import Footer from '../../../FooterDiv/Footer';
 import Bookings from './Bookings';
 import Schedules from './Schedules';
@@ -23,6 +23,8 @@ const WorkerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem('authToken');
+  const [profileImageUrl, setProfileImageUrl] = useState('default-avatar.png');
+
 
   useEffect(() => {
     const fetchWorkerData = async () => {
@@ -40,6 +42,13 @@ const WorkerDashboard = () => {
         });
         console.log('Worker data:', response.data);
         setWorker(response.data);
+
+        const imageUrl = response.data.profileImage 
+  ? `${API_ENDPOINT}${response.data.profileImage}` 
+  : '/default-avatar.png'; // Ensure this matches the correct path
+setProfileImageUrl(imageUrl);
+
+
 
         if (response.data?.workerId) {
           fetchBookings(response.data.workerId);
@@ -125,9 +134,9 @@ const WorkerDashboard = () => {
               {worker && (
                 <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
                   <Avatar
-                    src={worker.user.profilePicture || 'default-avatar.png'}
-                    sx={{ width: 120, height: 120 }}
-                  />
+  src={profileImageUrl}
+  sx={{ width: 120, height: 120 }}
+/>
                   <Typography variant="h6">
                     {worker.user.fullName}
                   </Typography>
