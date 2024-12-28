@@ -10,6 +10,8 @@ import * as config from "../../../services/config";
 import "./OrderTracking.css"
 
 import { useParams, useLocation } from "react-router-dom";
+import dayjs from 'dayjs';
+import { ContactSupportOutlined } from '@mui/icons-material';
 
 const OrderTracking = () => {
     const [jobTypeMapping, setJobTypeMapping] = useState({});
@@ -30,6 +32,7 @@ const OrderTracking = () => {
 
     const [dataBookingOrder, setDataBookingOrder] = useState(null);
     const [dataWorkerOrder, setDataWorkerOrder] = useState(null);
+    const [profileImageUrl, setProfileImageUrl] = useState('default-avatar.png');
 
     const removeVietnameseTones = (str) => {
         return str
@@ -41,6 +44,9 @@ const OrderTracking = () => {
             .toUpperCase(); // Chuyển tất cả chữ thành viết hoa
     };
 
+    const [starttrack, setstarttrack] = useState(null);
+    const [endtrack, setendtrack] = useState(null);
+    const [daytrack, setdaytrack] = useState(null);
 
     useEffect(() => {
         const fetchBookingDetails = async () => {
@@ -54,6 +60,10 @@ const OrderTracking = () => {
 
                 console.log("+++++",response_book.data)
 
+                setstarttrack(response_book.data.startTime.split(':')[0]);
+                setendtrack(response_book.data.endTime.split(':')[0]);
+                setdaytrack(dayjs(response_book.data.bookingDate).format('DD/MM/YYYY'));
+
                 const response_worker = await axios.get(
                     `${API_ENDPOINT}/api/Workers/${response_book.data.workerID}`,
                     {
@@ -63,6 +73,11 @@ const OrderTracking = () => {
                         },
                     }
                 );
+
+                const imageUrl = response_worker.data.profileImage 
+                        ? `${API_ENDPOINT}${response_worker.data.profileImage}` 
+                        : '/default-avatar.png'; 
+                        setProfileImageUrl(imageUrl);
 
                 const response_jobtype = await axios.get(
                     `${API_ENDPOINT}/api/JobTypes`,
@@ -120,6 +135,7 @@ const OrderTracking = () => {
         setIsBoxCompleted(true);
         
     };
+    
 
     const handleOpenModal = () => {
         setModalOpen(true);
@@ -281,21 +297,20 @@ const OrderTracking = () => {
                             <span className="totalAmount">đ̲{dataBookingOrder.totalAmount}</span>
                         </div>
                         <div className='button-block'>
-                            {dataBookingOrder.status !== ("Rejected" && "Completed") && (
+                        {["Rejected", "Completed"].includes(dataBookingOrder.status) ? null : (
                             <>
-                                {!isCompleted && (
+                            {!isCompleted && (
                                 <button className="placeOrderButton" onClick={handleConfirm}>
-                                    Xác nhận hoàn thành
+                                Xác nhận hoàn thành
                                 </button>
-                                )}
-
-                                {!isEndRating && (
-                                <button className="placeOrderButton" onClick={handleOpenModal}>
-                                    Đánh giá
-                                </button>
-                                )}
-                            </>
                             )}
+                            {!isEndRating && (
+                                <button className="placeOrderButton" onClick={handleOpenModal}>
+                                Đánh giá
+                                </button>
+                            )}
+                            </>
+                        )}
                         </div>
                     </div>
                 </div>
@@ -306,50 +321,90 @@ const OrderTracking = () => {
                         <h3 className="progressTitle-content" data-wow-delay="0.3s">Thông tin chi tiết</h3>
                     </div>
                     <div className="infoSection">
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Thông tin của bạn</span>
+                        <div className="info-card">
+                            <div className="card-header">
+                                <span className="card-title">Thông tin của bạn</span>
                                 {/* <a href="#" className="editLink">Edit</a> */}
                             </div>
-                            <div className="cardContent">
-                                <p>{userDataString.fullName}</p>
-                                <p>{userDataString.email}</p>
+                            <div className="card-content">
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=x0qTmzjcFRhW&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.fullName}</p>
+                                </div>
+
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=X0mEIh0RyDdL&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.email}</p>
+                                </div>
+
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=a-NKVP7cWRva&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.address}</p>
+                                </div>
+
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=2et9LpHu9Vxh&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.phoneNumber}</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Thông tin của thợ</span>
+                        <div className="info-card">
+                            <div className="card-header">
+                                <span className="card-title">Thông tin của thợ</span>
                                 {/* <a href="#" className="editLink">Edit</a> */}
                             </div>
-                            <div className="cardContent">
-                                <p>{WORKER_name}</p>
-                                <p>{WORKER_address}</p>
+                            <div className="card-content">
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=2upK8qlqCAEf&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{WORKER_name}</p>
+                                </div>
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=a-NKVP7cWRva&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{WORKER_address}</p>
+                                </div>
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=2et9LpHu9Vxh&format=png&color=000000" alt="Visa" className="paymentIcon" />
                                 <p>{WORKER_phone}</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Địa chỉ của bạn</span>
-                                {/* <a href="#" className="editLink">Edit</a> */}
+                        <div className="info-card">
+                        <div className="card-header">
+                            <span className="card-title">Lịch trình công việc</span>
+                        </div>
+                        <div className="card-content">
+                            <div className="schedule-item">
+                            <img src="https://img.icons8.com/?size=100&id=12776&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                            <p>{daytrack}</p>
                             </div>
-                            <div className="cardContent">
-                                <p>{userDataString.address}</p>
-                                <p>{userDataString.phoneNumber}</p>
+                            <div className="schedule-item">
+                            <img src="https://img.icons8.com/?size=100&id=RfNbsrywO87P&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                            <p>Bắt đầu: {starttrack}:00 h</p>
+                            </div>
+                            <div className="schedule-item">
+                            <img src="https://img.icons8.com/?size=100&id=Y6SzeUtiLnxL&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                            <p>Kết thúc: {endtrack}:00 h</p>
                             </div>
                         </div>
+                        </div>
 
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Phương thức thanh toán</span>
+
+                        <div className="info-card">
+                            <div className="card-header">
+                                <span className="card-title">Phương thức thanh toán</span>
                                 {/* <a href="#" className="editLink">Edit</a> */}
                             </div>
-                            <div className="cardContent">
-                                <img src="https://img.icons8.com/?size=100&id=aMTIdm5CdddP&format=png&color=000000" alt="Visa" className="paymentIcon" />
-                                <p>Visa card ending in 1234</p>
-                                <img src="https://img.icons8.com/?size=100&id=p2scHNLP9nSb&format=png&color=000000" alt="Visa" className="paymentIcon" />
-                                <p>Thanh toán bằng tiền mặt</p>
+                            <div className="card-content">
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=aMTIdm5CdddP&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>Visa card ending in 1234</p>
+                                </div>
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=p2scHNLP9nSb&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>Thanh toán bằng tiền mặt</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -367,7 +422,7 @@ const OrderTracking = () => {
 
                     <div className="itemRow">
                         <div className="itemInfo">
-                            <img src="src\Assets\about\worker.png" alt="item" className="itemImage" />
+                            <img src={profileImageUrl} alt="item" className="itemImage" />
                             <div>
                                 <p>{WORKER_name}</p>
                                 <p>{WORKER_EXP} Năm kinh nghiệm</p>

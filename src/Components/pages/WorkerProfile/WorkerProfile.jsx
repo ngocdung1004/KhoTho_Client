@@ -59,6 +59,86 @@ const WorkerProfile = () => {
 
   const token = localStorage.getItem('authToken');
   const [isJobType, setIsJobType] = useState(null);
+  const [profileImageUrl, setProfileImageUrl] = useState('default-avatar.png');
+
+  const [fulljobTypes, setfullJobTypes] = useState([]); // Lưu trữ danh sách job types
+
+  const [completedBookingsCount, setcompletedBookingsCount] = useState(0);
+  const [reviewsCount, setreviewsCount] = useState(0);
+
+  const [roundedRating, setroundedRating] = useState(0);
+
+  useEffect(() => {
+    const fetchReviewsAndCount = async () => {
+      try {
+        const response = await axios.get(`${API_ENDPOINT}/api/Reviews/worker/${workerId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        });
+    
+        setreviewsCount(response.data.length);
+
+        // Lấy tất cả các rating
+        const ratings = response.data.map(review => review.rating);
+
+        // Tính trung bình số sao
+        const averageRating = ratings.reduce((acc, rating) => acc + rating, 0) / ratings.length;
+
+        // Hàm làm tròn trung bình đến mốc 0.5
+        setroundedRating(Math.round(averageRating * 2) / 2);
+        
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error);
+      }
+    };
+    fetchReviewsAndCount();
+  }, [token]);
+
+  useEffect(() => {
+  const fetchBookingsAndCountCompleted = async () => {
+    try {
+      const response = await axios.get(`${API_ENDPOINT}/api/Booking/worker/${workerId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+      },
+      });
+  
+      // Lọc và đếm số lượng status là "Completed"
+      setcompletedBookingsCount(response.data.filter(booking => booking.status === 'Completed').length);
+      
+    } catch (error) {
+      console.error('Lỗi khi lấy dữ liệu booking:', error);
+    }
+  };
+  fetchBookingsAndCountCompleted();
+}, [token]);
+
+    // Lấy dữ liệu job types từ API
+    useEffect(() => {
+      const fetchJobTypes = async () => {
+          try {
+              const response = await axios.get(`${API_ENDPOINT}/api/JobTypes`, {
+                  headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                  },
+              });
+              setfullJobTypes(response.data); // Lưu dữ liệu job types vào state
+          } catch (error) {
+              console.error("Error fetching job types:", error);
+          }
+      };
+      fetchJobTypes();
+  }, [token]);
+
+  // Hàm để lấy tên job type từ id
+    const getJobTypeName = (id) => {
+      const jobType = fulljobTypes.find((type) => type.jobTypeId === id);
+      return jobType ? jobType.jobTypeName : 'Không tìm thấy'; // Trả về tên job type hoặc thông báo nếu không tìm thấy
+    };
 
   useEffect(() => {
     const fetchWorkerDetails = async () => {
@@ -83,7 +163,11 @@ const WorkerProfile = () => {
           }
         );
         setIsJobType(response_data_wokerJOB.data[0].jobTypeId)
-
+        const imageUrl = response.data.profileImage 
+        ? `${API_ENDPOINT}${response.data.profileImage}` 
+        : '/default-avatar.png'; 
+        console.log("imageUrl", imageUrl)
+        setProfileImageUrl(imageUrl);
         setWorkerData(response.data);
       } catch (error) {
         console.error("Error fetching worker details:", error);
@@ -95,6 +179,8 @@ const WorkerProfile = () => {
     fetchWorkerDetails();
   }, [workerId]);
 
+  
+
   // Fetch all bookings
   useEffect(() => {
     const fetchBookings = async () => {
@@ -105,6 +191,7 @@ const WorkerProfile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log(response.data)
         setBookings(response.data);
       } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -123,15 +210,16 @@ const WorkerProfile = () => {
   }, [workerId, bookings]);
 
    // Function to format the time into HH-HH | dd/mm/yy
-   const formatBookingTime = (startTime, bookingDate) => {
+   const formatBookingTime = (startTime, endTime, bookingDate) => {
     const start = new Date(bookingDate);
     const [startHour, startMinute] = startTime.split(':');
     start.setHours(startHour, startMinute);
     
-    const endTime = new Date(start);
-    endTime.setHours(start.getHours() + 2); // Assuming 2-hour duration as in the sample data
+    const end = new Date(bookingDate);
+    const [endHour, endMinute] = endTime.split(':');
+    end.setHours(endHour, endMinute); 
 
-    const startFormatted = `${start.getHours()}h - ${endTime.getHours()}h`;
+    const startFormatted = `${start.getHours()}h - ${end.getHours()}h`;
     const dateFormatted = `Ngày ${start.getDate().toString().padStart(2, '0')}/${(start.getMonth() + 1).toString().padStart(2, '0')}/${start.getFullYear().toString().slice(2, 4)}`;
 
     return `${startFormatted} | ${dateFormatted}`;
@@ -203,8 +291,6 @@ const WorkerProfile = () => {
   };
   
   
-  
-
   const handleConfirmBooking = async () => {
     try {
       // Chuyển đổi dữ liệu phù hợp với định dạng API yêu cầu
@@ -301,7 +387,7 @@ const WorkerProfile = () => {
               <CardContent>
                 <Box display="flex" flexDirection="column" alignItems="center">
                   <Avatar
-                    src={workerData.user.profileImage || defaultImage}
+                    src={profileImageUrl}
                     sx={{ width: 200, height: 200, mb: 2 }}
                   />
 
@@ -312,9 +398,9 @@ const WorkerProfile = () => {
                     )}
 
                   </Typography>
-                  <Rating value={workerData.rating || 0} readOnly precision={0.5} />
+                  <Rating value={roundedRating || 0} readOnly precision={0.5} />
                   <Typography color="text.secondary" gutterBottom>
-                    ({workerData.totalReviews || 0} đánh giá)
+                    ({reviewsCount || 0} đánh giá)
                   </Typography>
                 </Box>
 
@@ -323,12 +409,12 @@ const WorkerProfile = () => {
                 <Stack spacing={2}>
                   <Box display="flex" alignItems="center" gap={1}>
                     <LocationOn color="primary" />
-                    <Typography>Bình Định</Typography>
+                    <Typography>{workerData.user.address}</Typography>
                   </Box>
-                  <Box display="flex" alignItems="center" gap={1}>
+                  {/* <Box display="flex" alignItems="center" gap={1}>
                     <Work color="primary" />
                     <Typography>Thợ sửa chữa đồ dân dụng</Typography>
-                  </Box>
+                  </Box> */}
                   <Box display="flex" alignItems="center" gap={1}>
                     <School color="primary" />
                     <Typography>Kinh nghiệm {workerData.experienceYears} năm</Typography>
@@ -380,7 +466,7 @@ const WorkerProfile = () => {
                     <Grid item xs={4}>
                       <Box textAlign="center">
                         <Typography variant="h4" color="primary">
-                          {workerData.completedJobs || 0}
+                          {completedBookingsCount || 0}
                         </Typography>
                         <Typography color="text.secondary">
                           Công việc hoàn thành
@@ -419,9 +505,7 @@ const WorkerProfile = () => {
                     Kỹ năng chuyên môn
                   </Typography>
                   <Box display="flex" gap={1} flexWrap="wrap">
-                    {workerData.skills?.map((skill, index) => (
-                      <Chip key={index} label={skill} color="primary" variant="outlined" />
-                    )) || "Chưa có thông tin về kỹ năng."}
+                    {getJobTypeName(isJobType)}
                   </Box>
                 </CardContent>
               </Card>
@@ -542,7 +626,7 @@ const WorkerProfile = () => {
                         filteredBookings.map((booking) => (
                           <div className="block-hourDay">
                               <p>
-                              {formatBookingTime(booking.startTime, booking.bookingDate)}
+                              {formatBookingTime(booking.startTime, booking.endTime, booking.bookingDate)}
                               </p>
                           </div>
                         ))
