@@ -33,6 +33,8 @@ const OrderTracking = () => {
     const [dataBookingOrder, setDataBookingOrder] = useState(null);
     const [dataWorkerOrder, setDataWorkerOrder] = useState(null);
     const [profileImageUrl, setProfileImageUrl] = useState('default-avatar.png');
+    const [isCancel, setIsCancel] = useState(false);
+    const [isCancelOpen, setCancelOpen] = useState(false);
 
     const removeVietnameseTones = (str) => {
         return str
@@ -58,7 +60,7 @@ const OrderTracking = () => {
                     },
                 });
 
-                console.log("+++++",response_book.data)
+                // console.log("+++++",response_book.data)
 
                 setstarttrack(response_book.data.startTime.split(':')[0]);
                 setendtrack(response_book.data.endTime.split(':')[0]);
@@ -147,12 +149,41 @@ const OrderTracking = () => {
         setRating(0);
         setComment('');
     };
+    const handleCancelOpenModal = () => {
+        setCancelOpen(true);
+
+    }
+
+
+
+    const handleCancelCloseModal = () => {
+        setCancelOpen(false)
+    };
+
+
 
     const handleConfirmJob = () => {
         setRatingStep(true);
         setIsCompleted(true);
     }
-    console.log(dataBookingOrder)
+
+    const handleCancelConfirmJob = () => {
+        setIsCancel(true);
+        setRatingStep(true);
+        setIsCompleted(true);
+        setIsEndRating(true)
+    }
+
+    
+
+    const handleExitCancel= () => {
+        setIsCancel(false);
+        setCancelOpen(false)
+        setRatingStep(false);
+        setIsCompleted(false);
+        setIsEndRating(false)
+    }
+
     const handleSubmitRating = async () => {
         try {
 
@@ -187,12 +218,30 @@ const OrderTracking = () => {
                 }
             );
 
-
-
-
-    
             setIsEndRating(true);  
-            handleCloseModal();  
+            handleCloseModal(); 
+            window.location.reload()  ///reload page 
+        } catch (error) {
+            console.error("Lỗi khi gửi đánh giá:", error);
+        }
+    };
+
+    const handleSubmitCancel = async () => {
+        try {
+
+            const status = "Rejected"; 
+            const response_status = await axios.put(
+                `${API_ENDPOINT}/api/Booking/${booking_id}/status`,  
+                `${status}`, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',  
+                        'Authorization': `Bearer ${token}`,  
+                    }
+                }
+            );
+            window.location.reload()
+
         } catch (error) {
             console.error("Lỗi khi gửi đánh giá:", error);
         }
@@ -299,18 +348,24 @@ const OrderTracking = () => {
                         <div className='button-block'>
                         {["Rejected", "Completed"].includes(dataBookingOrder.status) ? null : (
                             <>
-                            {!isCompleted && (
-                                <button className="placeOrderButton" onClick={handleConfirm}>
-                                Xác nhận hoàn thành
-                                </button>
-                            )}
-                            {!isEndRating && (
-                                <button className="placeOrderButton" onClick={handleOpenModal}>
-                                Đánh giá
-                                </button>
-                            )}
+                                {!isCompleted && (
+                                    <button className="placeOrderButton" onClick={handleConfirm}>
+                                        Xác nhận hoàn thành
+                                    </button>
+                                )}
+                                {!isEndRating && (
+                                    <button className="placeOrderButton" onClick={handleOpenModal}>
+                                        Đánh giá
+                                    </button>
+                                )}
+                                {dataBookingOrder.status === "Pending" && !isCancel && (
+                                    <button className="placeOrderButton placeOrderButtonCancel" onClick={handleCancelOpenModal}>
+                                        Hủy
+                                    </button>
+                                )}
                             </>
                         )}
+
                         </div>
                     </div>
                 </div>
@@ -511,6 +566,45 @@ const OrderTracking = () => {
                             Gửi đánh giá
                         </button>
                         <button className="cancel-button" onClick={handleCloseModal}>
+                            Hủy
+                        </button>
+                        </div>
+                    </>
+                    )}
+                </div>
+                </div>
+            )}
+
+            {isCancelOpen && (
+                <div className="modal-overlay">
+                <div className="modal-content">
+                    {!isCancel ? (
+                    <>
+                        <h3>Xác nhận hủy đơn</h3>
+                        <div className="modal-buttons">
+                        <button className="confirm-button" onClick={handleCancelConfirmJob}>
+                            Xác nhận
+                        </button>
+                        <button className="cancel-button" onClick={handleCancelCloseModal}>
+                            Hủy
+                        </button>
+                        </div>
+                    </>
+                    ) : (
+                    <>
+                        <h3>Lí do hủy</h3>
+                        <div className="comment-section">
+                        <textarea
+                            placeholder="Nhập lí do của bạn..."
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                        ></textarea>
+                        </div>
+                        <div className="modal-buttons">
+                        <button className="confirm-button" onClick={handleSubmitCancel}>
+                            Xác nhận
+                        </button>
+                        <button className="cancel-button" onClick={handleExitCancel}>
                             Hủy
                         </button>
                         </div>
