@@ -279,5 +279,26 @@
     color: #3498db; /* Blue color on hover */
     transition: color 0.3s ease-in-out; /* Smooth color transition */
   }
+
+  .suggestion-list {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 5px;
+    background-color: white;
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+  }
+  
+  .suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .suggestion-item:hover {
+    background-color: #f0f0f0;
+  }
   
 
