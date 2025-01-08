@@ -29,7 +29,6 @@ const NavBar = () => {
           Bắt đầu nhận việc
         </Link>
         <Link to="/khotho/jobs" className="menuList text-[#6f6f6f] hover:text-blueColor">Công việc</Link>
-        <Link to="/khotho/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Khách hàng</Link>
         <Link to="/khotho/aboutlogin"  className="menuList text-[#6f6f6f] hover:text-blueColor">Giới thiệu</Link>
         <Link to="/khotho/contactlogin" className="menuList text-[#6f6f6f] hover:text-blueColor">Liên hệ</Link>
         <div className="relative">

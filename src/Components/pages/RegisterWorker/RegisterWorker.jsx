@@ -10,6 +10,11 @@ import { API_ENDPOINT } from "../../../services/config";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import {
+  GeoapifyGeocoderAutocomplete,
+  GeoapifyContext,
+} from "@geoapify/react-geocoder-autocomplete";
+import { Input } from "antd";
 
 const RegisterWorker = () => {
     const USERnow = JSON.parse(localStorage.getItem("userData"));
@@ -19,6 +24,7 @@ const RegisterWorker = () => {
     const [phone, setPhone] = useState(USERnow ? USERnow.phoneNumber : "");
     const [email, setEmail] = useState(USERnow ? USERnow.email : "");
     const [address, setAddress] = useState(USERnow ? USERnow.address : "");
+    const [suggestions, setSuggestions] = useState([]);
 
     const navigate = useNavigate();
 
@@ -43,6 +49,25 @@ const [backCCCDFile, setBackCCCDFile] = useState(null);
     const [Workers, setWorkers] = useState(null)
 
     const [jobTypes, setJobTypes] = useState([]); // Lưu trữ danh sách job types
+    const API_KEY = "KBGL0ihukFkc3MeOxPxktzGM2eY82Ow9KB5xswAI";
+    const handleAddressChange = async (location) => {
+      
+      setAddress(location); 
+  
+      if (address.length > 0) {
+          const response = await axios.get(
+            "https://rsapi.goong.io/Place/AutoComplete",
+            {
+              params: {
+                api_key: API_KEY,
+                input: address,
+              },
+            }
+          );
+          setSuggestions(response.data.predictions); 
+      }
+    };
+  
 
     // Lấy dữ liệu job types từ API
     useEffect(() => {
@@ -179,6 +204,8 @@ const handleCCCDUpload = (event, type) => {
     setActiveTab(tab);
   };
 
+
+
   return (
     <div className="w-[85%] m-auto white-color-sl">
       <ToastContainer position="top-right" autoClose={3000} />
@@ -259,10 +286,34 @@ const handleCCCDUpload = (event, type) => {
                   <label className="block text-gray-600">Email</label>
                   <input type="email" className="input-field" value={email} onChange={(e) => setEmail(e.target.value)}/>
                 </div>
-                <div className="form-row mb-4">
-                  <label className="block text-gray-600">Nơi thường trú</label>
-                  <input type="text" className="input-field" value={address} onChange={(e) => setAddress(e.target.value)}/>
+                <div>
+                  <div className="form-row mb-4">
+                    <label className="block text-gray-600">Nơi thường trú</label>
+                    <input
+                      type="text"
+                      className="input-field"
+                      value={address}
+                      onChange={(e) => handleAddressChange(e.target.value)}
+                    />
+                    {suggestions?.length > 0 && (
+                      <ul className="suggestion-list">
+                        {suggestions.map((suggestion, index) => (
+                          <li
+                            key={index}
+                            className="suggestion-item cursor-pointer hover:bg-gray-200 px-2 py-1"
+                            onClick={() => {
+                              setAddress(suggestion.description);
+                              setSuggestions([]); 
+                            }}
+                          >
+                            {suggestion.description}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
+
                 <div className="form-row mb-4">
                   <label className="block text-gray-600">Quốc tịch</label>
                   <select className="input-field" value={nationality} onChange={(e) => setNationality(e.target.value)}>
