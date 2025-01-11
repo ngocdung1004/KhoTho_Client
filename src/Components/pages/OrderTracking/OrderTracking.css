@@ -186,9 +186,18 @@
     text-transform: uppercase;  /* Chữ in hoa */
 }
 
+.placeOrderButtonCancel {
+  background-color: #ff2a2a
+}
+
 /* Hiệu ứng hover cho nút */
 .placeOrderButton:hover {
     background-color: #1a4bbd;  /* Màu khi hover */
+    transform: translateY(-3px);  /* Hiệu ứng di chuyển lên khi hover */
+}
+
+.placeOrderButtonCancel:hover {
+  background-color: #c01f1f;  /* Màu khi hover */
     transform: translateY(-3px);  /* Hiệu ứng di chuyển lên khi hover */
 }
 
