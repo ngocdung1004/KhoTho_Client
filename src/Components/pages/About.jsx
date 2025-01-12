@@ -96,7 +96,7 @@ const About = () => {
               <div className="homepage-first-area">
                 <div className="homepage-first-area-left-side">
                   <div style={{ display: 'flex' }} className="subtitle homepage-subtitle">
-                    <div>
+                    <div style={{ textAlign: 'justify' }} className="">
                       <strong style={{ fontWeight: 800 }}>Kho Thợ</strong> là nền tảng tiên phong kết nối người lao động phổ thông với các cơ hội việc làm nhanh chóng và linh hoạt. 
                       Với phương châm "Việc làm gấp, thợ tới tấp," Kho Thợ giúp những cá nhân và gia đình cần thợ sửa chữa, vệ sinh, và các dịch vụ khẩn cấp khác tìm được những người lao động đáng tin cậy chỉ trong vài bước đơn giản. 
                       Đối với người lao động, Kho Thợ mang đến những cơ hội kiếm thêm thu nhập mà không cần chuẩn bị CV hay yêu cầu trình độ cao. 
@@ -143,7 +143,7 @@ const About = () => {
             >
               <div style={{fontSize: "35px", fontWeight: "800"}}>Chúng tôi đang cung cấp những gì?</div>
               <div style={{fontWeight: "500"}}>Nền tảng quảng bá mạnh mẽ</div>
-              <div style={{fontSize: "15px", fontWeight: "300", width: "80%"}}>Cùng hệ thống tương tác hai chiều, dễ dàng đặt lịch để nhân viên đến hỗ trợ nhanh chóng cho công việc của bạn, hoặc chính bạn sẽ trở thành người làm việc để mang lại những nguồn thu nhập tuyệt vời cho chính bản thân.</div>
+              <div style={{fontSize: "15px", fontWeight: "300", width: "80%", textAlign: 'justify' }}>Cùng hệ thống tương tác hai chiều, dễ dàng đặt lịch để nhân viên đến hỗ trợ nhanh chóng cho công việc của bạn, hoặc chính bạn sẽ trở thành người làm việc để mang lại những nguồn thu nhập tuyệt vời cho chính bản thân.</div>
             </Typography>
           </Grid>
           
