@@ -12,6 +12,8 @@ import "./OrderTracking.css"
 import { useParams, useLocation } from "react-router-dom";
 import dayjs from 'dayjs';
 import { ContactSupportOutlined } from '@mui/icons-material';
+import VietQR from './../../VietQR/VietQR';
+import wor2 from '../../../Assets/w2.png';
 
 const OrderTracking = () => {
     const [jobTypeMapping, setJobTypeMapping] = useState({});
@@ -35,6 +37,11 @@ const OrderTracking = () => {
     const [profileImageUrl, setProfileImageUrl] = useState('default-avatar.png');
     const [isCancel, setIsCancel] = useState(false);
     const [isCancelOpen, setCancelOpen] = useState(false);
+
+    const [bankId, setbankId] = useState("ACB");
+    const [accountBankNo, setaccountBankNo] = useState("13157957");
+    const [accountNameBank, setaccountNameBank] = useState("Ha Khai Hoan");
+
 
     const removeVietnameseTones = (str) => {
         return str
@@ -443,23 +450,38 @@ const OrderTracking = () => {
                             <p>Kết thúc: {endtrack}:00 h</p>
                             </div>
                         </div>
+                        <div className="wor2IMAGEbox">
+                            <img
+                                className="wor2IMAGE"
+                                src={wor2}
+                                alt="avatar"
+                                />
+                        </div>
                         </div>
 
 
                         <div className="info-card">
                             <div className="card-header">
-                                <span className="card-title">Phương thức thanh toán</span>
+                                <span className="card-title">Thanh toán</span>
                                 {/* <a href="#" className="editLink">Edit</a> */}
                             </div>
                             <div className="card-content">
-                                <div className="schedule-item">
+                            <VietQR
+                                bankId={bankId} 
+                                accountNo={accountBankNo}
+                                amount={dataBookingOrder.totalAmount} 
+                                description={"TT"+ dataBookingOrder.bookingID}
+                                accountName={accountNameBank}
+                            />
+                                {/* <div className="schedule-item">
                                     <img src="https://img.icons8.com/?size=100&id=aMTIdm5CdddP&format=png&color=000000" alt="Visa" className="paymentIcon" />
                                     <p>Visa card ending in 1234</p>
                                 </div>
                                 <div className="schedule-item">
                                     <img src="https://img.icons8.com/?size=100&id=p2scHNLP9nSb&format=png&color=000000" alt="Visa" className="paymentIcon" />
                                     <p>Thanh toán bằng tiền mặt</p>
-                                </div>
+                                </div> */}
+                            <button className="checkVietQRButton placeOrderButton" onClick={handleCloseModal}>Xác nhận đã thanh toán</button>
                             </div>
                         </div>
                     </div>

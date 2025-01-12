@@ -490,6 +490,32 @@
     margin: 0;
     color: #555;
   }
-  
+/* Container for the image */
+.wor2IMAGEbox {
+  display: flex; /* Căn giữa theo cả chiều ngang và dọc */
+  justify-content: center;
+  align-items: center;
+  min-height: 500px; /* Chiều cao tối thiểu của box */
+  overflow: hidden; /* Ẩn các phần tử vượt ra ngoài khung */
+  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển động mượt mà */
+  margin: 20px auto; /* Căn giữa toàn bộ box */
+  max-width: 500px; /* Đặt chiều rộng tối đa */
+}
+
+.wor2IMAGEbox:hover {
+  transform: scale(1.05); /* Phóng to toàn bộ box khi hover */
+}
+
+/* Style for the image */
+.wor2IMAGE {
+  max-width: 100%; /* Đảm bảo ảnh không vượt quá kích thước container */
+  height: auto; /* Giữ tỷ lệ ảnh */
+  border-radius: 10px; /* Bo góc cho ảnh */
+  transition: transform 0.3s ease-in-out; /* Hiệu ứng chuyển động khi hover */
+}
+
+.wor2IMAGEbox:hover .wor2IMAGE {
+  transform: scale(1.1); /* Zoom ảnh khi hover */
+}
 
   
