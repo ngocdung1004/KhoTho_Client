@@ -29,6 +29,7 @@ import {
 } from '@mui/icons-material';
 import { useState } from 'react';
 import { API_ENDPOINT } from "../../../services/config";
+import { icon } from '@fortawesome/fontawesome-svg-core';
 
 // Styled components remain the same
 const DrawerHeader = styled(Box)(({ theme }) => ({
@@ -118,6 +119,11 @@ const Sidebar = () => {
       path: '/khotho/admin/reviews',
       name: 'Reviews',
       icon: <Star />
+    },
+    {
+      path: '/khotho/admin/bookingpayment',
+      name: 'Booking Payment',
+      icon: <BookOnline />
     }
   ];
 
