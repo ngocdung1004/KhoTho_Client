@@ -2,13 +2,18 @@ import React from 'react'
 import {AiFillInstagram} from 'react-icons/ai'
 import {BsFacebook} from 'react-icons/bs'
 import {BsLinkedin} from 'react-icons/bs'
+import logoKhoTho from '../../Assets/logos/logo_khotho_3.png'
 import "./Footer.css"
 
 const Footer = () => {
   return (
     <div className="footer-container">
       <div className="footer-section">
-        <h1 className="footer-logo">KhoTho</h1>
+        <img 
+          src={logoKhoTho} 
+          alt="KhoTho Logo" 
+          className="footer-logo-img"
+        />
         <p className="footer-description">
           Kết nối nhanh thợ và người cần, từ sửa chữa đến dọn dẹp, giúp lao động phổ thông có việc làm ngay, thu nhập liền tay, không cần CV
         </p>

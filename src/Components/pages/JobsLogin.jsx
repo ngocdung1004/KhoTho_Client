@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Footer from '../FooterDiv/Footer';
-import NavBar from '../NavBar/NavBar';
+import Footer from '../FooterDiv/Footer.jsx';
+import NavBar from '../NavBarLogin/NavBar.jsx';
 import * as config from "../../services/config.jsx"; // Ensure this file contains the correct API URL
 import { useNavigate } from "react-router-dom";
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
@@ -11,7 +11,6 @@ import FastfoodOutlinedIcon from '@mui/icons-material/FastfoodOutlined';
 import DriveEtaIcon from '@mui/icons-material/DriveEta';
 import AvTimerIcon from '@mui/icons-material/AvTimer';
 import { Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem, FormControl, InputLabel, Alert } from '@mui/material';
-import { Link } from 'react-router-dom';
 
 import "./styles/Jobs.css"
 
@@ -173,7 +172,7 @@ const Jobs = () => {
           <div className="row">
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="0.3s" onClick={() => navigate("/khotho/login")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="0.3s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <CleaningServicesIcon fontSize="large"/>
                 </div>
@@ -185,7 +184,7 @@ const Jobs = () => {
             </div>
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="0.6s" onClick={() => navigate("/khotho/login")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="0.6s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <BabyChangingStationIcon fontSize="large"/>
                 </div>
@@ -197,7 +196,7 @@ const Jobs = () => {
             </div>
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="0.9s" onClick={() => navigate("/khotho/login")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="0.9s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <HandymanIcon fontSize="large"/>
                 </div>
@@ -209,7 +208,7 @@ const Jobs = () => {
             </div>
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="1.2s" onClick={() => navigate("/khotho/login")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="1.2s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <FastfoodOutlinedIcon fontSize="large"/>
                 </div>
@@ -221,7 +220,7 @@ const Jobs = () => {
             </div>
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="1.5s" onClick={() => navigate("/khotho/login")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="1.5s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <DriveEtaIcon fontSize="large"/>
                 </div>
@@ -233,7 +232,7 @@ const Jobs = () => {
             </div>
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="1.8s" onClick={() => navigate("/khotho/login")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="1.8s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <AvTimerIcon fontSize="large"/>
                 </div>

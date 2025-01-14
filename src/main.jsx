@@ -8,6 +8,7 @@ import Contact from './Components/pages/Contact';
 import ContactLogin from './Components/pages/ContactLogin';
 import Customer from './Components/pages/Customer';
 import Jobs from './Components/pages/Jobs';
+import JobsLogin from './Components/pages/JobsLogin';
 import Register from './Components/pages/RegisterPage/Register';  
 import Login from './Components/pages/LoginPage/Login';
 import ForgotPassword from './Components/pages/ForgotPasswordPage/ForgotPassword';
@@ -38,6 +39,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route path="/khotho" element={<Jobs />} /> 
+        <Route path="/khothologin" element={<JobsLogin />} /> 
         <Route path="/khotho/ordertracking" element={<OrderTracking />} />  
         <Route path="/khotho/ordermanagement" element={<OrderManagement />} />  
         <Route path="/khotho/jobs" element={<App />} />

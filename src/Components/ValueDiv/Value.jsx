@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 import simple from '../../Assets/simple.png';
 import valentine from '../../Assets/valentine.png';
 import shield from '../../Assets/shield.png';
@@ -113,9 +113,9 @@ const Value = () => {
           <h1>Trải nghiệm ngay hôm nay!</h1>
           <p>Nhanh chóng trải nghiệm dịch vụ tuyệt vời của chúng tôi</p>
         </div>
-        <button className="card-button">
-          Đăng ký
-        </button>
+        <Link to="/khotho/register" className="card-button">
+            Đăng ký
+        </Link>
       </div>
 
     </div>
