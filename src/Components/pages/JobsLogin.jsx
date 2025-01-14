@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Footer from '../FooterDiv/Footer';
-import NavBar from '../NavBar/NavBar';
+import Footer from '../FooterDiv/Footer.jsx';
+import NavBar from '../NavBarLogin/NavBar.jsx';
 import * as config from "../../services/config.jsx"; // Ensure this file contains the correct API URL
 import { useNavigate } from "react-router-dom";
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
@@ -11,7 +11,6 @@ import FastfoodOutlinedIcon from '@mui/icons-material/FastfoodOutlined';
 import DriveEtaIcon from '@mui/icons-material/DriveEta';
 import AvTimerIcon from '@mui/icons-material/AvTimer';
 import { Button, Dialog, DialogTitle, DialogContent, TextField, Select, MenuItem, FormControl, InputLabel, Alert } from '@mui/material';
-import { Link } from 'react-router-dom';
 
 import "./styles/Jobs.css"
 

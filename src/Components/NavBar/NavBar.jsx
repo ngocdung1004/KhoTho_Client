@@ -10,11 +10,13 @@ const NavBar = () => {
     <div className='navBar flex justify-between items-center p-[3rem]'>
       <div className="logoDiv">
         <h1 className="logo text-[25px] text-blueColor logo-flex"> 
-        <div className="flex">
-          <div className="logo-font-blue">Kho</div>
-          <div className="logo-font-yellow">Tho</div>
-      </div>
-      </h1>
+          <Link to="/khotho">
+            <div className="flex">
+              <div className="logo-font-blue">Kho</div>
+              <div className="logo-font-yellow">Tho</div>
+            </div>
+          </Link>
+        </h1>
       </div>
 
       <div className="menu flex gap-8">
