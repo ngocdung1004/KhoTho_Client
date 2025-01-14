@@ -12,6 +12,8 @@ import "./OrderTracking.css"
 import { useParams, useLocation } from "react-router-dom";
 import dayjs from 'dayjs';
 import { ContactSupportOutlined } from '@mui/icons-material';
+import VietQR from './../../VietQR/VietQR';
+import wor2 from '../../../Assets/w2.png';
 
 const OrderTracking = () => {
     const [jobTypeMapping, setJobTypeMapping] = useState({});
@@ -35,6 +37,16 @@ const OrderTracking = () => {
     const [profileImageUrl, setProfileImageUrl] = useState('default-avatar.png');
     const [isCancel, setIsCancel] = useState(false);
     const [isCancelOpen, setCancelOpen] = useState(false);
+
+    const [bankId, setbankId] = useState("ACB");
+    const [accountBankNo, setaccountBankNo] = useState("13157957");
+    const [accountNameBank, setaccountNameBank] = useState("Ha Khai Hoan");
+    const [databookingpayment, setdatabookingpayment] = useState(null)
+    const [isConfirmedPayment, setisConfirmedPayment] = useState(false);
+
+    const handleConfirmPayment = () => {
+        setisConfirmedPayment(true); // Chuyển trạng thái sang đã xác nhận
+      };
 
     const removeVietnameseTones = (str) => {
         return str
@@ -60,7 +72,14 @@ const OrderTracking = () => {
                     },
                 });
 
-                // console.log("+++++",response_book.data)
+                const response_bookingpayment = await axios.get(`${API_ENDPOINT}/api/BookingPayment/booking/${booking_id}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setdatabookingpayment(response_bookingpayment.data)
+                console.log("+++", response_bookingpayment.data)
 
                 setstarttrack(response_book.data.startTime.split(':')[0]);
                 setendtrack(response_book.data.endTime.split(':')[0]);
@@ -353,12 +372,13 @@ const OrderTracking = () => {
                                         Xác nhận hoàn thành
                                     </button>
                                 )}
-                                {!isEndRating && (
+                                {!isEndRating && databookingpayment.paymentStatus === "Success" && (
                                     <button className="placeOrderButton" onClick={handleOpenModal}>
                                         Đánh giá
                                     </button>
-                                )}
-                                {dataBookingOrder.status === "Pending" && !isCancel && (
+                                    )}
+
+                                {dataBookingOrder.status === "Pending" && !isCancel && databookingpayment.paymentStatus === "Pending" && (
                                     <button className="placeOrderButton placeOrderButtonCancel" onClick={handleCancelOpenModal}>
                                         Hủy
                                     </button>
@@ -443,23 +463,51 @@ const OrderTracking = () => {
                             <p>Kết thúc: {endtrack}:00 h</p>
                             </div>
                         </div>
+                        <div className="wor2IMAGEbox">
+                            <img
+                                className="wor2IMAGE"
+                                src={wor2}
+                                alt="avatar"
+                                />
+                        </div>
+
                         </div>
 
 
                         <div className="info-card">
                             <div className="card-header">
-                                <span className="card-title">Phương thức thanh toán</span>
+                                <span className="card-title">Thanh toán</span>
                                 {/* <a href="#" className="editLink">Edit</a> */}
                             </div>
                             <div className="card-content">
-                                <div className="schedule-item">
-                                    <img src="https://img.icons8.com/?size=100&id=aMTIdm5CdddP&format=png&color=000000" alt="Visa" className="paymentIcon" />
-                                    <p>Visa card ending in 1234</p>
-                                </div>
-                                <div className="schedule-item">
-                                    <img src="https://img.icons8.com/?size=100&id=p2scHNLP9nSb&format=png&color=000000" alt="Visa" className="paymentIcon" />
-                                    <p>Thanh toán bằng tiền mặt</p>
-                                </div>
+                            {databookingpayment.paymentStatus === "Pending" ? (
+                                <>
+                                <VietQR
+                                        bankId={bankId} 
+                                        accountNo={accountBankNo}
+                                        amount={dataBookingOrder.totalAmount} 
+                                        description={"TT"+ dataBookingOrder.bookingID}
+                                        accountName={accountNameBank}
+                                    />
+                                {!isConfirmedPayment ? (
+                                    <button
+                                    className="checkVietQRButton placeOrderButton"
+                                    onClick={handleConfirmPayment}
+                                    >
+                                    Xác nhận đã thanh toán
+                                    </button>
+                                ) : (
+                                    <div className="confirmation-message">
+                                    Chúng tôi đã ghi nhận yêu cầu kiểm duyệt thanh toán, vui lòng kiểm tra
+                                    lại sau ít phút
+                                    </div>
+                                )}
+                                </>
+                            ) : databookingpayment.paymentStatus === "Success" ? (
+                                <p className="success-message">Bạn đã thanh toán</p>
+                            ) : (
+                                <p className="error-message">Không xác định trạng thái thanh toán</p>
+                            )}
                             </div>
                         </div>
                     </div>

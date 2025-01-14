@@ -1,50 +1,286 @@
+/* Scoped styles: chỉ ảnh hưởng đến .animated-text */
+.animated-text {
+  padding: 50px 0px;
+  width: 100%;
+}
+.animated-text .line {
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.animated-text .line .left{
+  width: 50%;
+}
+
+.animated-text .line .right{
+  width: 50%;
+}
+.animated-text .left, .animated-text .right {
+  width: 100vw;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.animated-text .left {
+  color: #34495e;  /* Màu chữ xám xanh nhẹ nhàng */
+  transform: skew(0deg, -10deg);
+}
+
+.animated-text .right {
+  color: #e74c3c;  /* Màu đỏ nhẹ để tạo sự nổi bật */
+  transform: skew(0deg, 10deg);
+}
+
+.animated-text .left .content, .animated-text .right .content {
+  width: 100vw;
+  text-align: center;
+}
+
+.animated-text .right .content {
+  transform: translateX(-43vw); /* Đẩy nội dung sang trái */
+}
+
+.animated-text span {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 5vw; /* Thu nhỏ kích thước chữ */
+  text-transform: uppercase;
+  line-height: 1.2;
+  transition: ease-out .6s;
+  font-weight: bold; /* Chữ đậm hơn */
+  letter-spacing: 3px;  /* Khoảng cách chữ ít hơn để chữ gọn gàng hơn */
+}
+
+/* Hiệu ứng động cho chữ tiến và lùi */
+.animated-text .spanSlow {
+  animation: textMove 10s ease-in-out infinite; /* Thời gian lâu hơn và hiệu ứng tiến/lùi */
+}
+
+/* Hiệu ứng tiến và lùi */
+@keyframes textMove {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+
+
+
 /* Card Container */
 .card-container {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(135deg, #61a0e9, #50e3c2);
-    padding: 2.5rem;
-    border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    color: white;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  padding: 3rem 4rem;
+  border-radius: 15px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+  color: white;
+  position: relative;
+  overflow: hidden;
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Background Glow Animation */
+.card-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0));
+  animation: rotateGlow 10s linear infinite;
+}
+
+@keyframes rotateGlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Text Section */
+.card-text {
+  max-width: 600px;
+  z-index: 1;
+}
+
+.card-text h1 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
+  animation: textColorChange 5s infinite alternate;
+}
+
+@keyframes textColorChange {
+  0% {
+    color: #ffffff;
+  }
+  100% {
+    color: #ffeb3b;
+  }
+}
+
+.card-text p {
+  font-size: 24px;
+  margin-top: 1rem;
+  color: #ffffff;
+  /* opacity: 0.85; */
+  text-shadow: 1px 3px 5px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.85;
+  }
+}
+
+/* Button Styling */
+.card-button {
+  background: linear-gradient(90deg, #ff8a00, #e52e71);
+  color: white;
+  padding: 1rem 2.5rem;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 20px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  position: relative;
+  animation: pulse 2.5s infinite;
+}
+
+/* Button Pulse Effect */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.card-button:hover {
+  transform: scale(1.2);
+  box-shadow: 0px 12px 25px rgba(255, 138, 0, 0.5);
+  background: linear-gradient(90deg, #ff5f6d, #ffc371);
+}
+
+/* Background Glow for Button */
+.card-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+  z-index: -1;
+  transform: scale(0);
+  transition: transform 0.4s ease-out;
+  border-radius: 50%;
+}
+
+.card-button:hover::after {
+  transform: scale(1.5);
+}
+
+  
+
+  .singleGrid {
+    position: relative;
+    background: rgb(255, 255, 255);
+    border-radius: 15px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    overflow: hidden;
   }
   
-  /* Text Section */
-  .card-text {
-    max-width: 600px;
+  .singleGrid:hover {
+    transform: translateY(-15px) rotateX(3deg) rotateY(-3deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   }
   
-  .card-text h1 {
-    font-size: 30px;
-    font-weight: bold;
-    color: white;
+  .singleGrid:hover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2), transparent);
+    opacity: 0;
+    animation: ripple 1s infinite;
   }
   
-  .card-text p {
-    font-size: 18px;
-    margin-top: 0.5rem;
-    color: white;
+  .imgDiv {
+    transition: transform 0.6s ease, filter 0.5s ease;
   }
   
-  /* Button Styling */
-  .card-button {
-    background-color: white;
-    color: #1a73e8; /* Use a shade of blue that matches the theme */
-    padding: 0.75rem 2rem;
-    border-radius: 9999px; /* Fully rounded */
-    font-weight: 600;
-    font-size: 18px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    border: none;
-    cursor: pointer;
+  .imgDiv img {
+    transform-origin: center;
   }
   
-  .card-button:hover {
-    background-color: #e0f2ff;
-    color: #1a5bb8;
+  .imgDiv:hover img {
+    transform: scale(1.3) rotate(15deg);
+  }
+  
+  @keyframes ripple {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+  
+  .singleGrid .relative span {
+    transition: color 0.7s ease;
+  }
+  
+  .singleGrid:hover span {
+    color: #000;
+  }
+  
+  p {
+    transform: translateY(10px);
+    transition: transform 0.7s ease, opacity 0.7s ease;
+  }
+  
+  .singleGrid:hover p {
+    transform: translateY(0);
+    opacity: 1;
   }
   
