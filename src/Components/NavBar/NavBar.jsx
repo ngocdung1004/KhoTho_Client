@@ -8,8 +8,10 @@ const NavBar = () => {
   const isLoggedIn = !!localStorage.getItem('authToken');
   return (
     <div className='navBar flex justify-between items-center p-[3rem]'>
+      
       <div className="logoDiv">
         <h1 className="logo text-[25px] text-blueColor logo-flex"> 
+
           <Link to="/khotho">
             <div className="flex">
               <div className="logo-font-blue">Kho</div>
@@ -17,6 +19,8 @@ const NavBar = () => {
             </div>
           </Link>
         </h1>
+=======
+    
       </div>
 
       <div className="menu flex gap-8">

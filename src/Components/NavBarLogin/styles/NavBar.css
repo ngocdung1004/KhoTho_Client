@@ -1,6 +1,19 @@
 .navBar {
-    background-color: #f4f7fa;
-}
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
+    padding: 1rem 4rem; /* Padding tạo không gian thoáng đãng */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    transition: all 0.3s ease;
+    border-radius: 0px 0px 12px 12px; /* Bo góc */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Đường viền mỏng */
+  }
 
 .logo-flex {
     display: flex;

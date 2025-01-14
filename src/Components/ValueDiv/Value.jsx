@@ -11,60 +11,102 @@ const Value = () => {
        
     <div className='mb-[4rem] mt-[6rem]'>
       {/* Centering the h1 inside a flex container */}
-      <div className="flex justify-center mb-[2rem]">
-        <h1 className='text-red-500 text-[40px] font-bold w-[700px] text-center'>
-          VIỆC LÀM GẤP, THỢ TỚI TẤP
-        </h1>
-        
+      <div className="animated-text">
+      <div className="wrap">
+        <div className="line">
+          <div className="left">
+            <div className="content">
+              <span className="spanSlow">VIỆC LÀM GẤP</span>
+            </div>
+          </div>
+          <div className="right">
+            <div className="content">
+              <span className="spanSlow">VIỆC LÀM GẤP</span>
+            </div>
+          </div>
+        </div>
+        <div className="line">
+          <div className="left">
+            <div className="content">
+              <span className="spanSlow">THỢ TỚI TẤP</span>
+            </div>
+          </div>
+          <div className="right">
+            <div className="content">
+              <span className="spanSlow">THỢ TỚI TẤP</span>
+            </div>
+          </div>
+        </div>
       </div>
-      
+    </div>
+
+
       <div className="flex justify-center mb-[3rem]"> {/* Flexbox for centering */}
         <img src={image1} alt="An tâm với sự lựa chọn của bạn" className='w-[1200px] h-auto rounded-[20px]' />
       </div>
 
-      <div className="grid gap-[10rem] grid-cols-3 items-center">
-        <div className="singleGrid rounded-[10px] hover:bg-[#E7F5FF] p-[1.5rem]">
-          <div className="flex items-center gap-3">
-            <div className="imgDiv p-[4px] rounded-[.8rem] bg-[#dedef8] h-[40px] w-[40px] flex items-center justify-center">
-              <img src={simple} alt='' className='w-[90%]'/>
-            </div>
-            <span className='font-semibold text-textColor text-[18px]'> 
-              Đặt lịch nhanh chóng
-            </span>
+      <div className="grid gap-[5rem] grid-cols-1 md:grid-cols-3 items-center px-5">
+  {[
+    {
+      imgSrc: simple,
+      bgColor: "linear-gradient(45deg, #a8edea, #fed6e3)",
+      hoverColor: "linear-gradient(135deg, #fdfcfb, #e2d1c3)",
+      title: "Đặt lịch nhanh chóng",
+      description: "Thao tác 60 giây trên ứng dụng, có ngay người nhận việc sau 60 phút.",
+    },
+    {
+      imgSrc: valentine,
+      bgColor: "linear-gradient(45deg, #ff9a9e, #fad0c4)",
+      hoverColor: "linear-gradient(135deg, #fbc2eb, #a6c1ee)",
+      title: "Đa dạng dịch vụ",
+      description: "Với các dịch vụ tiện ích, KhoTho sẵn sàng hỗ trợ mọi nhu cầu việc nhà của bạn.",
+    },
+    {
+      imgSrc: shield,
+      bgColor: "linear-gradient(45deg, #f6d365, #fda085)",
+      hoverColor: "linear-gradient(135deg, #ffecd2, #fcb69f)",
+      title: "An toàn tối đa",
+      description: "Người làm uy tín, luôn có hồ sơ lý lịch rõ ràng.",
+    },
+  ].map((card, index) => (
+    <div
+      key={index}
+      className={`singleGrid group relative rounded-[15px] p-[1.5rem] overflow-hidden cursor-pointer`}
+    >
+      <div
+        className="absolute inset-0 bg-cover bg-center rounded-[15px] transform scale-110 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100"
+        style={{ backgroundImage: card.hoverColor }}
+      ></div>
+      <div className="relative z-10">
+        {/* Glow Effect */}
+        <div className="absolute inset-0 blur-[30px] opacity-30 transition-all duration-700" 
+          style={{ background: card.bgColor }}></div>
+
+        {/* Icon */}
+        <div className="flex items-center gap-3">
+          <div
+            className="imgDiv p-[4px] rounded-[.8rem] flex items-center justify-center h-[50px] w-[50px] bg-gradient-to-r from-white to-transparent group-hover:animate-bounce"
+          >
+            <img
+              src={card.imgSrc}
+              alt=""
+              className="w-[90%] group-hover:rotate-[20deg] group-hover:scale-125 transition-transform duration-700"
+            />
           </div>
-          <p className='text-[13px] text-textColor opacity-[0.7] py-[1rem] font-semibold'>
-            Thao tác 60 giây trên ứng dụng, có ngay người nhận việc sau 60 phút.
-          </p>
+          <span className="font-semibold text-[20px] opacity-[0.8] transition-all duration-500">
+            {card.title}
+          </span>
         </div>
 
-        <div className="singleGrid rounded-[10px] hover:bg-[#f7edf5] p-[1.5rem]">
-          <div className="flex items-center gap-3">
-            <div className="imgDiv p-[4px] rounded-[.8rem] bg-[#F4C2E0] h-[40px] w-[40px] flex items-center justify-center">
-              <img src={valentine} alt='' className='w-[90%]'/>
-            </div>
-            <span className='font-semibold text-textColor text-[18px]'> 
-              Đa dạng dịch vụ
-            </span>
-          </div>
-          <p className='text-[13px] text-textColor opacity-[0.7] py-[1rem] font-semibold'>
-            Với các dịch vụ tiện ích, KhoTho sẵn sàng hỗ trợ mọi nhu cầu việc nhà của bạn.
-          </p>
-        </div>
-
-        <div className="singleGrid rounded-[10px] hover:bg-[#fcfae3] p-[1.5rem]">
-          <div className="flex items-center gap-3">
-            <div className="imgDiv p-[4px] rounded-[.8rem] bg-[#FFE8A7] h-[40px] w-[40px] flex items-center justify-center">
-              <img src={shield} alt='' className='w-[90%]'/>
-            </div>
-            <span className='font-semibold text-textColor text-[18px]'> 
-              An toàn tối đa
-            </span>
-          </div>
-          <p className='text-[13px] text-textColor opacity-[0.7] py-[1rem] font-semibold'>
-            Người làm uy tín, luôn có hồ sơ lý lịch rõ ràng.
-          </p>
-        </div>
+        {/* Description */}
+        <p className="text-[14px] opacity-[0.8] py-[1rem] transition-all duration-500">
+          {card.description}
+        </p>
       </div>
+    </div>
+  ))}
+</div>
+
 
       <div className="card-container">
         <div className="card-text">

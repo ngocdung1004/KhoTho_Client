@@ -1,5 +1,85 @@
+/* Scoped styles: chỉ ảnh hưởng đến .animated-text */
+.animated-text {
+  padding: 50px 0px;
+  width: 100%;
+}
+.animated-text .line {
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.animated-text .line .left{
+  width: 50%;
+}
+
+.animated-text .line .right{
+  width: 50%;
+}
+.animated-text .left, .animated-text .right {
+  width: 100vw;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.animated-text .left {
+  color: #34495e;  /* Màu chữ xám xanh nhẹ nhàng */
+  transform: skew(0deg, -10deg);
+}
+
+.animated-text .right {
+  color: #e74c3c;  /* Màu đỏ nhẹ để tạo sự nổi bật */
+  transform: skew(0deg, 10deg);
+}
+
+.animated-text .left .content, .animated-text .right .content {
+  width: 100vw;
+  text-align: center;
+}
+
+.animated-text .right .content {
+  transform: translateX(-43vw); /* Đẩy nội dung sang trái */
+}
+
+.animated-text span {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 5vw; /* Thu nhỏ kích thước chữ */
+  text-transform: uppercase;
+  line-height: 1.2;
+  transition: ease-out .6s;
+  font-weight: bold; /* Chữ đậm hơn */
+  letter-spacing: 3px;  /* Khoảng cách chữ ít hơn để chữ gọn gàng hơn */
+}
+
+/* Hiệu ứng động cho chữ tiến và lùi */
+.animated-text .spanSlow {
+  animation: textMove 10s ease-in-out infinite; /* Thời gian lâu hơn và hiệu ứng tiến/lùi */
+}
+
+/* Hiệu ứng tiến và lùi */
+@keyframes textMove {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+
+
+
 /* Card Container */
 .card-container {
+
     margin-top: 2rem;
     display: flex;
     flex-direction: row;

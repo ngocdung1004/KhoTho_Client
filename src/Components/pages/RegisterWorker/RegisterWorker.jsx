@@ -39,6 +39,13 @@ const RegisterWorker = () => {
     const [yearsExperience, setYearsExperience] = useState(0);
     const [selfIntroduction, setSelfIntroduction] = useState('');
 
+
+    // Thêm state để lưu trữ file ảnh thực tế
+const [profileImageFile, setProfileImageFile] = useState(null);
+const [frontCCCDFile, setFrontCCCDFile] = useState(null);
+const [backCCCDFile, setBackCCCDFile] = useState(null);
+
+
     const [Workers, setWorkers] = useState(null)
 
     const [jobTypes, setJobTypes] = useState([]); // Lưu trữ danh sách job types
@@ -80,80 +87,117 @@ const RegisterWorker = () => {
       fetchJobTypes();
   }, [token]);
 
-    const handleSubmit_ = async (e) => {
-      e.preventDefault();
-    
-      try {
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-          toast.error('Bạn cần đăng nhập để thực hiện thao tác này!', { position: "top-left", autoClose: 3000 });
-          return;
-        }
-
-        const userData = localStorage.getItem('userData');
-        if (!userData) {
-          toast.error('Không tìm thấy userData. Vui lòng đăng nhập lại!', { position: "top-left", autoClose: 3000 });
-          return;
-        }
-
-        const parsedUserData = JSON.parse(userData);
-        const userId = parsedUserData.userId;
-        if (!userId) {
-          toast.error('Không tìm thấy userId. Vui lòng đăng nhập lại!', { position: "top-left", autoClose: 3000 });
-          return;
-        }
-
-        const workerData = {
-          userID: userId,  
-          experienceYears: yearsExperience,
-          rating: 0,
-          bio: selfIntroduction,
-          verified: true,
-          jobTypeIds: [industryGroup],
-        };
-    
-    
-        const postResponse = await axios.post(
-          `${API_ENDPOINT}/api/Workers`,
-          workerData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              'Authorization': `Bearer ${token}`,
-            },
-          }
-        );
+  const handleSubmit_ = async (e) => {
+    e.preventDefault();
   
-        toast.success("Đăng ký thành công!", { position: "top-left", autoClose: 3000 });
-        setTimeout(() => navigate("/khotho/workers"), 1000);
-      } catch (error) {
-        console.error('Error:', error);
-        toast.error('Có lỗi xảy ra, vui lòng thử lại!', { position: "top-left", autoClose: 3000 });
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        toast.error('Bạn cần đăng nhập để thực hiện thao tác này!', { position: "top-left", autoClose: 3000 });
+        return;
       }
-    };
+  
+      const userData = localStorage.getItem('userData');
+      if (!userData) {
+        toast.error('Không tìm thấy userData. Vui lòng đăng nhập lại!', { position: "top-left", autoClose: 3000 });
+        return;
+      }
+  
+      const parsedUserData = JSON.parse(userData);
+      const userId = parsedUserData.userId;
+      if (!userId) {
+        toast.error('Không tìm thấy userId. Vui lòng đăng nhập lại!', { position: "top-left", autoClose: 3000 });
+        return;
+      }
+  
+      // Tạo FormData object
+      const formData = new FormData();
+      formData.append('UserId', userId);
+      formData.append('ExperienceYears', yearsExperience);
+      formData.append('Rating', 0);
+      formData.append('Bio', selfIntroduction);
+      formData.append('Verified', true);
+      formData.append('JobTypeIds', industryGroup);
+  
+      // Thêm file ảnh nếu có
+      if (profileImageFile) {
+        formData.append('ProfileImage', profileImageFile);
+      }
+      if (frontCCCDFile) {
+        formData.append('FrontIdcard', frontCCCDFile);
+      }
+      if (backCCCDFile) {
+        formData.append('BackIdcard', backCCCDFile);
+      }
+  
+      const response = await axios.post(
+        `${API_ENDPOINT}/api/Workers`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      toast.success("Đăng ký thành công!", { position: "top-left", autoClose: 3000 });
+      setTimeout(() => navigate("/khotho/workers"), 1000);
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Có lỗi xảy ra, vui lòng thử lại!', { position: "top-left", autoClose: 3000 });
+    }
+  };
+  
     
 
-  // Handle file upload
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
-    }
-  };
+  // // Handle file upload
+  // const handleImageUpload = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const imageUrl = URL.createObjectURL(file);
+  //     setProfileImage(imageUrl);
+  //   }
+  // };
 
-  // Handle file upload for CCCD images
-  const handleCCCDUpload = (event, type) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      if (type === 'front') {
-        setFrontCCCD(imageUrl);  // Set front image preview
-      } else if (type === 'back') {
-        setBackCCCD(imageUrl);   // Set back image preview
-      }
+  // // Handle file upload for CCCD images
+  // const handleCCCDUpload = (event, type) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const imageUrl = URL.createObjectURL(file);
+  //     if (type === 'front') {
+  //       setFrontCCCD(imageUrl);  // Set front image preview
+  //     } else if (type === 'back') {
+  //       setBackCCCD(imageUrl);   // Set back image preview
+  //     }
+  //   }
+  // };
+
+  // Hàm xử lý upload ảnh Profile
+const handleImageUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    setProfileImageFile(file); // Lưu file ảnh thực tế
+    const imageUrl = URL.createObjectURL(file);
+    setProfileImage(imageUrl); // Lưu URL preview
+  }
+};
+
+// Hàm xử lý upload ảnh CCCD
+const handleCCCDUpload = (event, type) => {
+  const file = event.target.files[0];
+  if (file) {
+    const imageUrl = URL.createObjectURL(file);
+    if (type === 'front') {
+      setFrontCCCDFile(file); // Lưu file gốc
+      setFrontCCCD(imageUrl); // Lưu URL preview
+    } else if (type === 'back') {
+      setBackCCCDFile(file); // Lưu file gốc
+      setBackCCCD(imageUrl); // Lưu URL preview
     }
-  };
+  }
+};
+
 
   // Function to handle tab change
   const handleTabChange = (tab) => {
