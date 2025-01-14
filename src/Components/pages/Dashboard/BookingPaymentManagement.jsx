@@ -17,25 +17,19 @@ import {
   ThemeProvider,
   createTheme,
 } from "@mui/material";
-import { Delete, Edit, Add, Info } from "@mui/icons-material";
-import { useNavigate } from 'react-router-dom';
 import Sidebar from "../Dashboard/Sidebar";
 import axios from "axios";
 import { API_ENDPOINT } from "../../../services/config";
+import { Delete, Edit, Add, Visibility } from "@mui/icons-material";
+import { useNavigate } from 'react-router-dom';
+const API_URL = `${API_ENDPOINT}/api/BookingPayment`;
 
-const API_URL = `${API_ENDPOINT}/api/Workers`;
-
-const WorkerManagement = () => {
+const BookingPaymentManagement = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
-  const [validationErrors, setValidationErrors] = useState({});
-  const [users, setUsers] = useState([]);
-  const [jobTypes, setJobTypes] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingRow, setEditingRow] = useState(null);
-  const [workerJobTypes, setWorkerJobTypes] = useState({});
   const navigate = useNavigate();
-
   const theme = createTheme({
     palette: {
       primary: {
@@ -48,92 +42,33 @@ const WorkerManagement = () => {
   });
 
   useEffect(() => {
-    fetchWorkers();
-    fetchUsers();
-    fetchJobTypes();
+    fetchBookingPayments();
   }, []);
 
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get(`${API_ENDPOINT}/api/Users`);
-      const availableUsers = response.data.filter(
-        (user) => user.userType === 1 && !user.worker
-      );
-      setUsers(availableUsers);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
-
-  const fetchWorkerJobTypes = async (workerId) => {
-    try {
-      const response = await axios.get(
-        `${API_ENDPOINT}/api/WorkerJobTypes/worker/${workerId}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching worker job types:", error);
-      return [];
-    }
-  };
-
-  const fetchJobTypes = async () => {
-    try {
-      const response = await axios.get(`${API_ENDPOINT}/api/JobTypes`);
-      console.log("Job Types:", response.data);
-      setJobTypes(response.data);
-    } catch (error) {
-      console.error("Error fetching job types:", error);
-    }
-  };
-
-  const fetchWorkers = async () => {
+  const fetchBookingPayments = async () => {
     try {
       const response = await axios.get(API_URL);
-      const workersData = response.data;
-
-      const workersWithJobTypes = await Promise.all(
-        workersData.map(async (worker) => {
-          const jobTypes = await fetchWorkerJobTypes(worker.workerId);
-          return {
-            ...worker,
-            workerJobTypes: jobTypes,
-          };
-        })
-      );
-
-      setTableData(workersWithJobTypes);
+      setTableData(response.data);
     } catch (error) {
-      console.error("Error fetching workers:", error);
+      console.error("Error fetching booking payments:", error);
     }
   };
 
   const handleCreateNewRow = async (values) => {
     try {
-      const newWorker = {
-        workerId: 0,
-        userId: values.selectedUser.userId,
-        experienceYears: values.experienceYears,
-        rating: 0,
-        bio: values.bio,
-        verified: values.verified,
+      const newBookingPayment = {
+        bookingId: values.bookingId,
+        amount: values.amount,
+        paymentMethod: values.paymentMethod,
+        transactionId: values.transactionId,
+        commissionRate: values.commissionRate,
       };
 
-      const response = await axios.post(API_URL, newWorker);
-      const createdWorker = response.data;
-
-      for (const jobType of values.selectedJobTypes) {
-        await axios.post(`${API_ENDPOINT}/api/WorkerJobTypes`, {
-          workerId: createdWorker.workerId,
-          jobTypeId: jobType.jobTypeId,
-        });
-      }
-
-      await fetchWorkers();
-      fetchUsers();
+      const response = await axios.post(API_URL, newBookingPayment);
+      setTableData([...tableData, response.data]);
     } catch (error) {
       console.error(
-        "Error creating worker:",
+        "Error creating booking payment:",
         error.response ? error.response.data : error.message
       );
     }
@@ -141,20 +76,17 @@ const WorkerManagement = () => {
 
   const handleSaveRowEdits = async ({ values, row }) => {
     try {
-      const workerId = row.original.workerId;
-      const updatedWorker = {
-        workerId: workerId,
-        userId: row.original.userId,
-        experienceYears: values.experienceYears,
-        rating: values.rating,
-        bio: values.bio,
-        verified: values.verified,
-      };
+      const bookingPaymentId = row.original.bookingPaymentId;
+      const updatedStatus = values.paymentStatus;
 
-      await axios.put(`${API_URL}/${workerId}`, updatedWorker);
-      fetchWorkers();
+      await axios.put(`${API_URL}/${bookingPaymentId}/status`, updatedStatus, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      fetchBookingPayments();
     } catch (error) {
-      console.error("Error updating worker:", error);
+      console.error("Error updating booking payment status:", error);
     }
   };
 
@@ -162,20 +94,18 @@ const WorkerManagement = () => {
     async (row) => {
       if (
         !confirm(
-          `Are you sure you want to delete ${row.getValue("user.fullName")}`
+          `Are you sure you want to delete booking payment with ID ${row.getValue("bookingPaymentId")}`
         )
       ) {
         return;
       }
 
       try {
-        const workerId = row.original.workerId;
-        await axios.delete(`${API_URL}/${workerId}`);
-        setTableData(
-          tableData.filter((worker) => worker.workerId !== workerId)
-        );
+        const bookingPaymentId = row.original.bookingPaymentId;
+        await axios.delete(`${API_URL}/${bookingPaymentId}`);
+        setTableData(tableData.filter((payment) => payment.bookingPaymentId !== bookingPaymentId));
       } catch (error) {
-        console.error("Error deleting worker:", error);
+        console.error("Error deleting booking payment:", error);
       }
     },
     [tableData]
@@ -184,82 +114,54 @@ const WorkerManagement = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "workerId",
-        header: "Worker ID",
+        accessorKey: "bookingPaymentId",
+        header: "Booking Payment ID",
         enableEditing: false,
         size: 80,
       },
       {
-        accessorKey: "user.fullName",
-        header: "Full Name",
-        size: 140,
+        accessorKey: "bookingId",
+        header: "Booking ID",
+        size: 80,
       },
       {
-        accessorKey: "user.email",
-        header: "Email",
-        size: 140,
-      },
-      {
-        accessorKey: "user.phoneNumber",
-        header: "Phone Number",
-        size: 120,
-      },
-      {
-        accessorKey: "user.address",
-        header: "Address",
-        size: 200,
-      },
-      {
-        accessorKey: "experienceYears",
-        header: "Experience (Years)",
-        size: 120,
-      },
-      {
-        accessorKey: "rating",
-        header: "Rating",
+        accessorKey: "amount",
+        header: "Amount",
         size: 100,
       },
       {
-        accessorKey: "bio",
-        header: "Bio",
-        size: 200,
+        accessorKey: "paymentMethod",
+        header: "Payment Method",
+        size: 140,
       },
       {
-        accessorKey: "verified",
-        header: "Verified",
-        size: 100,
-        Cell: ({ cell }) => (cell.getValue() ? "Yes" : "No"),
+        accessorKey: "paymentStatus",
+        header: "Payment Status",
+        size: 140,
         muiTableBodyCellEditTextFieldProps: {
           select: true,
           children: [
-            <MenuItem key={true} value={true}>
-              Yes
+            <MenuItem key="Pending" value="Pending">
+              Pending
             </MenuItem>,
-            <MenuItem key={false} value={false}>
-              No
+            <MenuItem key="Success" value="Success">
+              Success
             </MenuItem>,
           ],
         },
       },
       {
-        accessorKey: "workerJobTypes",
-        header: "Job Types",
-        size: 200,
-        Cell: ({ row }) => {
-          const workerJobTypes = row.original.workerJobTypes;
-          return workerJobTypes
-            ?.map((wjt) => {
-              const jobType = jobTypes.find(
-                (jt) => jt.jobTypeId === wjt.jobTypeId
-              );
-              return jobType?.jobTypeName;
-            })
-            .filter(Boolean)
-            .join(", ");
-        },
+        accessorKey: "transactionId",
+        header: "Transaction ID",
+        size: 140,
+      },
+      {
+        accessorKey: "commissionRate",
+        header: "Commission Rate",
+        size: 100,
       },
     ],
-    [jobTypes]
+    []
   );
 
   return (
@@ -293,11 +195,11 @@ const WorkerManagement = () => {
               onEditingRowSave={handleSaveRowEdits}
               renderRowActions={({ row }) => (
                 <Box sx={{ display: "flex", gap: "1rem" }}>
-                  <Tooltip arrow placement="left" title="Details">
+                  <Tooltip arrow placement="left" title="Detail">
                     <IconButton
-                      onClick={() => navigate(`/workers/detail/${row.original.workerId}`)}
+                      onClick={() => navigate(`/booking-payment/detail/${row.original.bookingPaymentId}`)}
                     >
-                      <Info />
+                      <Visibility />
                     </IconButton>
                   </Tooltip>
                   <Tooltip arrow placement="left" title="Edit">
@@ -311,10 +213,7 @@ const WorkerManagement = () => {
                     </IconButton>
                   </Tooltip>
                   <Tooltip arrow placement="right" title="Delete">
-                    <IconButton
-                      color="error"
-                      onClick={() => handleDeleteRow(row)}
-                    >
+                    <IconButton color="error" onClick={() => handleDeleteRow(row)}>
                       <Delete />
                     </IconButton>
                   </Tooltip>
@@ -327,13 +226,13 @@ const WorkerManagement = () => {
                   variant="contained"
                   startIcon={<Add />}
                 >
-                  Create New Worker
+                  Create New Booking Payment
                 </Button>
               )}
             />
           </Box>
           {editingRow && (
-            <EditWorkerModal
+            <EditBookingPaymentModal
               open={isEditModalOpen}
               onClose={() => {
                 setIsEditModalOpen(false);
@@ -341,15 +240,12 @@ const WorkerManagement = () => {
               }}
               onSubmit={handleSaveRowEdits}
               row={editingRow}
-              jobTypes={jobTypes}
             />
           )}
-          <CreateNewWorkerModal
+          <CreateNewBookingPaymentModal
             open={createModalOpen}
             onClose={() => setCreateModalOpen(false)}
             onSubmit={handleCreateNewRow}
-            users={users}
-            jobTypes={jobTypes}
           />
         </div>
       </div>
@@ -357,141 +253,31 @@ const WorkerManagement = () => {
   );
 };
 
-const EditWorkerModal = ({ open, onClose, onSubmit, row, jobTypes }) => {
+const EditBookingPaymentModal = ({ open, onClose, onSubmit, row }) => {
   const [values, setValues] = useState({
-    experienceYears: row.original.experienceYears,
-    rating: row.original.rating,
-    bio: row.original.bio,
-    verified: row.original.verified,
-    selectedJobTypes:
-      row.original.workerJobTypes.length > 0
-        ? [
-            jobTypes.find(
-              (jt) => jt.jobTypeId === row.original.workerJobTypes[0].jobTypeId
-            ),
-          ].filter(Boolean)
-        : [],
+    paymentStatus: row.original.paymentStatus,
   });
 
   const handleSubmit = async () => {
-    try {
-      console.log("Current values:", values);
-      console.log("Selected job type:", values.selectedJobTypes[0]);
-
-      if (!values.selectedJobTypes || values.selectedJobTypes.length === 0) {
-        alert("Please select a job type");
-        return;
-      }
-
-      const updatedWorker = {
-        workerId: row.original.workerId,
-        userId: row.original.userId,
-        experienceYears: values.experienceYears,
-        rating: values.rating,
-        bio: values.bio,
-        verified: values.verified,
-      };
-
-      console.log("Updating worker with data:", updatedWorker);
-      await axios.put(`${API_URL}/${row.original.workerId}`, updatedWorker);
-
-      console.log("Deleting old job types...");
-      await axios.delete(
-        `${API_ENDPOINT}/api/WorkerJobTypes/worker/${row.original.workerId}`
-      );
-
-      const newWorkerJobType = {
-        workerId: row.original.workerId,
-        jobTypeId: values.selectedJobTypes[0].jobTypeId,
-      };
-
-      console.log("Adding new job type:", newWorkerJobType);
-      await axios.post(`${API_ENDPOINT}/api/WorkerJobTypes`, newWorkerJobType);
-
-      console.log("Update completed successfully");
-      onClose();
-      window.location.reload();
-    } catch (error) {
-      console.error("Error updating worker:", error);
-      console.error("Error details:", error.response?.data);
-      alert("Error updating worker: " + error.message);
-    }
+    onSubmit({ values, row });
+    onClose();
   };
 
   return (
     <Dialog open={open} maxWidth="md" fullWidth>
-      <DialogTitle textAlign="center">Edit Worker</DialogTitle>
+      <DialogTitle textAlign="center">Edit Booking Payment</DialogTitle>
       <DialogContent>
         <form onSubmit={(e) => e.preventDefault()}>
           <Stack spacing={3} sx={{ mt: 2 }}>
-            <Box sx={{ bgcolor: "background.paper", p: 2, borderRadius: 1 }}>
-              <Typography variant="subtitle1">Worker Information:</Typography>
-              <Typography>Full Name: {row.original.user.fullName}</Typography>
-              <Typography>Email: {row.original.user.email}</Typography>
-              <Typography>Phone: {row.original.user.phoneNumber}</Typography>
-              <Typography>Address: {row.original.user.address}</Typography>
-            </Box>
-
             <TextField
               select
               fullWidth
-              label="Select Job Type"
-              value={values.selectedJobTypes[0] || ""} // Chỉ lấy giá trị đầu tiên
-              onChange={(e) =>
-                setValues({ ...values, selectedJobTypes: [e.target.value] }) // Wrap trong mảng với 1 phần tử
-              }
+              label="Payment Status"
+              value={values.paymentStatus}
+              onChange={(e) => setValues({ ...values, paymentStatus: e.target.value })}
             >
-              {jobTypes.map((jobType) => (
-                <MenuItem key={jobType.jobTypeId} value={jobType}>
-                  {jobType.jobTypeName}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              fullWidth
-              label="Experience Years"
-              type="number"
-              value={values.experienceYears}
-              onChange={(e) =>
-                setValues({
-                  ...values,
-                  experienceYears: parseInt(e.target.value),
-                })
-              }
-            />
-
-            <TextField
-              fullWidth
-              label="Rating"
-              type="number"
-              inputProps={{ step: "0.1", min: "0", max: "5" }}
-              value={values.rating}
-              onChange={(e) =>
-                setValues({ ...values, rating: parseFloat(e.target.value) })
-              }
-            />
-
-            <TextField
-              fullWidth
-              label="Bio"
-              multiline
-              rows={4}
-              value={values.bio}
-              onChange={(e) => setValues({ ...values, bio: e.target.value })}
-            />
-
-            <TextField
-              select
-              fullWidth
-              label="Verified"
-              value={values.verified}
-              onChange={(e) =>
-                setValues({ ...values, verified: e.target.value })
-              }
-            >
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
+              <MenuItem value="Pending">Pending</MenuItem>
+              <MenuItem value="Success">Success</MenuItem>
             </TextField>
           </Stack>
         </form>
@@ -506,21 +292,14 @@ const EditWorkerModal = ({ open, onClose, onSubmit, row, jobTypes }) => {
   );
 };
 
-const CreateNewWorkerModal = ({ open, onClose, onSubmit, users, jobTypes }) => {
+const CreateNewBookingPaymentModal = ({ open, onClose, onSubmit }) => {
   const [values, setValues] = useState({
-    selectedUser: null,
-    selectedJobTypes: [],
-    experienceYears: "",
-    bio: "",
-    verified: false,
+    bookingId: "",
+    amount: "",
+    paymentMethod: "",
+    transactionId: "",
+    commissionRate: "",
   });
-
-  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
-
-  const handleUserChange = (user) => {
-    setValues({ ...values, selectedUser: user });
-    setSelectedUserDetails(user);
-  };
 
   const handleSubmit = () => {
     onSubmit(values);
@@ -529,101 +308,54 @@ const CreateNewWorkerModal = ({ open, onClose, onSubmit, users, jobTypes }) => {
 
   return (
     <Dialog open={open} maxWidth="md" fullWidth>
-      <DialogTitle textAlign="center">Create New Worker</DialogTitle>
+      <DialogTitle textAlign="center">Create New Booking Payment</DialogTitle>
       <DialogContent>
         <form onSubmit={(e) => e.preventDefault()}>
           <Stack spacing={3} sx={{ mt: 2 }}>
             <TextField
-              select
               fullWidth
-              label="Select User"
-              value={values.selectedUser || ""}
-              onChange={(e) => handleUserChange(e.target.value)}
-            >
-              {users.map((user) => (
-                <MenuItem key={user.userId} value={user}>
-                  {user.fullName}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            {selectedUserDetails && (
-              <Box sx={{ bgcolor: "background.paper", p: 2, borderRadius: 1 }}>
-                <Typography variant="subtitle1">
-                  Selected User Details:
-                </Typography>
-                <Typography>
-                  Full Name: {selectedUserDetails.fullName}
-                </Typography>
-                <Typography>Email: {selectedUserDetails.email}</Typography>
-                <Typography>
-                  Phone: {selectedUserDetails.phoneNumber}
-                </Typography>
-                <Typography>Address: {selectedUserDetails.address}</Typography>
-              </Box>
-            )}
-
-            <TextField
-              select
-              fullWidth
-              label="Select Job Type"
-              value={values.selectedJobTypes[0] || ""} // Chỉ lấy giá trị đầu tiên
-              onChange={(e) =>
-                setValues({ ...values, selectedJobTypes: [e.target.value] }) // Wrap trong mảng với 1 phần tử
-              }
-            >
-              {jobTypes.map((jobType) => (
-                <MenuItem key={jobType.jobTypeId} value={jobType}>
-                  {jobType.jobTypeName}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              fullWidth
-              label="Experience Years"
+              label="Booking ID"
               type="number"
-              value={values.experienceYears}
-              onChange={(e) =>
-                setValues({
-                  ...values,
-                  experienceYears: parseInt(e.target.value),
-                })
-              }
+              value={values.bookingId}
+              onChange={(e) => setValues({ ...values, bookingId: parseInt(e.target.value) })}
             />
-
             <TextField
               fullWidth
-              label="Bio"
-              multiline
-              rows={4}
-              value={values.bio}
-              onChange={(e) => setValues({ ...values, bio: e.target.value })}
+              label="Amount"
+              type="number"
+              value={values.amount}
+              onChange={(e) => setValues({ ...values, amount: parseFloat(e.target.value) })}
             />
-
             <TextField
-              select
               fullWidth
-              label="Verified"
-              value={values.verified}
-              onChange={(e) =>
-                setValues({ ...values, verified: e.target.value })
-              }
-            >
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
-            </TextField>
+              label="Payment Method"
+              value={values.paymentMethod}
+              onChange={(e) => setValues({ ...values, paymentMethod: e.target.value })}
+            />
+            <TextField
+              fullWidth
+              label="Transaction ID"
+              value={values.transactionId}
+              onChange={(e) => setValues({ ...values, transactionId: e.target.value })}
+            />
+            <TextField
+              fullWidth
+              label="Commission Rate"
+              type="number"
+              value={values.commissionRate}
+              onChange={(e) => setValues({ ...values, commissionRate: parseFloat(e.target.value) })}
+            />
           </Stack>
         </form>
       </DialogContent>
       <DialogActions sx={{ p: "1.25rem" }}>
         <Button onClick={onClose}>Cancel</Button>
         <Button color="primary" onClick={handleSubmit} variant="contained">
-          Create Worker
+          Create Booking Payment
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default WorkerManagement;
+export default BookingPaymentManagement;
