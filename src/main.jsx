@@ -30,6 +30,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import BookingPaymentManagement from './Components/pages/Dashboard/BookingPaymentManagement';
 import DetailBookingPaymentManagement from './Components/pages/Dashboard/DetailBookingPaymentManagement';
+import WorkerDetail from './Components/pages/Dashboard/WorkerDetail';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -67,6 +68,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/khotho/admin/bookingpayment" element={<BookingPaymentManagement />} />
         <Route path="/booking-payment/detail/:id" element={<DetailBookingPaymentManagement />} />
         <Route path="/workers" element={<WorkerDashboard/>} />
+        <Route path="/workers/detail/:id" element={<WorkerDetail />} />
         
         <Route path="/khotho/profile" element={<Profile />} />
       </Routes>

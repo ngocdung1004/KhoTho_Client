@@ -159,11 +159,11 @@ const JobTypeManagement = () => {
       //   header: 'Description',
       //   size: 200,
       // },
-      {
-        accessorKey: 'pricePerHour',
-        header: 'Price Per Hour',
-        size: 120,
-      },
+      // {
+      //   accessorKey: 'pricePerHour',
+      //   header: 'Price Per Hour',
+      //   size: 120,
+      // },
       
     ],
     [],
