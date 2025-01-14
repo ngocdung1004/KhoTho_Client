@@ -166,7 +166,6 @@ const WorkerProfile = () => {
         const imageUrl = response.data.profileImage 
         ? `${API_ENDPOINT}${response.data.profileImage}` 
         : '/default-avatar.png'; 
-        console.log("imageUrl", imageUrl)
         setProfileImageUrl(imageUrl);
         setWorkerData(response.data);
       } catch (error) {
@@ -191,7 +190,6 @@ const WorkerProfile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response.data)
         setBookings(response.data);
       } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -290,7 +288,6 @@ const WorkerProfile = () => {
     });
   };
   
-  
   const handleConfirmBooking = async () => {
     try {
       // Chuyển đổi dữ liệu phù hợp với định dạng API yêu cầu
@@ -313,6 +310,21 @@ const WorkerProfile = () => {
   
       // Lấy data trả về từ API
       const responseData = response.data;
+
+      const formattedPaymentsDetails = {
+        bookingId: parseInt(responseData.bookingID, 10),
+        amount: totalCost,
+        paymentMethod: "QR",
+        transactionId: `TT${responseData.bookingID}`,
+        commissionRate: 80, // Đã sửa thành đúng key 'commissionRate'
+      };
+      
+      const response_payments = await axios.post(`${API_ENDPOINT}/api/BookingPayment`, formattedPaymentsDetails, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
   
       toast.success("Đặt lịch thành công!", { position: "top-left", autoClose: 3000 });
       setIsModalOpen(false);

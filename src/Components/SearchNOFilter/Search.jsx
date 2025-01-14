@@ -182,7 +182,6 @@ const Search = () => {
           const imageUrl = profileImage === "default-profile.png"
           ? "/src/Assets/images/thodien.jpg"
           : `${API_ENDPOINT}${profileImage.startsWith("/") ? profileImage : `/${profileImage}`}`; 
-    console.log("---------",imageUrl)
     return (
       <div className="bg-white rounded-xl p-6 transition-all duration-300 hover:shadow-xl">
         <div className="flex items-start gap-4">
