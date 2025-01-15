@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import NavBar from '../../../NavBarLogin/NavBarWorker';
+import NavBar from '../../../NavBarLogin/NavBar';
 import Footer from '../../../FooterDiv/Footer';
 import Bookings from './Bookings';
 import Schedules from './Schedules';
@@ -40,7 +40,6 @@ const WorkerDashboard = () => {
             'Authorization': `Bearer ${token}`
           }
         });
-        console.log('Worker data:', response.data);
         setWorker(response.data);
 
         const imageUrl = response.data.profileImage 

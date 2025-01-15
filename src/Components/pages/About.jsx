@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Footer from '../FooterDiv/Footer';
-import NavBar from '../NavBar/NavBar';
+import NavBar from '../NavBarLogin/NavBar';
 import Gallery from '../Gallery/Gallery';
 import Logo from "../common/logo";
 import "./styles/About.css";

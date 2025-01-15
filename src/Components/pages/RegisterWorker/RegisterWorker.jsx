@@ -149,29 +149,6 @@ const [backCCCDFile, setBackCCCDFile] = useState(null);
     }
   };
   
-    
-
-  // // Handle file upload
-  // const handleImageUpload = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const imageUrl = URL.createObjectURL(file);
-  //     setProfileImage(imageUrl);
-  //   }
-  // };
-
-  // // Handle file upload for CCCD images
-  // const handleCCCDUpload = (event, type) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const imageUrl = URL.createObjectURL(file);
-  //     if (type === 'front') {
-  //       setFrontCCCD(imageUrl);  // Set front image preview
-  //     } else if (type === 'back') {
-  //       setBackCCCD(imageUrl);   // Set back image preview
-  //     }
-  //   }
-  // };
 
   // Hàm xử lý upload ảnh Profile
 const handleImageUpload = (event) => {

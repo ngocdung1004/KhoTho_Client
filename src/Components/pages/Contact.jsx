@@ -1,5 +1,5 @@
 // import React from 'react'
-import NavBar from '../NavBar/NavBar'
+import NavBar from '../NavBarLogin/NavBar';
 import ContactForm from '../Contact/Contact';
 import Social from '../Contact/Social';
 import Footer from '../FooterDiv/Footer'
