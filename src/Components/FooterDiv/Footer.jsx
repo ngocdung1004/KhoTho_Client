@@ -48,11 +48,11 @@ const Footer = () => {
         <span className="footer-title">Thông tin liên lạc</span>
         <small className="contact-email">khotho.24h@gmail.com</small>
         <div className="social-icons">
-          <AiFillInstagram className="icon" />
+          <AiFillInstagram className="icon instagram" />
           <a href="https://www.facebook.com/profile.php?id=61567859981143" target="_blank" rel="noopener noreferrer">
-          <BsFacebook className="icon" />
+          <BsFacebook className="icon facebook" />
           </a>
-          <BsLinkedin className="icon" />
+          <BsLinkedin className="icon linkedin" />
         </div>
       </div>
     </div>
