@@ -22,7 +22,7 @@
 }
 
 /* Email liên hệ */
-.contact-email {
+.navBarTopcontact-email {
   font-size: 14px;
   color: #333; /* Màu chữ tối */
   font-weight: 500;
@@ -31,15 +31,15 @@
   margin: 0px;
   padding-right: 8px;
   border-right: 1px solid #e0e0e0;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
-.contact-email:hover {
+.navBarTopcontact-email:hover {
   color: #ff2a2a; /* Màu thay đổi khi hover */
 }
 
 
-.social-icons {
+.navBarTopsocial-icons {
   margin: 0px;
   display: flex;
   gap: 20px; /* Khoảng cách giữa các icon */

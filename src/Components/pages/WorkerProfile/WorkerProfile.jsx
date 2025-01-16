@@ -598,13 +598,13 @@ const WorkerProfile = () => {
                   </div>
 
                   <div>
-                    <label className="schedule-label">Công việc thợ cần thực hiện</label>
+                    <label className="schedule-label">Địa chỉ cụ thể</label>
                     <textarea
                       className="schedule-input"
                       name="notes"
                       value={bookingDetails.notes}
                       onChange={handleInputChange}
-                      placeholder="Ví dụ: Sửa hệ thống nước nhà bếp, sửa máy giặt"
+                      placeholder="Ví dụ: 49 Bát Đàn, Quận Hoàn Kiếm, Hà Nội"
                     ></textarea>
                   </div>
 

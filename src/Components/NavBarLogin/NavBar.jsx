@@ -41,8 +41,8 @@ const NavBar = () => {
     <div className="navBar">
 
       <div className="navBarTop">
-        <small className="contact-email">khotho.24h@gmail.com</small>
-        <div className="social-icons">
+        <small className="navBarTopcontact-email">khotho.24h@gmail.com</small>
+        <div className="navBarTopsocial-icons">
           <AiFillInstagram className="icon instagram" />
           <a href="https://www.facebook.com/profile.php?id=61567859981143" target="_blank" rel="noopener noreferrer">
           <BsFacebook className="icon facebook" />
