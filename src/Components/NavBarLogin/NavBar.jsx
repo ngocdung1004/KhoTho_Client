@@ -13,9 +13,9 @@ import {BsLinkedin} from 'react-icons/bs'
 const NavBar = () => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
-  const [isLoggedInvalue, setIsLoggedInvalue] = useState(true);
+  const [isLoggedInvalue, setIsLoggedInvalue] = useState(false);
   const [userTypevalue, setUserTypevalue] = useState(null);
-  console.log("isLoggedInvalue:", isLoggedInvalue)
+
   useEffect(() => {
     // Khởi tạo trạng thái từ localStorage
     const authToken = localStorage.getItem('authToken');
@@ -41,8 +41,8 @@ const NavBar = () => {
     <div className="navBar">
 
       <div className="navBarTop">
-        <small className="navBarTopcontact-email">khotho.24h@gmail.com</small>
-        <div className="navBarTopsocial-icons">
+        <small className="contact-email">khotho.24h@gmail.com</small>
+        <div className="social-icons">
           <AiFillInstagram className="icon instagram" />
           <a href="https://www.facebook.com/profile.php?id=61567859981143" target="_blank" rel="noopener noreferrer">
           <BsFacebook className="icon facebook" />
@@ -94,34 +94,34 @@ const NavBar = () => {
                 onClick={toggleDropdown}
               />
               {showDropdown && (
-                  <div className="custom-dropdown">
-                    <Link 
-                      to="/khotho/profile" 
-                      className="custom-dropdown-item"
-                    >
-                      Thông tin cá nhân
-                    </Link>
-                    <Link 
-                      to="/khotho/ordermanagement" 
-                      className="custom-dropdown-item"
-                    >
-                      Quản lí đơn
-                    </Link>
-                    <Link 
-                      to="/khotho/settings" 
-                      className="custom-dropdown-item"
-                    >
-                      Cài đặt
-                    </Link>
-                    <hr className="custom-dropdown-divider" />
-                    <button 
-                      onClick={handleLogout}
-                      className="custom-dropdown-item custom-dropdown-logout"
-                    >
-                      Đăng xuất
-                    </button>
-                  </div>
-                )}
+    <div className="custom-dropdown">
+      <Link 
+        to="/khotho/profile" 
+        className="custom-dropdown-item"
+      >
+        Thông tin cá nhân
+      </Link>
+      <Link 
+        to="/khotho/ordermanagement" 
+        className="custom-dropdown-item"
+      >
+        Quản lí đơn
+      </Link>
+      <Link 
+        to="/khotho/settings" 
+        className="custom-dropdown-item"
+      >
+        Cài đặt
+      </Link>
+      <hr className="custom-dropdown-divider" />
+      <button 
+        onClick={handleLogout}
+        className="custom-dropdown-item custom-dropdown-logout"
+      >
+        Đăng xuất
+      </button>
+    </div>
+  )}
 
             </div>
           )}
