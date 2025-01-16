@@ -13,7 +13,7 @@ import {BsLinkedin} from 'react-icons/bs'
 const NavBar = () => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
-  const [isLoggedInvalue, setIsLoggedInvalue] = useState(false);
+  const [isLoggedInvalue, setIsLoggedInvalue] = useState(true);
   const [userTypevalue, setUserTypevalue] = useState(null);
 
   useEffect(() => {
