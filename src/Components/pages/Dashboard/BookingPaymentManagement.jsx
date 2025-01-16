@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { MaterialReactTable } from "material-react-table";
+import { Typography } from "@mui/material";
+
 import {
   Box,
   Button,
@@ -14,7 +16,6 @@ import {
   Tooltip,
   ThemeProvider,
   createTheme,
-  Typography,
 } from "@mui/material";
 import { Delete, Edit, Add, Info } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
@@ -33,7 +34,7 @@ const WorkerManagement = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingRow, setEditingRow] = useState(null);
   const [workerJobTypes, setWorkerJobTypes] = useState({});
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const theme = createTheme({
     palette: {
@@ -64,10 +65,8 @@ const navigate = useNavigate();
     }
   };
 
-  // Thêm hàm fetch WorkerJobTypes
   const fetchWorkerJobTypes = async (workerId) => {
     try {
-      // const response = await axios.get(`https://localhost:7062/api/WorkerJobTypes/worker/${workerId}`);
       const response = await axios.get(
         `${API_ENDPOINT}/api/WorkerJobTypes/worker/${workerId}`
       );
@@ -80,7 +79,6 @@ const navigate = useNavigate();
 
   const fetchJobTypes = async () => {
     try {
-      // const response = await axios.get("https://localhost:7062/api/JobTypes");
       const response = await axios.get(`${API_ENDPOINT}/api/JobTypes`);
       console.log("Job Types:", response.data);
       setJobTypes(response.data);
@@ -94,7 +92,6 @@ const navigate = useNavigate();
       const response = await axios.get(API_URL);
       const workersData = response.data;
 
-      // Fetch job types for each worker
       const workersWithJobTypes = await Promise.all(
         workersData.map(async (worker) => {
           const jobTypes = await fetchWorkerJobTypes(worker.workerId);
@@ -110,6 +107,7 @@ const navigate = useNavigate();
       console.error("Error fetching workers:", error);
     }
   };
+
   const handleCreateNewRow = async (values) => {
     try {
       const newWorker = {
@@ -120,20 +118,18 @@ const navigate = useNavigate();
         bio: values.bio,
         verified: values.verified,
       };
-      // Tạo worker mới
+
       const response = await axios.post(API_URL, newWorker);
       const createdWorker = response.data;
 
-      // Thêm worker job types
       for (const jobType of values.selectedJobTypes) {
-        // await axios.post('https://localhost:7062/api/WorkerJobTypes', {
         await axios.post(`${API_ENDPOINT}/api/WorkerJobTypes`, {
           workerId: createdWorker.workerId,
           jobTypeId: jobType.jobTypeId,
         });
       }
 
-      await fetchWorkers(); // Refresh data
+      await fetchWorkers();
       fetchUsers();
     } catch (error) {
       console.error(
@@ -281,7 +277,7 @@ const navigate = useNavigate();
                   muiTableHeadCellProps: {
                     align: "center",
                   },
-                  size: 200, // Increased size to accommodate all buttons
+                  size: 120,
                 },
               }}
               columns={columns}
@@ -296,23 +292,16 @@ const navigate = useNavigate();
               enableSelectAll
               onEditingRowSave={handleSaveRowEdits}
               renderRowActions={({ row }) => (
-                <Box sx={{ 
-                  display: "flex", 
-                  gap: "0.5rem", 
-                  justifyContent: "center",
-                  minWidth: "180px" // Ensure minimum width for buttons
-                }}>
+                <Box sx={{ display: "flex", gap: "1rem" }}>
                   <Tooltip arrow placement="left" title="Details">
                     <IconButton
-                      color="info"
                       onClick={() => navigate(`/workers/detail/${row.original.workerId}`)}
                     >
                       <Info />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip arrow placement="top" title="Edit">
+                  <Tooltip arrow placement="left" title="Edit">
                     <IconButton
-                      color="primary"
                       onClick={() => {
                         setEditingRow(row);
                         setIsEditModalOpen(true);
@@ -343,7 +332,25 @@ const navigate = useNavigate();
               )}
             />
           </Box>
-          {/* ... (modal components remain the same) */}
+          {editingRow && (
+            <EditWorkerModal
+              open={isEditModalOpen}
+              onClose={() => {
+                setIsEditModalOpen(false);
+                setEditingRow(null);
+              }}
+              onSubmit={handleSaveRowEdits}
+              row={editingRow}
+              jobTypes={jobTypes}
+            />
+          )}
+          <CreateNewWorkerModal
+            open={createModalOpen}
+            onClose={() => setCreateModalOpen(false)}
+            onSubmit={handleCreateNewRow}
+            users={users}
+            jobTypes={jobTypes}
+          />
         </div>
       </div>
     </ThemeProvider>
@@ -389,7 +396,6 @@ const EditWorkerModal = ({ open, onClose, onSubmit, row, jobTypes }) => {
       await axios.put(`${API_URL}/${row.original.workerId}`, updatedWorker);
 
       console.log("Deleting old job types...");
-      // await axios.delete(`https://localhost:7062/api/WorkerJobTypes/worker/${row.original.workerId}`);
       await axios.delete(
         `${API_ENDPOINT}/api/WorkerJobTypes/worker/${row.original.workerId}`
       );
@@ -400,7 +406,6 @@ const EditWorkerModal = ({ open, onClose, onSubmit, row, jobTypes }) => {
       };
 
       console.log("Adding new job type:", newWorkerJobType);
-      // await axios.post('https://localhost:7062/api/WorkerJobTypes', newWorkerJobType);
       await axios.post(`${API_ENDPOINT}/api/WorkerJobTypes`, newWorkerJobType);
 
       console.log("Update completed successfully");
@@ -432,9 +437,8 @@ const EditWorkerModal = ({ open, onClose, onSubmit, row, jobTypes }) => {
               fullWidth
               label="Select Job Type"
               value={values.selectedJobTypes[0] || ""} // Chỉ lấy giá trị đầu tiên
-              onChange={
-                (e) =>
-                  setValues({ ...values, selectedJobTypes: [e.target.value] }) // Wrap trong mảng với 1 phần tử
+              onChange={(e) =>
+                setValues({ ...values, selectedJobTypes: [e.target.value] }) // Wrap trong mảng với 1 phần tử
               }
             >
               {jobTypes.map((jobType) => (
@@ -564,9 +568,8 @@ const CreateNewWorkerModal = ({ open, onClose, onSubmit, users, jobTypes }) => {
               fullWidth
               label="Select Job Type"
               value={values.selectedJobTypes[0] || ""} // Chỉ lấy giá trị đầu tiên
-              onChange={
-                (e) =>
-                  setValues({ ...values, selectedJobTypes: [e.target.value] }) // Wrap trong mảng với 1 phần tử
+              onChange={(e) =>
+                setValues({ ...values, selectedJobTypes: [e.target.value] }) // Wrap trong mảng với 1 phần tử
               }
             >
               {jobTypes.map((jobType) => (

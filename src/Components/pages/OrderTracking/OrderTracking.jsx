@@ -10,6 +10,10 @@ import * as config from "../../../services/config";
 import "./OrderTracking.css"
 
 import { useParams, useLocation } from "react-router-dom";
+import dayjs from 'dayjs';
+import { ContactSupportOutlined } from '@mui/icons-material';
+import VietQR from './../../VietQR/VietQR';
+import wor2 from '../../../Assets/w2.png';
 
 const OrderTracking = () => {
     const [jobTypeMapping, setJobTypeMapping] = useState({});
@@ -30,6 +34,19 @@ const OrderTracking = () => {
 
     const [dataBookingOrder, setDataBookingOrder] = useState(null);
     const [dataWorkerOrder, setDataWorkerOrder] = useState(null);
+    const [profileImageUrl, setProfileImageUrl] = useState('default-avatar.png');
+    const [isCancel, setIsCancel] = useState(false);
+    const [isCancelOpen, setCancelOpen] = useState(false);
+
+    const [bankId, setbankId] = useState("ACB");
+    const [accountBankNo, setaccountBankNo] = useState("13157957");
+    const [accountNameBank, setaccountNameBank] = useState("Ha Khai Hoan");
+    const [databookingpayment, setdatabookingpayment] = useState(null)
+    const [isConfirmedPayment, setisConfirmedPayment] = useState(false);
+
+    const handleConfirmPayment = () => {
+        setisConfirmedPayment(true); // Chuyển trạng thái sang đã xác nhận
+      };
 
     const removeVietnameseTones = (str) => {
         return str
@@ -41,6 +58,9 @@ const OrderTracking = () => {
             .toUpperCase(); // Chuyển tất cả chữ thành viết hoa
     };
 
+    const [starttrack, setstarttrack] = useState(null);
+    const [endtrack, setendtrack] = useState(null);
+    const [daytrack, setdaytrack] = useState(null);
 
     useEffect(() => {
         const fetchBookingDetails = async () => {
@@ -52,7 +72,18 @@ const OrderTracking = () => {
                     },
                 });
 
-                console.log("+++++",response_book.data)
+                const response_bookingpayment = await axios.get(`${API_ENDPOINT}/api/BookingPayment/booking/${booking_id}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setdatabookingpayment(response_bookingpayment.data)
+                console.log("+++", response_bookingpayment.data)
+
+                setstarttrack(response_book.data.startTime.split(':')[0]);
+                setendtrack(response_book.data.endTime.split(':')[0]);
+                setdaytrack(dayjs(response_book.data.bookingDate).format('DD/MM/YYYY'));
 
                 const response_worker = await axios.get(
                     `${API_ENDPOINT}/api/Workers/${response_book.data.workerID}`,
@@ -63,6 +94,11 @@ const OrderTracking = () => {
                         },
                     }
                 );
+
+                const imageUrl = response_worker.data.profileImage 
+                        ? `${API_ENDPOINT}${response_worker.data.profileImage}` 
+                        : '/default-avatar.png'; 
+                        setProfileImageUrl(imageUrl);
 
                 const response_jobtype = await axios.get(
                     `${API_ENDPOINT}/api/JobTypes`,
@@ -120,6 +156,7 @@ const OrderTracking = () => {
         setIsBoxCompleted(true);
         
     };
+    
 
     const handleOpenModal = () => {
         setModalOpen(true);
@@ -131,12 +168,41 @@ const OrderTracking = () => {
         setRating(0);
         setComment('');
     };
+    const handleCancelOpenModal = () => {
+        setCancelOpen(true);
+
+    }
+
+
+
+    const handleCancelCloseModal = () => {
+        setCancelOpen(false)
+    };
+
+
 
     const handleConfirmJob = () => {
         setRatingStep(true);
         setIsCompleted(true);
     }
-    console.log(dataBookingOrder)
+
+    const handleCancelConfirmJob = () => {
+        setIsCancel(true);
+        setRatingStep(true);
+        setIsCompleted(true);
+        setIsEndRating(true)
+    }
+
+    
+
+    const handleExitCancel= () => {
+        setIsCancel(false);
+        setCancelOpen(false)
+        setRatingStep(false);
+        setIsCompleted(false);
+        setIsEndRating(false)
+    }
+
     const handleSubmitRating = async () => {
         try {
 
@@ -171,12 +237,30 @@ const OrderTracking = () => {
                 }
             );
 
-
-
-
-    
             setIsEndRating(true);  
-            handleCloseModal();  
+            handleCloseModal(); 
+            window.location.reload()  ///reload page 
+        } catch (error) {
+            console.error("Lỗi khi gửi đánh giá:", error);
+        }
+    };
+
+    const handleSubmitCancel = async () => {
+        try {
+
+            const status = "Rejected"; 
+            const response_status = await axios.put(
+                `${API_ENDPOINT}/api/Booking/${booking_id}/status`,  
+                `${status}`, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',  
+                        'Authorization': `Bearer ${token}`,  
+                    }
+                }
+            );
+            window.location.reload()
+
         } catch (error) {
             console.error("Lỗi khi gửi đánh giá:", error);
         }
@@ -281,21 +365,27 @@ const OrderTracking = () => {
                             <span className="totalAmount">đ̲{dataBookingOrder.totalAmount}</span>
                         </div>
                         <div className='button-block'>
-                            {dataBookingOrder.status !== ("Rejected" && "Completed") && (
+                        {["Rejected", "Completed"].includes(dataBookingOrder.status) ? null : (
                             <>
                                 {!isCompleted && (
-                                <button className="placeOrderButton" onClick={handleConfirm}>
-                                    Xác nhận hoàn thành
-                                </button>
+                                    <button className="placeOrderButton" onClick={handleConfirm}>
+                                        Xác nhận hoàn thành
+                                    </button>
                                 )}
+                                {!isEndRating && databookingpayment.paymentStatus === "Success" && (
+                                    <button className="placeOrderButton" onClick={handleOpenModal}>
+                                        Đánh giá
+                                    </button>
+                                    )}
 
-                                {!isEndRating && (
-                                <button className="placeOrderButton" onClick={handleOpenModal}>
-                                    Đánh giá
-                                </button>
+                                {dataBookingOrder.status === "Pending" && !isCancel && databookingpayment.paymentStatus === "Pending" && (
+                                    <button className="placeOrderButton placeOrderButtonCancel" onClick={handleCancelOpenModal}>
+                                        Hủy
+                                    </button>
                                 )}
                             </>
-                            )}
+                        )}
+
                         </div>
                     </div>
                 </div>
@@ -306,50 +396,118 @@ const OrderTracking = () => {
                         <h3 className="progressTitle-content" data-wow-delay="0.3s">Thông tin chi tiết</h3>
                     </div>
                     <div className="infoSection">
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Thông tin của bạn</span>
+                        <div className="info-card">
+                            <div className="card-header">
+                                <span className="card-title">Thông tin của bạn</span>
                                 {/* <a href="#" className="editLink">Edit</a> */}
                             </div>
-                            <div className="cardContent">
-                                <p>{userDataString.fullName}</p>
-                                <p>{userDataString.email}</p>
+                            <div className="card-content">
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=x0qTmzjcFRhW&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.fullName}</p>
+                                </div>
+
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=X0mEIh0RyDdL&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.email}</p>
+                                </div>
+
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=a-NKVP7cWRva&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.address}</p>
+                                </div>
+
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=2et9LpHu9Vxh&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.phoneNumber}</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Thông tin của thợ</span>
+                        <div className="info-card">
+                            <div className="card-header">
+                                <span className="card-title">Thông tin của thợ</span>
                                 {/* <a href="#" className="editLink">Edit</a> */}
                             </div>
-                            <div className="cardContent">
-                                <p>{WORKER_name}</p>
-                                <p>{WORKER_address}</p>
+                            <div className="card-content">
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=2upK8qlqCAEf&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{WORKER_name}</p>
+                                </div>
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=a-NKVP7cWRva&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{WORKER_address}</p>
+                                </div>
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=2et9LpHu9Vxh&format=png&color=000000" alt="Visa" className="paymentIcon" />
                                 <p>{WORKER_phone}</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Địa chỉ của bạn</span>
-                                {/* <a href="#" className="editLink">Edit</a> */}
+                        <div className="info-card">
+                        <div className="card-header">
+                            <span className="card-title">Lịch trình công việc</span>
+                        </div>
+                        <div className="card-content">
+                            <div className="schedule-item">
+                            <img src="https://img.icons8.com/?size=100&id=12776&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                            <p>{daytrack}</p>
                             </div>
-                            <div className="cardContent">
-                                <p>{userDataString.address}</p>
-                                <p>{userDataString.phoneNumber}</p>
+                            <div className="schedule-item">
+                            <img src="https://img.icons8.com/?size=100&id=RfNbsrywO87P&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                            <p>Bắt đầu: {starttrack}:00 h</p>
+                            </div>
+                            <div className="schedule-item">
+                            <img src="https://img.icons8.com/?size=100&id=Y6SzeUtiLnxL&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                            <p>Kết thúc: {endtrack}:00 h</p>
                             </div>
                         </div>
+                        <div className="wor2IMAGEbox">
+                            <img
+                                className="wor2IMAGE"
+                                src={wor2}
+                                alt="avatar"
+                                />
+                        </div>
 
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Phương thức thanh toán</span>
+                        </div>
+
+
+                        <div className="info-card">
+                            <div className="card-header">
+                                <span className="card-title">Thanh toán</span>
                                 {/* <a href="#" className="editLink">Edit</a> */}
                             </div>
-                            <div className="cardContent">
-                                <img src="https://img.icons8.com/?size=100&id=aMTIdm5CdddP&format=png&color=000000" alt="Visa" className="paymentIcon" />
-                                <p>Visa card ending in 1234</p>
-                                <img src="https://img.icons8.com/?size=100&id=p2scHNLP9nSb&format=png&color=000000" alt="Visa" className="paymentIcon" />
-                                <p>Thanh toán bằng tiền mặt</p>
+                            <div className="card-content">
+                            {databookingpayment.paymentStatus === "Pending" ? (
+                                <>
+                                <VietQR
+                                        bankId={bankId} 
+                                        accountNo={accountBankNo}
+                                        amount={dataBookingOrder.totalAmount} 
+                                        description={"TT"+ dataBookingOrder.bookingID}
+                                        accountName={accountNameBank}
+                                    />
+                                {!isConfirmedPayment ? (
+                                    <button
+                                    className="checkVietQRButton placeOrderButton"
+                                    onClick={handleConfirmPayment}
+                                    >
+                                    Xác nhận đã thanh toán
+                                    </button>
+                                ) : (
+                                    <div className="confirmation-message">
+                                    Chúng tôi đã ghi nhận yêu cầu kiểm duyệt thanh toán, vui lòng kiểm tra
+                                    lại sau ít phút
+                                    </div>
+                                )}
+                                </>
+                            ) : databookingpayment.paymentStatus === "Success" ? (
+                                <p className="success-message">Bạn đã thanh toán</p>
+                            ) : (
+                                <p className="error-message">Không xác định trạng thái thanh toán</p>
+                            )}
                             </div>
                         </div>
                     </div>
@@ -367,7 +525,7 @@ const OrderTracking = () => {
 
                     <div className="itemRow">
                         <div className="itemInfo">
-                            <img src="src\Assets\about\worker.png" alt="item" className="itemImage" />
+                            <img src={profileImageUrl} alt="item" className="itemImage" />
                             <div>
                                 <p>{WORKER_name}</p>
                                 <p>{WORKER_EXP} Năm kinh nghiệm</p>
@@ -456,6 +614,45 @@ const OrderTracking = () => {
                             Gửi đánh giá
                         </button>
                         <button className="cancel-button" onClick={handleCloseModal}>
+                            Hủy
+                        </button>
+                        </div>
+                    </>
+                    )}
+                </div>
+                </div>
+            )}
+
+            {isCancelOpen && (
+                <div className="modal-overlay">
+                <div className="modal-content">
+                    {!isCancel ? (
+                    <>
+                        <h3>Xác nhận hủy đơn</h3>
+                        <div className="modal-buttons">
+                        <button className="confirm-button" onClick={handleCancelConfirmJob}>
+                            Xác nhận
+                        </button>
+                        <button className="cancel-button" onClick={handleCancelCloseModal}>
+                            Hủy
+                        </button>
+                        </div>
+                    </>
+                    ) : (
+                    <>
+                        <h3>Lí do hủy</h3>
+                        <div className="comment-section">
+                        <textarea
+                            placeholder="Nhập lí do của bạn..."
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                        ></textarea>
+                        </div>
+                        <div className="modal-buttons">
+                        <button className="confirm-button" onClick={handleSubmitCancel}>
+                            Xác nhận
+                        </button>
+                        <button className="cancel-button" onClick={handleExitCancel}>
                             Hủy
                         </button>
                         </div>

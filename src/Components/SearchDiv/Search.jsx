@@ -27,6 +27,7 @@ const Search = () => {
   const [loading, setLoading] = useState(true);
   const [searchResults, setSearchResults] = useState([]);
   const workersPerPage = 8;
+  const [profileImageUrl, setProfileImageUrl] = useState('/default-avatar.png');
 
   const navigate = useNavigate();
   const handleViewProfile = (workerId) => {
@@ -194,13 +195,16 @@ const Search = () => {
     </div>
   );
   const WorkerCard = ({ worker }) => {
-    const { user, experienceYears, bio, rating, verified } = worker;
+    const {profileImage, user, experienceYears, bio, rating, verified } = worker;
+    const imageUrl = profileImage === "default-profile.png"
+    ? "src/Assets/images/thodien.jpg"
+    : `${API_ENDPOINT}${profileImage.startsWith("/") ? profileImage : `/${profileImage}`}`;
 
     return (
       <div className="bg-white rounded-xl p-6 transition-all duration-300 hover:shadow-xl">
         <div className="flex items-start gap-4">
           <img
-            src="src\Assets\images\thodien.jpg"
+            src={imageUrl}
             alt={`${user.fullName}'s profile`}
             className="w-20 h-20 rounded-xl object-cover"
           />
