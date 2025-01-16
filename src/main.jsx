@@ -8,6 +8,7 @@ import Contact from './Components/pages/Contact';
 import ContactLogin from './Components/pages/ContactLogin';
 import Customer from './Components/pages/Customer';
 import Jobs from './Components/pages/Jobs';
+import JobsLogin from './Components/pages/JobsLogin';
 import Register from './Components/pages/RegisterPage/Register';  
 import Login from './Components/pages/LoginPage/Login';
 import ForgotPassword from './Components/pages/ForgotPasswordPage/ForgotPassword';
@@ -28,6 +29,9 @@ import Profile from './Components/pages/MyProfile/Profile';
 import OrderManagement from './Components/pages/OrderManagement/OrderManagement';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import BookingPaymentManagement from './Components/pages/Dashboard/BookingPaymentManagement';
+import DetailBookingPaymentManagement from './Components/pages/Dashboard/DetailBookingPaymentManagement';
+import WorkerDetail from './Components/pages/Dashboard/WorkerDetail';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -35,6 +39,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route path="/khotho" element={<Jobs />} /> 
+        <Route path="/khothologin" element={<JobsLogin />} /> 
         <Route path="/khotho/ordertracking" element={<OrderTracking />} />  
         <Route path="/khotho/ordermanagement" element={<OrderManagement />} />  
         <Route path="/khotho/jobs" element={<App />} />
@@ -62,7 +67,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/khotho/ordertracking" element={<OrderTracking/>} />
         <Route path="/khotho/admin/bookings" element={<BookingManagement />} />
         <Route path="/khotho/admin/workerschedule" element={<WorkerScheduleManagement />} />
+        <Route path="/khotho/admin/bookingpayment" element={<BookingPaymentManagement />} />
+        <Route path="/booking-payment/detail/:id" element={<DetailBookingPaymentManagement />} />
         <Route path="/workers" element={<WorkerDashboard/>} />
+        <Route path="/workers/detail/:id" element={<WorkerDetail />} />
         
         <Route path="/khotho/profile" element={<Profile />} />
       </Routes>

@@ -32,6 +32,7 @@
     font-size: 16px;
     line-height: 1.5;
     opacity: 0.85;
+    color: #ffffff;
   }
   
   /* Title for Links Section */
@@ -87,3 +88,16 @@
     background-color: #e0f2ff;
   }
   
+  .footer-logo-img {
+    width: 70px; /* Reduced size */
+    height: 70px; /* Make it square */
+    border-radius: 50%; /* Make it circular */
+    object-fit: cover; /* Maintain aspect ratio */
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease;
+    margin-left: 70px;
+  }
+  
+  .footer-logo-img:hover {
+    transform: scale(1.1);
+  }

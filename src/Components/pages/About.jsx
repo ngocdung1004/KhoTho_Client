@@ -62,6 +62,7 @@ const About = () => {
 		border: stayLogo ? "1px solid white" : "none",
 		borderRadius: stayLogo ? "50%" : "none",
 		boxShadow: stayLogo ? "0px 4px 10px rgba(0, 0, 0, 0.25)" : "none",
+    marginLeft: "110px",
 	};
 
   // useEffect(() => {

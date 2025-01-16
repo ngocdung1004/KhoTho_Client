@@ -7,7 +7,11 @@ import {
   Alert,
   TextField,
   Grid,
-  IconButton
+  IconButton,
+  Divider,
+  Chip,
+  Card,
+  CardContent
 } from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -35,7 +39,7 @@ const Schedules = ({ workerId }) => {
           axios.get(`${API_ENDPOINT}/api/WorkerSchedule/worker/${workerId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
           }),
-          axios.get(`${API_ENDPOINT}/api/Booking/worker/${workerId}`, {
+          axios.get(`${API_ENDPOINT}/api/Booking`, {
             headers: { 'Authorization': `Bearer ${token}` }
           })
         ]);
@@ -63,10 +67,8 @@ const Schedules = ({ workerId }) => {
   };
 
   const getDateStatus = (date) => {
-    const dayOfWeek = date.getDay();
     const formattedDate = date.toISOString().split('T')[0];
     
-    const daySchedules = schedules.filter(schedule => schedule.dayOfWeek === dayOfWeek);
     const dayBookings = bookings.filter(booking => 
       booking.bookingDate.split('T')[0] === formattedDate
     );
@@ -79,46 +81,60 @@ const Schedules = ({ workerId }) => {
       if (statuses.includes('Cancelled')) return 'cancelled';
     }
 
-    return daySchedules.length > 0 ? 'available' : 'unavailable';
+    return 'unavailable';
   };
 
   const getScheduleForDate = (date) => {
-    const dayOfWeek = date.getDay();
     const formattedDate = date.toISOString().split('T')[0];
     
-    const daySchedules = schedules.filter(schedule => schedule.dayOfWeek === dayOfWeek);
     const dayBookings = bookings.filter(booking => 
       booking.bookingDate.split('T')[0] === formattedDate
     );
 
-    return { schedules: daySchedules, bookings: dayBookings };
+    return { bookings: dayBookings };
   };
 
   const renderScheduleInfo = () => {
-    const { schedules: daySchedules, bookings: dayBookings } = getScheduleForDate(selectedDate);
+    const { bookings: dayBookings } = getScheduleForDate(selectedDate);
 
-    if (daySchedules.length === 0) {
+    if (dayBookings.length === 0) {
       return <Typography>Không có lịch trình cho ngày này</Typography>;
     }
 
     return (
       <>
-        {daySchedules.map((schedule, index) => (
-          <Box key={index} sx={{ mt: 1 }}>
-            <Typography>
-              Thời gian: {schedule.startTime.slice(0, -3)} - {schedule.endTime.slice(0, -3)}
-            </Typography>
-          </Box>
-        ))}
         {dayBookings.map((booking, index) => (
-          <Box key={`booking-${index}`} sx={{ mt: 1 }}>
-            <Typography>
-              Trạng thái công việc: {booking.status}
-            </Typography>
-          </Box>
+          <Card key={`booking-${index}`} sx={{ mt: 2, borderLeft: `5px solid ${getStatusColor(booking.status)}` }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ color: getStatusColor(booking.status) }}>
+                {booking.status}
+              </Typography>
+              <Typography>
+                Thời gian: {booking.startTime.slice(0, -3)} - {booking.endTime.slice(0, -3)}
+              </Typography>
+              <Typography>
+                Ghi chú: {booking.notes}
+              </Typography>
+            </CardContent>
+          </Card>
         ))}
       </>
     );
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Accepted':
+        return '#4CAF50';
+      case 'Pending':
+        return '#FFC107';
+      case 'Completed':
+        return '#2196F3';
+      case 'Cancelled':
+        return '#ee1616';
+      default:
+        return '#f5f5f5';
+    }
   };
 
   if (loading) {
@@ -166,63 +182,6 @@ const Schedules = ({ workerId }) => {
           </IconButton>
         </Grid>
       </Grid>
-
-      {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DateCalendar
-          value={selectedDate}
-          onChange={(newValue) => setSelectedDate(newValue)}
-          date={currentMonth}
-          sx={{
-            '& .MuiPickersDay-root': {
-              '&.Mui-selected': {
-                backgroundColor: 'primary.main',
-              },
-            },
-            '& .MuiPickersDay-root[data-status="accepted"]': {
-              backgroundColor: '#4CAF50',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: '#45a049',
-              }
-            },
-            '& .MuiPickersDay-root[data-status="pending"]': {
-              backgroundColor: '#FFC107',
-              color: 'black',
-              '&:hover': {
-                backgroundColor: '#ffb300',
-              }
-            },
-            '& .MuiPickersDay-root[data-status="completed"]': {
-              backgroundColor: '#2196F3',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: '#1976D2',
-              }
-            },
-            '& .MuiPickersDay-root[data-status="cancelled"]': {
-              backgroundColor: '#9E9E9E',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: '#757575',
-              }
-            },
-            '& .MuiPickersDay-root[data-status="unavailable"]': {
-              backgroundColor: '#f5f5f5',
-              color: '#bdbdbd',
-            }
-          }}
-          slots={{
-            day: (props) => {
-              const status = getDateStatus(props.day);
-              return (
-                <div {...props} data-status={status}>
-                  {props.children}
-                </div>
-              );
-            }
-          }}
-        />
-      </LocalizationProvider> */}
       
       <Box sx={{ mt: 2 }}>
         <Typography variant="subtitle1" gutterBottom>
@@ -231,36 +190,30 @@ const Schedules = ({ workerId }) => {
         {renderScheduleInfo()}
       </Box>
 
+      <Divider sx={{ my: 2 }} />
+
       <Box sx={{ mt: 2 }}>
         <Typography variant="subtitle2" gutterBottom>
           Legend:
         </Typography>
-        <Grid container spacing={1}>
-          <Grid item xs={6} sm={4}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 20, height: 20, backgroundColor: '#4CAF50', borderRadius: '50%' }} />
-              <Typography variant="body2">Accepted</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={6} sm={4}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 20, height: 20, backgroundColor: '#FFC107', borderRadius: '50%' }} />
-              <Typography variant="body2">Pending</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={6} sm={4}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 20, height: 20, backgroundColor: '#2196F3', borderRadius: '50%' }} />
-              <Typography variant="body2">Completed</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={6} sm={4}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 20, height: 20, backgroundColor: '#9E9E9E', borderRadius: '50%' }} />
-              <Typography variant="body2">Cancelled</Typography>
-            </Box>
-          </Grid>
-        </Grid>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ width: 20, height: 20, backgroundColor: '#4CAF50', borderRadius: '50%' }} />
+            <Typography variant="body2">Đồng ý</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ width: 20, height: 20, backgroundColor: '#FFC107', borderRadius: '50%' }} />
+            <Typography variant="body2">Đang chờ nhận việc</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ width: 20, height: 20, backgroundColor: '#2196F3', borderRadius: '50%' }} />
+            <Typography variant="body2">Hoàn thành</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ width: 20, height: 20, backgroundColor: '#9E9E9E', borderRadius: '50%' }} />
+            <Typography variant="body2">Từ chối</Typography>
+          </Box>
+        </Box>
       </Box>
     </Paper>
   );

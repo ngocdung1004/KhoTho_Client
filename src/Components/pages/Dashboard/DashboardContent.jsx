@@ -35,6 +35,7 @@ const DashboardContent = () => {
   const [reviews, setReviews] = useState([]);
   const [workersByJobType, setWorkersByJobType] = useState({});
   const [workerJobTypes, setWorkerJobTypes] = useState([]);
+  const [bookingpayments, setBookingPayments] = useState([]);
 
   useEffect(() => {
     // Kiểm tra xác thực admin
@@ -71,6 +72,7 @@ const DashboardContent = () => {
           fetch(`${API_ENDPOINT}/api/JobTypes`, { headers }),
           fetch(`${API_ENDPOINT}/api/Reviews`, { headers }),
           fetch(`${API_ENDPOINT}/api/WorkerJobTypes`, { headers }),
+          fetch(`${API_ENDPOINT}/api/BookingPayments`, { headers }),
         ]);
 
         // Kiểm tra response status
