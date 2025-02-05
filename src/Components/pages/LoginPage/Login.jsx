@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../../../services/authService";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, IconButton  } from "@mui/material";
 import { Eye, EyeOff } from "lucide-react";
 import bgrLogin from "../../../Assets/bgr-login.jpg";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -116,7 +117,7 @@ const Login = () => {
                   />
                 </div>
 
-                <div>
+                <div className="space-y-4">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Mật khẩu
                   </label>
@@ -128,17 +129,23 @@ const Login = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
-                    <button
-                      type="button"
-                      onClick={togglePasswordVisibility}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                    >
-                      {showPassword ? (
-                        <EyeOff className="w-5 h-5" />
-                      ) : (
-                        <Eye className="w-5 h-5" />
-                      )}
-                    </button>
+                    <div className="absolute bottom-1.5 inset-y-0 right-2 flex items-center pr-3">
+                      <IconButton
+                        onClick={togglePasswordVisibility}
+                        className="relative p-1 rounded-full hover:bg-gray-100 transition-colors"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        size="small"
+                      >
+                        <span className="flex items-center justify-center h-5 w-5">
+                          {showPassword ? (
+                            <VisibilityOff className="h-5 w-5 text-gray-500" />
+                          ) : (
+                            <Visibility className="h-5 w-5 text-gray-500" />
+                          )}
+                        </span>
+                      </IconButton>
+                    </div>
+
                   </div>
                 </div>
               </div>

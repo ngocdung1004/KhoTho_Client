@@ -19,7 +19,6 @@ const NavBar = () => {
             </div>
           </Link>
         </h1>
-=======
     
       </div>
 
