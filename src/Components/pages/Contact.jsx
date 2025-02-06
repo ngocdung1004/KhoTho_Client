@@ -1,19 +1,33 @@
-import React from 'react'
-import NavBar from '../NavBar/NavBar'
+// import React from 'react'
+import NavBar from '../NavBarLogin/NavBar';
 import ContactForm from '../Contact/Contact';
 import Social from '../Contact/Social';
 import Footer from '../FooterDiv/Footer'
 import { Container } from "react-bootstrap";
 import { FaGift, FaBox, FaStar, FaCalendarAlt } from 'react-icons/fa';
-
+import React from 'react';
 import "./styles/Contact2.css"
 
 const Contact = () => {
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // useEffect(() => {
+  //   const token = localStorage.getItem("authToken");
+  //   console.log("Token fetched:", token);
+  //   setIsLoggedIn(!!token);
+  // }, []);
+
+  // const handleLogout = () => {
+  //   localStorage.removeItem("authToken");
+  //   setIsLoggedIn(false);
+  // };
+
+  // console.log("Auth Token:", localStorage.getItem("authToken"));
+  // console.log("isLoggedIn:", isLoggedIn);
 
   return (
     <div className='w-[85%] m-auto white-color-sl'>
-        <NavBar/>
+     <NavBar />
         <Container className='white-color-sl'>
           <ContactForm />
           <section id="contact" className="section-padding bg-gray">

@@ -9,9 +9,12 @@ import { API_ENDPOINT } from "../../services/config";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { Input } from "antd";
+import {
+  GeoapifyGeocoderAutocomplete,
+  GeoapifyContext,
+} from "@geoapify/react-geocoder-autocomplete";
 const Search = () => {
-  
   const [jobTypes, setJobTypes] = useState([]);
   const [workers, setWorkers] = useState([]);
   const [filteredWorkers, setFilteredWorkers] = useState([]);
@@ -22,11 +25,13 @@ const Search = () => {
   const [selectedRating, setSelectedRating] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [searchResults, setSearchResults] = useState([]);
   const workersPerPage = 8;
+  const [profileImageUrl, setProfileImageUrl] = useState('/default-avatar.png');
 
   const navigate = useNavigate();
   const handleViewProfile = (workerId) => {
-    navigate(`/worker-profile/${workerId}`);
+    navigate(`/khotho/worker-profile/${workerId}`);
   };
 
   const ratingRanges = [
@@ -35,29 +40,60 @@ const Search = () => {
     { label: "3-4 sao", min: 3, max: 4 },
     { label: "4-5 sao", min: 4, max: 5 },
   ];
+  const API_KEY = "KBGL0ihukFkc3MeOxPxktzGM2eY82Ow9KB5xswAI";
+  const token = localStorage.getItem("authToken");
+  const handleAllChangeLocation = async (location) => {
+    // console.log("alo");
+    setSelectedLocation(location);
+    if (selectedLocation.length > 0) {
+      const response = await axios.get(
+        "https://rsapi.goong.io/Place/AutoComplete",
+        {
+          params: {
+            api_key: API_KEY,
+            input: selectedLocation,
+          },
+        }
+      );
+      setSearchResults(response.data.predictions);
+    }
+  };
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [jobTypesResponse, workersResponse, workerJobTypesResponse] =
+        await Promise.all([
+          axios.get(`${API_ENDPOINT}/api/JobTypes`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+          axios.get(`${API_ENDPOINT}/api/Workers`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+          axios.get(`${API_ENDPOINT}/api/WorkerJobTypes`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+        ]);
 
+      setJobTypes(jobTypesResponse.data);
+      setWorkers(workersResponse.data);
+      setWorkerJobTypes(workerJobTypesResponse.data);
+      setFilteredWorkers(workersResponse.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [jobTypesResponse, workersResponse, workerJobTypesResponse] =
-          await Promise.all([
-            axios.get(`${API_ENDPOINT}/api/JobTypes`),
-            axios.get(`${API_ENDPOINT}/api/Workers`),
-            axios.get(`${API_ENDPOINT}/api/WorkerJobTypes`),
-          ]);
-
-        setJobTypes(jobTypesResponse.data);
-        setWorkers(workersResponse.data);
-        setWorkerJobTypes(workerJobTypesResponse.data);
-        setFilteredWorkers(workersResponse.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -102,7 +138,6 @@ const Search = () => {
     }
 
     setFilteredWorkers(filtered);
-    setCurrentPage(1);
   };
 
   const SearchBox = ({
@@ -146,7 +181,7 @@ const Search = () => {
               placeholder={label}
               className="w-full bg-transparent focus:outline-none text-gray-600"
               value={value}
-              onChange={(e) => onChange(e.target.value)} // Thay đổi ở đây
+              onChange={onChange} // Thay đổi ở đây
             />
           )}
           {value && (
@@ -159,15 +194,17 @@ const Search = () => {
       </div>
     </div>
   );
-
   const WorkerCard = ({ worker }) => {
-    const { user, experienceYears, bio, rating, verified } = worker;
+    const {profileImage, user, experienceYears, bio, rating, verified } = worker;
+    const imageUrl = profileImage === "default-profile.png"
+    ? "src/Assets/images/thodien.jpg"
+    : `${API_ENDPOINT}${profileImage.startsWith("/") ? profileImage : `/${profileImage}`}`;
 
     return (
       <div className="bg-white rounded-xl p-6 transition-all duration-300 hover:shadow-xl">
         <div className="flex items-start gap-4">
           <img
-            src="src\Assets\images\thodien.jpg"
+            src={imageUrl}
             alt={`${user.fullName}'s profile`}
             className="w-20 h-20 rounded-xl object-cover"
           />
@@ -210,8 +247,10 @@ const Search = () => {
           <button className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
             Liên hệ ngay
           </button>
-          <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
-          onClick={() => handleViewProfile(worker.workerId)}>
+          <button
+            className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+            onClick={() => handleViewProfile(worker.workerId)}
+          >
             Xem hồ sơ
           </button>
         </div>
@@ -249,8 +288,7 @@ const Search = () => {
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
           Tìm kiếm dịch vụ
         </h2>
-
-        <form className="space-y-6" onSubmit={handleSearch}>
+        <form className="space-y-6 " onSubmit={handleSearch}>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <SearchBox
               icon={BsBriefcase}
@@ -260,16 +298,53 @@ const Search = () => {
               options={jobTypes}
               onClear={() => setSelectedJobType("")}
             />
-
-            <SearchBox
-              icon={CiLocationOn}
-              label="Nhập địa điểm"
+            
+            {/* <Input
+              prefix={<CiLocationOn className="text-gray-800 text-lg" />}
+              placeholder="Nhập địa điểm"
               value={selectedLocation}
-              onChange={(value) => setSelectedLocation(value)} // Thay đổi ở đây
-              type="text"
-              options={[]}
+              onChange={(e) => handleAllChangeLocation(e.target.value)}
               onClear={() => setSelectedLocation("")}
-            />
+              className="placeholder:text-gray-800 font-semibold text-l"
+              style={{
+                borderRadius: '8px',
+                color: '#666'
+              }}
+
+            /> */}
+            <div className="relative">
+              <Input
+                prefix={<CiLocationOn className="text-gray-800 text-lg" />}
+                placeholder="Nhập địa điểm" 
+                value={selectedLocation}
+                onChange={(e) => handleAllChangeLocation(e.target.value)}
+                allowClear
+                className="placeholder:text-gray-800 font-semibold text-l"
+                style={{
+                  height: '55px',
+                  borderRadius: '8px',
+                  color: '#666'
+                }}
+              />
+
+              {searchResults.length > 0 && (
+                <div className="absolute left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                  {searchResults.map((item, index) => (
+                    <div
+                      key={index}
+                      className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center gap-2"
+                      onClick={() => {
+                        setSelectedLocation(item.description);
+                        setSearchResults([]); // Clear results after selection
+                      }}
+                    >
+                      <CiLocationOn className="text-gray-800" />
+                      <span className="text-gray-800">{item.description}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <SearchBox
               icon={MdWorkOutline}
@@ -372,6 +447,20 @@ const Search = () => {
           </>
         )}
       </div>
+      {/* {searchResults && (
+        <div>
+          {searchResults.map((item, index) => (
+            <div
+              className="bg-white rounded-lg shadow-md p-2 cursor-pointer hover:bg-gray-100"
+              key={index}
+              onClick={() => setSelectedLocation(result.description)}
+            >
+              {item.description}
+            </div>
+          ))}
+          <div />
+        </div>
+      )} */}
     </div>
   );
 };

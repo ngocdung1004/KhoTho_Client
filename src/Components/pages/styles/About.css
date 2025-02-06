@@ -1,4 +1,7 @@
 
+.page-content{
+	margin-top: 100px;
+}
 .homepage-logo-container {
 	display: flex;
 	justify-content: left;
@@ -37,6 +40,32 @@
 	display: flex;
 	align-items: center;
 }
+
+/* Định dạng chung cho nội dung bên trong */
+.subtitle.homepage-subtitle {
+  display: flex;
+  font-family: 'Montserrat', sans-serif; /* Chọn font chữ, thay bằng font khác nếu muốn */
+  line-height: 1.6; /* Khoảng cách giữa các dòng */
+  color: #252b36; /* Màu chữ */
+  margin: 20px 0; /* Khoảng cách trên và dưới */
+}
+
+/* Định dạng chữ in đậm */
+.subtitle.homepage-subtitle strong {
+  font-weight: 800; /* Đậm hơn bình thường */
+  color: #2a68ff; /* Màu chữ in đậm */
+}
+
+/* Định dạng văn bản với căn chỉnh đều hai bên */
+.subtitle.homepage-subtitle > div {
+  text-align: justify;
+}
+
+/* Thêm hiệu ứng hover (tuỳ chọn) */
+.subtitle.homepage-subtitle strong:hover {
+  color: #e2ab21dc; /* Đổi màu chữ khi hover */
+}
+
 
 .homepage-image-container {
 	width: 100%;
@@ -484,4 +513,5 @@
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     margin-left: auto; /* Dồn nội dung sang bên phải */
 }
+
   

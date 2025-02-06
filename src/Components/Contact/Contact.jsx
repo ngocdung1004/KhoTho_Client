@@ -50,16 +50,21 @@ const Contact = () => {
         <Container style={{paddingTop: '50px'}} >
             <Row >
               <Col md={6} className="c-left white-color-sl" >
-              <h1 >Get in Touch</h1>
-              <h1 className="yellow text-blueColor">Contact me</h1>
+              <div className="homepage-image-wrapper">
+                      <img
+                        src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="about"
+                        className="homepage-image"
+                      />
+                    </div>
               </Col>
               <Col md={6} className="c-right white-color-sl">
                   <form ref={form} onSubmit={sendEmail}>
-                  <input type="text" name="from_name" className="user"  placeholder="Name" onChange={handleChange}/>
+                  <input type="text" name="from_name" className="user"  placeholder="Họ & Tên" onChange={handleChange}/>
                   <input type="email" name="reply_to" className="user" placeholder="Email" onChange={handleChange} />
-                  <textarea name="message" className="user" placeholder="Message" onChange={handleChange} />
+                  <textarea name="message" className="user" placeholder="Tin nhắn" onChange={handleChange} />
                   <span className='not-done' >{notDone && "Please, fill all the input field"}</span>
-                  <Button type="submit" className="button button-contact" disabled={done}>SEND</Button>
+                  <Button type="submit" className="button button-contact" disabled={done}> Gửi tin nhắn </Button>
                   <span className='done'>{done && "Thanks for contacting me and be sure i have recieved your mail. If you are testing this functionality then i am confirming this thing working perfectly fine. If you have any serious query then i will reply. Also if you need me, you can conatct me on Linkedin."}</span>
                   </form>
               </Col>
@@ -68,4 +73,4 @@ const Contact = () => {
     )
 }
 
-export default Contact
+export default Contact 

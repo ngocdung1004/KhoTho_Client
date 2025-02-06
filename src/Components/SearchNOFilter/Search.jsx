@@ -36,15 +36,32 @@ const Search = () => {
     { label: "4-5 sao", min: 4, max: 5 },
   ];
 
+  const token = localStorage.getItem("authToken");
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const [jobTypesResponse, workersResponse, workerJobTypesResponse] =
           await Promise.all([
-            axios.get(`${API_ENDPOINT}/api/JobTypes`),
-            axios.get(`${API_ENDPOINT}/api/Workers`),
-            axios.get(`${API_ENDPOINT}/api/WorkerJobTypes`),
+            axios.get(`${API_ENDPOINT}/api/JobTypes`, {
+              headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+              },
+          }),
+            axios.get(`${API_ENDPOINT}/api/Workers`, {
+              headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+              },
+          }),
+            axios.get(`${API_ENDPOINT}/api/WorkerJobTypes`, {
+              headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+              },
+          }),
           ]);
 
         setJobTypes(jobTypesResponse.data);
@@ -161,13 +178,15 @@ const Search = () => {
   );
 
   const WorkerCard = ({ worker }) => {
-    const { user, experienceYears, bio, rating, verified } = worker;
-
+      const {profileImage, user, experienceYears, bio, rating, verified } = worker;
+          const imageUrl = profileImage === "default-profile.png"
+          ? "/src/Assets/images/thodien.jpg"
+          : `${API_ENDPOINT}${profileImage.startsWith("/") ? profileImage : `/${profileImage}`}`; 
     return (
       <div className="bg-white rounded-xl p-6 transition-all duration-300 hover:shadow-xl">
         <div className="flex items-start gap-4">
           <img
-            src="https://png.pngtree.com/png-vector/20240405/ourlarge/pngtree-car-mechanic-vector-icon-png-image_12264316.png"
+            src={imageUrl}
             alt={`${user.fullName}'s profile`}
             className="w-20 h-20 rounded-xl object-cover"
           />

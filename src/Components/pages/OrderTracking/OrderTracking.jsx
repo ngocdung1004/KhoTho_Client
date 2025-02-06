@@ -1,33 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Footer from '../../FooterDiv/Footer';
-import NavBar from '../../NavBar/NavBar';
+import NavBar from '../../NavBarLogin/NavBar';
 import Search from '../../SearchNOFilter/Search'
-// import axios from "axios";
+import axios from "axios";
 
-// import {
-//     Container,
-//     Grid,
-//     Paper,
-//     Avatar,
-//     Typography,
-//     Button,
-//     Box,
-//     Card,
-//     CardContent,
-//     Rating,
-//     Divider,
-//     Chip,
-//     Stack,
-//     IconButton,
-//   } from "@mui/material";
-// import { useParams } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
+import { API_ENDPOINT } from "../../../services/config";
+
 import * as config from "../../../services/config";
 import "./OrderTracking.css"
 
+import { useParams, useLocation } from "react-router-dom";
+import dayjs from 'dayjs';
+import { ContactSupportOutlined } from '@mui/icons-material';
+import VietQR from './../../VietQR/VietQR';
+import wor2 from '../../../Assets/w2.png';
 
 const OrderTracking = () => {
-
+    const [jobTypeMapping, setJobTypeMapping] = useState({});
+    
     const [isModalOpen, setModalOpen] = useState(false);
     const [isRatingStep, setRatingStep] = useState(false);
     const [rating, setRating] = useState(0);
@@ -35,75 +25,295 @@ const OrderTracking = () => {
     const [isCompleted, setIsCompleted] = useState(false);
     const [isBoxCompleted, setIsBoxCompleted] = useState(false);
     const [isEndRating, setIsEndRating] = useState(false);
-    
+
+    const [loading, setLoading] = useState(true); // Trạng thái loading
+    const userDataString = JSON.parse(localStorage.getItem("userData"));
+    const token = localStorage.getItem('authToken')
+    const location = useLocation();
+    const booking_id = location.state;
+
+    const [dataBookingOrder, setDataBookingOrder] = useState(null);
+    const [dataWorkerOrder, setDataWorkerOrder] = useState(null);
+    const [profileImageUrl, setProfileImageUrl] = useState('default-avatar.png');
+    const [isCancel, setIsCancel] = useState(false);
+    const [isCancelOpen, setCancelOpen] = useState(false);
+
+    const [bankId, setbankId] = useState("ACB");
+    const [accountBankNo, setaccountBankNo] = useState("13157957");
+    const [accountNameBank, setaccountNameBank] = useState("Ha Khai Hoan");
+    const [databookingpayment, setdatabookingpayment] = useState(null)
+    const [isConfirmedPayment, setisConfirmedPayment] = useState(false);
+
+    const handleConfirmPayment = () => {
+        setisConfirmedPayment(true); // Chuyển trạng thái sang đã xác nhận
+      };
+
+    const removeVietnameseTones = (str) => {
+        return str
+            .normalize("NFD") // Chuẩn hóa chuỗi Unicode
+            .replace(/[\u0300-\u036f]/g, "") // Loại bỏ dấu
+            .replace(/đ/g, "d") // Chuyển đổi chữ đ
+            .replace(/Đ/g, "D") // Chuyển đổi chữ Đ
+            .replace(/\s+/g, "") // Xóa khoảng trắng
+            .toUpperCase(); // Chuyển tất cả chữ thành viết hoa
+    };
+
+    const [starttrack, setstarttrack] = useState(null);
+    const [endtrack, setendtrack] = useState(null);
+    const [daytrack, setdaytrack] = useState(null);
+
+    useEffect(() => {
+        const fetchBookingDetails = async () => {
+            try {
+                const response_book = await axios.get(`${API_ENDPOINT}/api/Booking/${booking_id}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                const response_bookingpayment = await axios.get(`${API_ENDPOINT}/api/BookingPayment/booking/${booking_id}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setdatabookingpayment(response_bookingpayment.data)
+                console.log("+++", response_bookingpayment.data)
+
+                setstarttrack(response_book.data.startTime.split(':')[0]);
+                setendtrack(response_book.data.endTime.split(':')[0]);
+                setdaytrack(dayjs(response_book.data.bookingDate).format('DD/MM/YYYY'));
+
+                const response_worker = await axios.get(
+                    `${API_ENDPOINT}/api/Workers/${response_book.data.workerID}`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const imageUrl = response_worker.data.profileImage 
+                        ? `${API_ENDPOINT}${response_worker.data.profileImage}` 
+                        : '/default-avatar.png'; 
+                        setProfileImageUrl(imageUrl);
+
+                const response_jobtype = await axios.get(
+                    `${API_ENDPOINT}/api/JobTypes`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const jobTypeData =  response_jobtype.data;
+
+                const mapping = jobTypeData.reduce((acc, job) => {
+                    acc[job.jobTypeId] = job.jobTypeName;
+                    return acc;
+                }, {});
+
+                setJobTypeMapping(mapping);
+                setDataBookingOrder(response_book.data);
+                setDataWorkerOrder(response_worker.data);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching booking details:", error);
+                setLoading(false);
+            }
+        };
+        fetchBookingDetails()
+    }, [booking_id, token]);
+
+    if (loading) {
+        return (
+            <div className="loading-screen">
+                <p>Đang tải dữ liệu...</p>
+                {/* Bạn có thể thay thế bằng một spinner hoặc hiệu ứng loading khác */}
+            </div>
+        );
+    }
+
+    if (!dataBookingOrder || !dataWorkerOrder) {
+        return (
+            <div className="error-screen">
+                <p>Không thể tải thông tin đơn hàng. Vui lòng thử lại sau.</p>
+            </div>
+        );
+    }
+
+    const WORKER_name = dataWorkerOrder.user.fullName
+    const WORKER_address = dataWorkerOrder.user.address
+    // const WORKER_jobType = dataWorkerOrder.user.userType
+    const WORKER_phone = dataWorkerOrder.user.phoneNumber
+    const WORKER_EXP = dataWorkerOrder.experienceYears
+
     const handleConfirm = () => {
         setIsBoxCompleted(true);
         
     };
+    
 
     const handleOpenModal = () => {
         setModalOpen(true);
-        setIsEndRating(true);
     }
     const handleCloseModal = () => {
         setModalOpen(false);
         setRatingStep(false);
+        setIsBoxCompleted(false)
         setRating(0);
         setComment('');
     };
+    const handleCancelOpenModal = () => {
+        setCancelOpen(true);
+
+    }
+
+
+
+    const handleCancelCloseModal = () => {
+        setCancelOpen(false)
+    };
+
+
 
     const handleConfirmJob = () => {
         setRatingStep(true);
         setIsCompleted(true);
     }
 
-    const handleSubmitRating = () => {
-        console.log('Rating:', rating);
-        console.log('Comment:', comment);
-        handleCloseModal();
+    const handleCancelConfirmJob = () => {
+        setIsCancel(true);
+        setRatingStep(true);
+        setIsCompleted(true);
+        setIsEndRating(true)
+    }
 
+    
+
+    const handleExitCancel= () => {
+        setIsCancel(false);
+        setCancelOpen(false)
+        setRatingStep(false);
+        setIsCompleted(false);
+        setIsEndRating(false)
+    }
+
+    const handleSubmitRating = async () => {
+        try {
+
+            const payload = {
+                workerId: dataBookingOrder.workerID,  
+                customerId: dataBookingOrder.customerID,  
+                rating: rating,  
+                comments: comment,  
+            };
+    
+            // Gửi POST request
+            const response_rating = await axios.post(
+                `${API_ENDPOINT}/api/Reviews`, 
+                payload,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`, 
+                    },
+                }
+            );
+
+            const status = "Completed"; 
+            const response_status = await axios.put(
+                `${API_ENDPOINT}/api/Booking/${booking_id}/status`,  
+                `${status}`, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',  
+                        'Authorization': `Bearer ${token}`,  
+                    }
+                }
+            );
+
+            setIsEndRating(true);  
+            handleCloseModal(); 
+            window.location.reload()  ///reload page 
+        } catch (error) {
+            console.error("Lỗi khi gửi đánh giá:", error);
+        }
     };
 
-    // const { workerId } = useParams();
-    // const [workerData, setWorkerData] = useState(null);
-    // const [loading, setLoading] = useState(true);
-    // const [feedbacks, setFeedbacks] = useState([]);
+    const handleSubmitCancel = async () => {
+        try {
 
-    // useEffect(() => {
-    //     const fetchWorkerDetails = async () => {
-    //     setLoading(true);
-    //     try {
-    //         const response = await axios.get(`${API_ENDPOINT}/api/Workers/${workerId}`);
-    //         setWorkerData(response.data);
-    //     } catch (error) {
-    //         console.error("Error fetching worker details:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    //     };
+            const status = "Rejected"; 
+            const response_status = await axios.put(
+                `${API_ENDPOINT}/api/Booking/${booking_id}/status`,  
+                `${status}`, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',  
+                        'Authorization': `Bearer ${token}`,  
+                    }
+                }
+            );
+            window.location.reload()
 
-    //     fetchWorkerDetails();
-    // }, [workerId]);
+        } catch (error) {
+            console.error("Lỗi khi gửi đánh giá:", error);
+        }
+    };
 
-    // const handleAddFeedback = (newFeedback) => {
-    //     setFeedbacks([...feedbacks, newFeedback]);
-    // };
+    const getStepClass = (status, step) => {
+        if (status === "Rejected") {
+          return step === 1 ? "completed" : "rejected"; // Mốc 1 xanh, các mốc còn lại đỏ
+        }
+      
+        if (status === "Completed" && step <= 4) {
+          return "completed"; // Tất cả các mốc xanh khi Completed
+        }
+      
+        if (status === "Accepted" && step <= 3) {
+          return "completed"; // Mốc 1, 2, 3 xanh khi Accepted
+        }
+      
+        if (status === "Pending" && step === 1) {
+          return "completed"; // Mốc 1 xanh khi Pending
+        }
+      
+        return "active"; // Các mốc còn lại chưa hoàn thành
+      };
+      
+      const getStepIcon = (status, step) => {
+        if (status === "Rejected") {
+          return step === 1 ? "✔" : "✖"; // Mốc 1 dấu ✔, các mốc còn lại dấu X
+        }
+      
+        if (status === "Completed" && step <= 4) {
+          return "✔"; // Dấu tích cho tất cả mốc khi Completed
+        }
+      
+        if (status === "Accepted" && step <= 3) {
+          return "✔"; // Dấu tích cho mốc 1, 2, 3 khi Accepted
+        }
+      
+        if (status === "Pending" && step === 1) {
+          return "✔"; // Dấu tích cho mốc 1 khi Pending
+        }
+      
+        return "!"; // Dấu chấm than cho mốc chưa hoàn thành
+      };
+      
+      const progressStepColor = (status, step) => {
+        if (status === "Rejected") {
+          return step === 1 ? "green" : "red"; // Mốc 1 xanh, các mốc còn lại đỏ
+        }
+      
+        return "green"; // Màu xanh khi hoàn thành
+      };
 
-    // if (loading) {
-    //     return (
-    //     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-    //         <Typography variant="h5">Loading...</Typography>
-    //     </Box>
-    //     );
-    // }
-
-    // if (!workerData) {
-    //     return (
-    //     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-    //         <Typography variant="h5">No worker data found.</Typography>
-    //     </Box>
-    //     );
-    // }
 
     return (
         <div className="w-[85%] m-auto white-color-sl">
@@ -120,60 +330,62 @@ const OrderTracking = () => {
 
                 <div className='progressBlock'>
                     <div className='progressTitle'>
-                        <h3 className="progressTitle-content" data-wow-delay="0.3s">Tiến độ</h3>
+                    <h3 className="progressTitle-content" data-wow-delay="0.3s">Tiến độ</h3>
                     </div>
                     <div className="progressContainer">
-                        <div className="progressStep completed">
-                            <div className="stepIcon">✔</div>
-                            <span className="stepLabel">Booking</span>
-                        </div>
+                    {[...Array(4)].map((_, index) => {
+                        const step = index + 1;
+                        const statusClass = getStepClass(dataBookingOrder.status, step);
+                        const stepIcon = getStepIcon(dataBookingOrder.status, step);
+                        const stepColor = progressStepColor(dataBookingOrder.status);
 
-                        <div className="connector"></div>
-
-                        <div className="progressStep completed">
-                            <div className="stepIcon">✔</div>
-                            
-                            <span className="stepLabel">Đã xác nhận</span>
-                        </div>
-
-                        <div className="connector"></div>
-
-                        <div className="progressStep completed">
-                            <div className="stepIcon">✔</div>
-                            <span className="stepLabel">Đang thực hiện</span>
-                        </div>
-
-                        <div className="connector"></div>
-
-                        <div className={`progressStep ${isCompleted ? "completed" : "active"}`}>
-                            <div className="stepIcon">{isCompleted ? "✔" : "4"}</div>
-                            <span className="stepLabel">Hoàn thành</span>
-                        </div>
+                        return (
+                        <React.Fragment key={step}>
+                            <div className={`progressStep ${statusClass}`} style={{ color: stepColor }}>
+                            <div className="stepIcon">{stepIcon}</div>
+                            <span className="stepLabel">
+                                {step === 1 ? "Booking" : step === 2 ? "Đã xác nhận" : step === 3 ? "Đang thực hiện" : "Hoàn thành"}
+                            </span>
+                            </div>
+                            {step < 4 && <div className="connector"></div>}
+                        </React.Fragment>
+                        );
+                    })}
                     </div>
                 </div>
 
                 <div className="header">
                     <div className='header-left'>
                         <span className="totalAmount-title">Mã đơn:</span>
-                        <span className="totalAmount">FHAL3OV0AAT2NF</span>
+                        <span className="totalAmount">{dataBookingOrder.bookingID}-{removeVietnameseTones(WORKER_name)}</span>
                     </div>
                     <div className='header-right'>
                         <div className='Amount-Block'>
                             <span className="totalAmount-title">Tổng số tiền</span>
-                            <span className="totalAmount">đ̲200.000</span>
+                            <span className="totalAmount">đ̲{dataBookingOrder.totalAmount}</span>
                         </div>
                         <div className='button-block'>
-                            {!isCompleted && (
-                                <button className="placeOrderButton" onClick={handleConfirm}>
-                                Xác nhận hoàn thành
-                                </button>
-                            )}
+                        {["Rejected", "Completed"].includes(dataBookingOrder.status) ? null : (
+                            <>
+                                {!isCompleted && (
+                                    <button className="placeOrderButton" onClick={handleConfirm}>
+                                        Xác nhận hoàn thành
+                                    </button>
+                                )}
+                                {!isEndRating && databookingpayment.paymentStatus === "Success" && (
+                                    <button className="placeOrderButton" onClick={handleOpenModal}>
+                                        Đánh giá
+                                    </button>
+                                    )}
 
-                            {!isEndRating && (
-                            <button className="placeOrderButton" onClick={handleOpenModal}>
-                                Đánh giá
-                            </button>
-                            )}
+                                {dataBookingOrder.status === "Pending" && !isCancel && databookingpayment.paymentStatus === "Pending" && (
+                                    <button className="placeOrderButton placeOrderButtonCancel" onClick={handleCancelOpenModal}>
+                                        Hủy
+                                    </button>
+                                )}
+                            </>
+                        )}
+
                         </div>
                     </div>
                 </div>
@@ -184,56 +396,118 @@ const OrderTracking = () => {
                         <h3 className="progressTitle-content" data-wow-delay="0.3s">Thông tin chi tiết</h3>
                     </div>
                     <div className="infoSection">
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Thông tin của bạn</span>
+                        <div className="info-card">
+                            <div className="card-header">
+                                <span className="card-title">Thông tin của bạn</span>
                                 {/* <a href="#" className="editLink">Edit</a> */}
                             </div>
-                            <div className="cardContent">
-                                <p>Hà Khải Hoàn</p>
-                                <p>hoan21012003@gmail.com</p>
+                            <div className="card-content">
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=x0qTmzjcFRhW&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.fullName}</p>
+                                </div>
+
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=X0mEIh0RyDdL&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.email}</p>
+                                </div>
+
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=a-NKVP7cWRva&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.address}</p>
+                                </div>
+
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=2et9LpHu9Vxh&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{userDataString.phoneNumber}</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Thông tin của thợ</span>
+                        <div className="info-card">
+                            <div className="card-header">
+                                <span className="card-title">Thông tin của thợ</span>
                                 {/* <a href="#" className="editLink">Edit</a> */}
                             </div>
-                            <div className="cardContent">
-                                <p>Trần Anh Tuấn</p>
-                                <p>Xóm Dừa</p>
-                                <p>Thôn Nam Tượng 1</p>
-                                <p>Xã Nhơn Tân - Thị Xã An Nhơn - Tỉnh Bình Định</p>
-                                <p>Việt Nam</p>
-                                <p>0987654321</p>
+                            <div className="card-content">
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=2upK8qlqCAEf&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{WORKER_name}</p>
+                                </div>
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=a-NKVP7cWRva&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                    <p>{WORKER_address}</p>
+                                </div>
+                                <div className="schedule-item">
+                                    <img src="https://img.icons8.com/?size=100&id=2et9LpHu9Vxh&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                                <p>{WORKER_phone}</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Địa chỉ của bạn</span>
-                                {/* <a href="#" className="editLink">Edit</a> */}
+                        <div className="info-card">
+                        <div className="card-header">
+                            <span className="card-title">Lịch trình công việc</span>
+                        </div>
+                        <div className="card-content">
+                            <div className="schedule-item">
+                            <img src="https://img.icons8.com/?size=100&id=12776&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                            <p>{daytrack}</p>
                             </div>
-                            <div className="cardContent">
-                                <p>Xóm Phúc Hậu</p>
-                                <p>Thôn Nam Tượng 3</p>
-                                <p>Xã Nhơn Tân - Thị Xã An Nhơn - Tỉnh Bình Định</p>
-                                <p>Việt Nam</p>
-                                <p>0356295910</p>
+                            <div className="schedule-item">
+                            <img src="https://img.icons8.com/?size=100&id=RfNbsrywO87P&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                            <p>Bắt đầu: {starttrack}:00 h</p>
+                            </div>
+                            <div className="schedule-item">
+                            <img src="https://img.icons8.com/?size=100&id=Y6SzeUtiLnxL&format=png&color=000000" alt="Visa" className="paymentIcon" />
+                            <p>Kết thúc: {endtrack}:00 h</p>
                             </div>
                         </div>
+                        <div className="wor2IMAGEbox">
+                            <img
+                                className="wor2IMAGE"
+                                src={wor2}
+                                alt="avatar"
+                                />
+                        </div>
 
-                        <div className="infoCard">
-                            <div className="cardHeader">
-                                <span>Phương thức thanh toán</span>
+                        </div>
+
+
+                        <div className="info-card">
+                            <div className="card-header">
+                                <span className="card-title">Thanh toán</span>
                                 {/* <a href="#" className="editLink">Edit</a> */}
                             </div>
-                            <div className="cardContent">
-                                <img src="https://img.icons8.com/?size=100&id=aMTIdm5CdddP&format=png&color=000000" alt="Visa" className="paymentIcon" />
-                                <p>Visa card ending in 1234</p>
-                                <img src="https://img.icons8.com/?size=100&id=p2scHNLP9nSb&format=png&color=000000" alt="Visa" className="paymentIcon" />
-                                <p>Thanh toán bằng tiền mặt</p>
+                            <div className="card-content">
+                            {databookingpayment.paymentStatus === "Pending" ? (
+                                <>
+                                <VietQR
+                                        bankId={bankId} 
+                                        accountNo={accountBankNo}
+                                        amount={dataBookingOrder.totalAmount} 
+                                        description={"TT"+ dataBookingOrder.bookingID}
+                                        accountName={accountNameBank}
+                                    />
+                                {!isConfirmedPayment ? (
+                                    <button
+                                    className="checkVietQRButton placeOrderButton"
+                                    onClick={handleConfirmPayment}
+                                    >
+                                    Xác nhận đã thanh toán
+                                    </button>
+                                ) : (
+                                    <div className="confirmation-message">
+                                    Chúng tôi đã ghi nhận yêu cầu kiểm duyệt thanh toán, vui lòng kiểm tra
+                                    lại sau ít phút
+                                    </div>
+                                )}
+                                </>
+                            ) : databookingpayment.paymentStatus === "Success" ? (
+                                <p className="success-message">Bạn đã thanh toán</p>
+                            ) : (
+                                <p className="error-message">Không xác định trạng thái thanh toán</p>
+                            )}
                             </div>
                         </div>
                     </div>
@@ -242,27 +516,27 @@ const OrderTracking = () => {
                 <div className="itemSection">
                     <div className="tableHeader">
                         <span>Thợ</span>
-                        <span>Khu vực</span>
+                        <span>Địa chỉ</span>
                         <span>Nhóm ngành</span>
-                        <span>Số lượng</span>
+                        <span>Tổng giờ</span>
                         <span>Đơn giá</span>
                         <span>Thành tiền</span>
                     </div>
 
                     <div className="itemRow">
                         <div className="itemInfo">
-                            <img src="src\Assets\about\worker.png" alt="item" className="itemImage" />
+                            <img src={profileImageUrl} alt="item" className="itemImage" />
                             <div>
-                                <p>Trần Tuấn Anh</p>
-                                <p>5 Năm kinh nghiệm</p>
+                                <p>{WORKER_name}</p>
+                                <p>{WORKER_EXP} Năm kinh nghiệm</p>
                                 {/* <a href="#" className="removeLink">Remove</a> */}
                             </div>
                         </div>
-                        <span>Bình Định</span>
-                        <span>Sửa chữa</span>
-                        <span>10</span>
-                        <span>đ̲20.000</span>
-                        <span>đ̲200.000</span>
+                        <span>{WORKER_address}</span>
+                        <span>{jobTypeMapping[dataBookingOrder.jobTypeID]}</span>
+                        <span>{dataBookingOrder.totalHours}</span>
+                        <span>{dataBookingOrder.hourlyRate}</span>
+                        <span>{dataBookingOrder.totalAmount}</span>
                     </div>
                 </div>
             </div>
@@ -278,22 +552,21 @@ const OrderTracking = () => {
             <div className='margin-box'></div>
             
             {isBoxCompleted && !isCompleted && (
-
-                    <div className="modal-overlay">
-                        <div className="modal-content">
-                            <>
-                            <h3>Xác nhận công việc đã hoàn thành</h3>
-                            <div className="modal-buttons">
-                            <button className="confirm-button" onClick={handleConfirmJob}>
-                                Xác nhận
-                            </button>
-                            <button className="cancel-button" onClick={handleCloseModal}>
-                                Hủy
-                            </button>
-                            </div>
-                            </>
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <>
+                        <h3>Xác nhận công việc đã hoàn thành</h3>
+                        <div className="modal-buttons">
+                        <button className="confirm-button" onClick={handleConfirmJob}>
+                            Xác nhận
+                        </button>
+                        <button className="cancel-button" onClick={handleCloseModal}>
+                            Hủy
+                        </button>
                         </div>
+                        </>
                     </div>
+                </div>
             )};
 
 
@@ -341,6 +614,45 @@ const OrderTracking = () => {
                             Gửi đánh giá
                         </button>
                         <button className="cancel-button" onClick={handleCloseModal}>
+                            Hủy
+                        </button>
+                        </div>
+                    </>
+                    )}
+                </div>
+                </div>
+            )}
+
+            {isCancelOpen && (
+                <div className="modal-overlay">
+                <div className="modal-content">
+                    {!isCancel ? (
+                    <>
+                        <h3>Xác nhận hủy đơn</h3>
+                        <div className="modal-buttons">
+                        <button className="confirm-button" onClick={handleCancelConfirmJob}>
+                            Xác nhận
+                        </button>
+                        <button className="cancel-button" onClick={handleCancelCloseModal}>
+                            Hủy
+                        </button>
+                        </div>
+                    </>
+                    ) : (
+                    <>
+                        <h3>Lí do hủy</h3>
+                        <div className="comment-section">
+                        <textarea
+                            placeholder="Nhập lí do của bạn..."
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                        ></textarea>
+                        </div>
+                        <div className="modal-buttons">
+                        <button className="confirm-button" onClick={handleSubmitCancel}>
+                            Xác nhận
+                        </button>
+                        <button className="cancel-button" onClick={handleExitCancel}>
                             Hủy
                         </button>
                         </div>
