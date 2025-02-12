@@ -160,7 +160,7 @@ const Search = () => {
               onChange={onChange}
             >
               <option value="">{label}</option>
-              {options.map((option, index) => (
+              {Array.isArray(options) && options?.map((option, index) => (
                 <option
                   key={index}
                   value={
@@ -329,7 +329,7 @@ const Search = () => {
 
               {searchResults.length > 0 && (
                 <div className="absolute left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-                  {searchResults.map((item, index) => (
+                  {Array.isArray(searchResults) && searchResults?.map((item, index) => (
                     <div
                       key={index}
                       className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center gap-2"
@@ -401,7 +401,7 @@ const Search = () => {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {currentWorkers.map((worker) => (
+              {Array.isArray(currentWorkers) && currentWorkers?.map((worker) => (
                 <WorkerCard key={worker.workerId} worker={worker} />
               ))}
             </div>

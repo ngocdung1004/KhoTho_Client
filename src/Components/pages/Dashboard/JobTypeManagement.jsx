@@ -268,7 +268,7 @@ const CreateNewJobTypeModal = ({ open, columns, onClose, onSubmit }) => {
               mt: 2,
             }}
           >
-            {columns.map((column) => {
+            {Array.isArray(columns) && columns?.map((column) => {
               if (column.accessorKey === 'jobTypeId') return null;
 
               return (

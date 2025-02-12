@@ -22,7 +22,7 @@ const FeedbackSection = ({ feedbacks, onSubmitFeedback }) => {
       <Typography  className="feedback-header">PHẢN HỒI TỪ KHÁCH HÀNG</Typography>
 
       <div className="space-y-4">
-        {feedbacks.map((feedback, index) => (
+        {Array.isArray(feedbacks) && feedbacks?.map((feedback, index) => (
           <div key={index} className="feedback-item">
             <Avatar src={feedback.userAvatar || defaultAvatar} alt="Customer Avatar" size="xs" className="feedback-avatar" />
             <div className="feedback-info">

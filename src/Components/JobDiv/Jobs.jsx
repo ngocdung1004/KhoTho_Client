@@ -116,7 +116,7 @@ const Jobs = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {currentWorkers.map((worker) => (
+        {Array.isArray(currentWorkers) && currentWorkers?.map((worker) => (
           <WorkerCard key={worker.workerId} worker={worker} />
         ))}
       </div>

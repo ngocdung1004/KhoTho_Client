@@ -131,7 +131,7 @@ const CustomerDashboard = () => {
             </Typography>
             <List>
               {recentJobs.length > 0 ? (
-                recentJobs.map((job) => (
+                Array.isArray(recentJobs) && recentJobs?.map((job) => (
                   <React.Fragment key={job.id}>
                     <ListItem>
                       <Box sx={{ width: '100%' }}>

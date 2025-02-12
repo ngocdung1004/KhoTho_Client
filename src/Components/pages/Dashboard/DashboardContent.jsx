@@ -149,11 +149,11 @@ const pieData = {
 };
 
   const barData = {
-    labels: jobTypes.map((job) => job.jobTypeName),
+    labels: Array.isArray(recentJobs) && jobTypes?.map((job) => job.jobTypeName),
     datasets: [
       {
         label: "Số lượng thợ",
-        data: jobTypes.map((job) => workersByJobType[job.jobTypeName] || 0),
+        data: Array.isArray(jobTypes) && jobTypes?.map((job) => workersByJobType[job.jobTypeName] || 0),
         backgroundColor: "rgba(54, 162, 235, 0.8)",
       },
     ],

@@ -432,7 +432,7 @@ const Customer = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {users.map((user) => (
+                    {Array.isArray(users) && users?.map((user) => (
                       <tr key={user.userId} className="unread">
                         <td>
                           <img

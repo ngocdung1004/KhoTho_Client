@@ -316,7 +316,7 @@ const CreateNewBookingModal = ({ open, columns, onClose, onSubmit }) => {
               mt: 2,
             }}
           >
-            {columns.map((column) => {
+            {Array.isArray(columns) && columns?.map((column) => {
               if (column.accessorKey === 'bookingID') return null;
 
               return (

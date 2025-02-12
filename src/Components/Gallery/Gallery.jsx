@@ -37,7 +37,7 @@ const Gallery = () => {
         },
     ];
   
-    const renderSlides = imageData.map((image) => (
+    const renderSlides = Array.isArray(imageData) && imageData?.map((image) => (
     <div key={image.alt}>
         <img src={image.url} alt={image.alt} />
     </div>

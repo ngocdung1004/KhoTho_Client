@@ -4,9 +4,10 @@ import "swiper/swiper-bundle.css"; // Import CSS Swiper
 
 
 const bannerImages = [
-  "https://img3.thuthuatphanmem.vn/uploads/2019/10/14/banner-quang-cao-du-lich-ky-nghi_113659754.jpg",
-  "https://toursingmal.com/wp-content/uploads/2020/02/quy-nhon-phu-yen.png",
-  "https://www.travelplusvn.com/public/uploads/upload_kcfinder/files/BannerCondao1-01.png",
+  "https://i.imgur.com/hrwzs0q.png",
+  "https://i.imgur.com/ubjvOuc.png",
+  "https://i.imgur.com/WOBwwlK.png",
+  "https://i.imgur.com/RT2FvB8.png"
 ];
 
 
@@ -26,7 +27,7 @@ const Banner = () => {
           dynamicBullets: true,
         }}
       >
-        {bannerImages.map((image, index) => (
+        {Array.isArray(bannerImages) && bannerImages?.map((image, index) => (
           <SwiperSlide key={index}>
             <img
               src={image}

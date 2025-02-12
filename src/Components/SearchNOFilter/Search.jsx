@@ -142,7 +142,7 @@ const Search = () => {
               onChange={onChange}
             >
               <option value="">{label}</option>
-              {options.map((option, index) => (
+              {Array.isArray(options) && options?.map((option, index) => (
                 <option
                   key={index}
                   value={
@@ -275,7 +275,7 @@ const Search = () => {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {currentWorkers.map((worker) => (
+              {Array.isArray(currentWorkers) && currentWorkers?.map((worker) => (
                 <WorkerCard key={worker.workerId} worker={worker} />
               ))}
             </div>

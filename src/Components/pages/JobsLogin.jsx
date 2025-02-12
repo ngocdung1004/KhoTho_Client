@@ -142,7 +142,7 @@ const Jobs = () => {
                 onChange={handleChange}
                 required
               >
-                {jobTypes.map((jobType) => (
+                {Array.isArray(jobTypes) && jobTypes?.map((jobType) => (
                   <MenuItem key={jobType.jobTypeId} value={jobType.jobTypeId}>
                     {jobType.jobTypeName}
                   </MenuItem>
