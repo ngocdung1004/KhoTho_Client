@@ -77,7 +77,7 @@ const WorkerDetail = () => {
         <Button
           variant="outlined"
           startIcon={<ArrowBack />}
-          onClick={() => navigate('/khotho/admin/workers')}
+          onClick={() => navigate('/admin/workers')}
           sx={{ mb: 3 }}
         >
           Quay lại danh sách

@@ -176,7 +176,7 @@ const Jobs = () => {
           <div className="row">
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="0.3s" onClick={() => navigate("/khotho/jobs")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="0.3s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <CleaningServicesIcon fontSize="large"/>
                 </div>
@@ -188,7 +188,7 @@ const Jobs = () => {
             </div>
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="0.6s" onClick={() => navigate("/khotho/jobs")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="0.6s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <BabyChangingStationIcon fontSize="large"/>
                 </div>
@@ -200,7 +200,7 @@ const Jobs = () => {
             </div>
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="0.9s" onClick={() => navigate("/khotho/jobs")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="0.9s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <HandymanIcon fontSize="large"/>
                 </div>
@@ -212,7 +212,7 @@ const Jobs = () => {
             </div>
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="1.2s" onClick={() => navigate("/khotho/jobs")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="1.2s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <FastfoodOutlinedIcon fontSize="large"/>
                 </div>
@@ -224,7 +224,7 @@ const Jobs = () => {
             </div>
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="1.5s" onClick={() => navigate("/khotho/jobs")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="1.5s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <DriveEtaIcon fontSize="large"/>
                 </div>
@@ -236,7 +236,7 @@ const Jobs = () => {
             </div>
 
             <div className="col-md-6 col-lg-4 col-xs-12 white-color-sl">
-              <div className="services-item wow fadeInRight" data-wow-delay="1.8s" onClick={() => navigate("/khotho/jobs")}>
+              <div className="services-item wow fadeInRight" data-wow-delay="1.8s" onClick={() => navigate("/jobs")}>
                 <div className="icon">
                   <AvTimerIcon fontSize="large"/>
                 </div>

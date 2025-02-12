@@ -328,7 +328,7 @@ const WorkerProfile = () => {
   
       toast.success("Đặt lịch thành công!", { position: "top-left", autoClose: 3000 });
       setIsModalOpen(false);
-      setTimeout(() => navigate("/khotho/ordertracking", { state: responseData.bookingID }), 1000);
+      setTimeout(() => navigate("/ordertracking", { state: responseData.bookingID }), 1000);
     } catch (error) {
       console.error("Error confirming booking:", error);
       toast.error("Đặt lịch thất bại. Vui lòng thử lại!", { position: "top-left", autoClose: 3000 });

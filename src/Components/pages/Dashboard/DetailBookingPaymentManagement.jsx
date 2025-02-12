@@ -126,7 +126,7 @@ const DetailBookingPaymentManagement = () => {
           <Button
             variant="contained"
             startIcon={<ArrowBack />}
-            onClick={() => navigate('/khotho/admin/bookingpayment')}
+            onClick={() => navigate('/admin/bookingpayment')}
             sx={{ 
               bgcolor: 'white', 
               color: 'primary.main',

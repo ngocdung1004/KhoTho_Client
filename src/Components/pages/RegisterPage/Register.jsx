@@ -58,7 +58,7 @@ export default function Register() {
           message: "Đăng ký thành công!",
           severity: "success",
         });
-        setTimeout(() => navigate("/khotho/login"), 2000);
+        setTimeout(() => navigate("/login"), 2000);
       } else {
         setNotification({
           open: true,
@@ -231,7 +231,7 @@ export default function Register() {
                 <button
                   type="button"
                   className="inline-block rounded border-2 border-danger px-6 py-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-danger-600"
-                  onClick={() => navigate("/khotho/login")}
+                  onClick={() => navigate("/login")}
                 >
                   Đăng nhập
                 </button>

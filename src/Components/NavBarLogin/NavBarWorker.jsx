@@ -24,14 +24,14 @@ const NavBar = () => {
       </div>
 
       <div className="menu flex gap-8">
-        {/* <Link to="/khotho/registerworker" className="menuList highlightLink text-[#6f6f6f] hover:text-blueColor">
+        {/* <Link to="/registerworker" className="menuList highlightLink text-[#6f6f6f] hover:text-blueColor">
           <FontAwesomeIcon icon={faStar} className="highlightIcon" />
           Bắt đầu nhận việc
         </Link> */}
-        <Link to="/khotho/ordermanagement" className="menuList text-[#6f6f6f] hover:text-blueColor">Công việc</Link>
-        {/* <Link to="/khotho/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Khách hàng</Link> */}
-        <Link to="/khotho/aboutlogin"  className="menuList text-[#6f6f6f] hover:text-blueColor">Giới thiệu</Link>
-        <Link to="/khotho/contactlogin" className="menuList text-[#6f6f6f] hover:text-blueColor">Liên hệ</Link>
+        <Link to="/ordermanagement" className="menuList text-[#6f6f6f] hover:text-blueColor">Công việc</Link>
+        {/* <Link to="/customer" className="menuList text-[#6f6f6f] hover:text-blueColor">Khách hàng</Link> */}
+        <Link to="/aboutlogin"  className="menuList text-[#6f6f6f] hover:text-blueColor">Giới thiệu</Link>
+        <Link to="/contactlogin" className="menuList text-[#6f6f6f] hover:text-blueColor">Liên hệ</Link>
         <div className="relative">
           <img
             className="rounded-full w-10 mr-2 cursor-pointer"
@@ -42,26 +42,26 @@ const NavBar = () => {
           {showDropdown && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
               <Link 
-                to="/khotho/profile" 
+                to="/profile" 
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Thông tin cá nhân
               </Link>
               <Link 
-                to="/khotho/ordermanagement" 
+                to="/ordermanagement" 
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Quản lí đơn
               </Link>
               <Link 
-                to="/khotho/settings" 
+                to="/settings" 
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Cài đặt
               </Link>
               <hr className="my-1" />
               <Link 
-                to="/khotho" 
+                to="/" 
                 className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
               >
                 Đăng xuất

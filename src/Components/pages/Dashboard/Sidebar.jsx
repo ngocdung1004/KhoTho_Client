@@ -86,22 +86,22 @@ const Sidebar = () => {
 
   const menuItems = [
     {
-      path: '/khotho/dashboard',
+      path: '/dashboard',
       name: 'Dashboard',
       icon: <Dashboard />
     },
     {
-      path: '/khotho/admin/users',
+      path: '/admin/users',
       name: 'Users',
       icon: <People />
     },
     {
-      path: '/khotho/admin/workers',
+      path: '/admin/workers',
       name: 'Workers',
       icon: <Work />
     },
     {
-      path: '/khotho/admin/bookings',
+      path: '/admin/bookings',
       name: 'Booking',
       icon: <BookOnline />
     },
@@ -111,17 +111,17 @@ const Sidebar = () => {
     //   icon: <Schedule />
     // },
     {
-      path: '/khotho/admin/jobtypes',
+      path: '/admin/jobtypes',
       name: 'Job Types',
       icon: <Category />
     },
     {
-      path: '/khotho/admin/reviews',
+      path: '/admin/reviews',
       name: 'Reviews',
       icon: <Star />
     },
     {
-      path: '/khotho/admin/bookingpayment',
+      path: '/admin/bookingpayment',
       name: 'Booking Payment',
       icon: <BookOnline />
     }
@@ -130,7 +130,7 @@ const Sidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   const handleLogout = () => {
-    navigate('/khotho/login');
+    navigate('/login');
   };
 
   const DrawerComponent = isCollapsed ? CollapsedDrawer : StyledDrawer;

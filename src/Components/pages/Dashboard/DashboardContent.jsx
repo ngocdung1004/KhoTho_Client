@@ -44,7 +44,7 @@ const DashboardContent = () => {
       const userType = localStorage.getItem("userType");
 
       if (!token || userType !== "0") {
-        navigate("/khotho/login");
+        navigate("/login");
         return false;
       }
       return true;
@@ -106,7 +106,7 @@ const DashboardContent = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
         if (error.message === 'Unauthorized access') {
-          navigate('/khotho/login');
+          navigate('/login');
         }
         setIsLoading(false);
       }

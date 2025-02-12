@@ -142,7 +142,7 @@ const [backCCCDFile, setBackCCCDFile] = useState(null);
       );
   
       toast.success("Đăng ký thành công!", { position: "top-left", autoClose: 3000 });
-      setTimeout(() => navigate("/khotho/workers"), 1000);
+      setTimeout(() => navigate("/workers"), 1000);
     } catch (error) {
       console.error('Error:', error);
       toast.error('Có lỗi xảy ra, vui lòng thử lại!', { position: "top-left", autoClose: 3000 });

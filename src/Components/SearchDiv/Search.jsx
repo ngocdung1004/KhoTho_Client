@@ -31,7 +31,7 @@ const Search = () => {
 
   const navigate = useNavigate();
   const handleViewProfile = (workerId) => {
-    navigate(`/khotho/worker-profile/${workerId}`);
+    navigate(`/worker-profile/${workerId}`);
   };
 
   const ratingRanges = [

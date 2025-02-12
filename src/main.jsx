@@ -38,41 +38,41 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/khotho" element={<Jobs />} /> 
+        <Route path="/" element={<Jobs />} /> 
         <Route path="/khothologin" element={<JobsLogin />} /> 
-        <Route path="/khotho/ordertracking" element={<OrderTracking />} />  
-        <Route path="/khotho/ordermanagement" element={<OrderManagement />} />  
-        <Route path="/khotho/jobs" element={<App />} />
-        <Route path="/khotho/about" element={<About />} />
-        <Route path="/khotho/aboutlogin" element={<AboutLogin />} />
-        <Route path="/khotho/contact" element={<Contact />} />
-        <Route path="/khotho/contactlogin" element={<ContactLogin />} />
-        <Route path="/khotho/login" element={<Login />} />
-        <Route path="/khotho/register" element={<Register />} />
-        <Route path="/khotho/customer" element={<Customer />} />
-        <Route path="/khotho/forgot-password" element={<ForgotPassword />} />
+        <Route path="/ordertracking" element={<OrderTracking />} />  
+        <Route path="/ordermanagement" element={<OrderManagement />} />  
+        <Route path="/jobs" element={<App />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/aboutlogin" element={<AboutLogin />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/contactlogin" element={<ContactLogin />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/customer" element={<Customer />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         {/* <Route path="/admindashboard" element={<AdminDashboard />} /> */}
-        <Route path="/khotho/customerdashboard" element={<CustomerDashboard />} />  
-        <Route path="/khotho/worker-profile/:workerId" element={<WorkerProfile />} />
-        <Route path="/khotho/dashboard" element={<Dashboard />} />
+        <Route path="/customerdashboard" element={<CustomerDashboard />} />  
+        <Route path="/worker-profile/:workerId" element={<WorkerProfile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
 
-        <Route path="/khotho/admin/usermanagement" element={<UserManagement />} />
-        <Route path="/khotho/admin/customers" element={<CustomerDashboard />} />  
-        <Route path="/khotho/admin/users" element={<UserManagement />} />  
-        <Route path="/khotho/admin/workers" element={<WorkerManagement/>} />  
-        <Route path="/khotho/admin/jobtypes" element={<JobTypeManagement />} />
-        <Route path="/khotho/admin/reviews" element={<ReviewManagement />} />
-        <Route path="/khotho/workers" element={<WorkerDashboard/>} />
-        <Route path="/khotho/registerworker" element={<RegisterWorker/>} />
-        <Route path="/khotho/ordertracking" element={<OrderTracking/>} />
-        <Route path="/khotho/admin/bookings" element={<BookingManagement />} />
-        <Route path="/khotho/admin/workerschedule" element={<WorkerScheduleManagement />} />
-        <Route path="/khotho/admin/bookingpayment" element={<BookingPaymentManagement />} />
+        <Route path="/admin/usermanagement" element={<UserManagement />} />
+        <Route path="/admin/customers" element={<CustomerDashboard />} />  
+        <Route path="/admin/users" element={<UserManagement />} />  
+        <Route path="/admin/workers" element={<WorkerManagement/>} />  
+        <Route path="/admin/jobtypes" element={<JobTypeManagement />} />
+        <Route path="/admin/reviews" element={<ReviewManagement />} />
+        <Route path="/workers" element={<WorkerDashboard/>} />
+        <Route path="/registerworker" element={<RegisterWorker/>} />
+        <Route path="/ordertracking" element={<OrderTracking/>} />
+        <Route path="/admin/bookings" element={<BookingManagement />} />
+        <Route path="/admin/workerschedule" element={<WorkerScheduleManagement />} />
+        <Route path="/admin/bookingpayment" element={<BookingPaymentManagement />} />
         <Route path="/booking-payment/detail/:id" element={<DetailBookingPaymentManagement />} />
         <Route path="/workers" element={<WorkerDashboard/>} />
         <Route path="/workers/detail/:id" element={<WorkerDetail />} />
         
-        <Route path="/khotho/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

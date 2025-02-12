@@ -149,7 +149,7 @@ export default function ForgotPassword() {
         severity: "success"
       });
       
-      setTimeout(() => navigate("/khotho/login"), 2000);
+      setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
       setNotification({
         open: true,
@@ -300,7 +300,7 @@ export default function ForgotPassword() {
 
               <div className="text-center mt-4">
                 <a
-                  onClick={() => navigate("/khotho/login")}
+                  onClick={() => navigate("/login")}
                   className="text-sm text-neutral-600 cursor-pointer hover:text-neutral-700 transition duration-150 ease-in-out"
                 >
                   Quay lại đăng nhập!

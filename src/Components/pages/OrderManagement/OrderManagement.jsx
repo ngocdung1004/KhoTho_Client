@@ -88,7 +88,7 @@ const OrderManagement = () => {
   }
 
   const handleNavigate = (bookingID) => {
-    setTimeout(() => navigate("/khotho/ordertracking", { state: bookingID }), 200);
+    setTimeout(() => navigate("/ordertracking", { state: bookingID }), 200);
   };
 
   // Phân nhóm bookings theo trạng thái
