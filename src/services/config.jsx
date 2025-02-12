@@ -1,3 +1,3 @@
-export const url_get_worker = "https://localhost:7062/api/Workers";
-export const url_get_user = "https://localhost:7062/api/Users";
-export const API_ENDPOINT = 'https://localhost:7062';
+export const url_get_worker = import.meta.env.VITE_URL_GET_WORKER;
+export const url_get_user = import.meta.env.VITE_URL_GET_USER;
+export const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
