@@ -108,7 +108,7 @@ export default function Register() {
             <div className="text-center mb-8">
               <img
                 className="mx-auto w-24 h-24 object-contain"
-                src="../src/Assets/logokhotho.png"
+                src="../../src/Assets/logokhotho.png"
                 alt="logo"
               />
               <h4 className="mt-4 text-2xl font-bold text-gray-800">

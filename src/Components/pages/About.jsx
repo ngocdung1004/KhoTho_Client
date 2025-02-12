@@ -335,7 +335,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="src/Assets/testimonial/img1.jpg" 
+                  <img src="../src/Assets/testimonial/img1.jpg" 
                        alt="Hà Khải Hoàn" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
@@ -358,7 +358,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="src/Assets/testimonial/img2.jpg" 
+                  <img src="../src/Assets/testimonial/img2.jpg" 
                        alt="Hồ Thị Kính" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
@@ -381,7 +381,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="src/Assets/testimonial/img3.jpg" 
+                  <img src="../src/Assets/testimonial/img3.jpg" 
                        alt="Võ T.Thu Thảo" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
@@ -404,7 +404,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="src/Assets/testimonial/img4.jpg" 
+                  <img src="../src/Assets/testimonial/img4.jpg" 
                        alt="Nguyễn Trọng Nghĩa" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
@@ -427,7 +427,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="src/Assets/testimonial/img5.jpg" 
+                  <img src="../src/Assets/testimonial/img5.jpg" 
                        alt="Nguyễn Ngọc Dũng" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
@@ -450,7 +450,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="src/Assets/testimonial/img6.jpg" 
+                  <img src="../src/Assets/testimonial/img6.jpg" 
                        alt="Võ T.Kim Chung" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
