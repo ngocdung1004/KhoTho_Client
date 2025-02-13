@@ -149,7 +149,7 @@ const pieData = {
 };
 
   const barData = {
-    labels: Array.isArray(recentJobs) && jobTypes?.map((job) => job.jobTypeName),
+    labels: Array.isArray(jobTypes) && jobTypes?.map((job) => job.jobTypeName),
     datasets: [
       {
         label: "Số lượng thợ",
