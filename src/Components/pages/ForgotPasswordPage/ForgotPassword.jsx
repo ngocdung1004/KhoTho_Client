@@ -7,6 +7,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { API_ENDPOINT } from "../../../services/config";
 import "./ForgotPassword.css";
 import bgrLogin from "../../../Assets/bgr-login.jpg";
+import LoGokhotho from '../../../Assets/logokhotho.png';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -191,7 +192,7 @@ export default function ForgotPassword() {
             <div className="text-center mb-8">
               <img
                 className="mx-auto w-24"
-                src="..\src\Assets\logokhotho.png"
+                src={LoGokhotho}
                 alt="logo"
               />
               <h4 className="mt-4 text-xl font-semibold">Quên Mật Khẩu</h4>

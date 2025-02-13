@@ -30,6 +30,7 @@ import {
 import { useState } from 'react';
 import { API_ENDPOINT } from "../../../services/config";
 import { icon } from '@fortawesome/fontawesome-svg-core';
+import LoGokhotho from '../../../Assets/logokhotho.png';
 
 // Styled components remain the same
 const DrawerHeader = styled(Box)(({ theme }) => ({
@@ -140,7 +141,7 @@ const Sidebar = () => {
       <DrawerHeader>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Avatar
-            src="../../../Assets/logokhotho.png"
+            src={LoGokhotho}
             alt="Logo"
             sx={{ width: 40, height: 40, bgcolor: 'white' }}
           />

@@ -5,6 +5,7 @@ import { Snackbar, Alert, IconButton  } from "@mui/material";
 import { Eye, EyeOff } from "lucide-react";
 import bgrLogin from "../../../Assets/bgr-login.jpg";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import LoGokhotho from '../../../Assets/logokhotho.png';
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -90,7 +91,7 @@ const Login = () => {
             <div className="text-center mb-8">
               <img
                 className="mx-auto w-24 h-24 object-contain"
-                src="../../src/Assets/logokhotho.png"
+                src={LoGokhotho}
                 alt="logo"
               />
               <h4 className="mt-4 text-2xl font-bold text-gray-800">

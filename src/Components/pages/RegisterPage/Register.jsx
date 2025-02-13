@@ -7,6 +7,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { API_ENDPOINT } from "../../../services/config";
 import bgrLogin from "../../../Assets/bgr-login.jpg";
 import "./Register.css";
+import LoGokhotho from '../../../Assets/logokhotho.png';
 
 export default function Register() {
   const [fullName, setFullName] = useState("");
@@ -108,7 +109,7 @@ export default function Register() {
             <div className="text-center mb-8">
               <img
                 className="mx-auto w-24 h-24 object-contain"
-                src="../../src/Assets/logokhotho.png"
+                src={LoGokhotho}
                 alt="logo"
               />
               <h4 className="mt-4 text-2xl font-bold text-gray-800">

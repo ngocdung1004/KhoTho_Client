@@ -19,6 +19,13 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import FastfoodOutlinedIcon from '@mui/icons-material/FastfoodOutlined';
 import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
 
+import IMG1 from '../../Assets/testimonial/img1.jpg';
+import IMG2 from '../../Assets/testimonial/img2.jpg';
+import IMG3 from '../../Assets/testimonial/img3.jpg';
+import IMG4 from '../../Assets/testimonial/img4.jpg';
+import IMG5 from '../../Assets/testimonial/img5.jpg';
+import IMG6 from '../../Assets/testimonial/img6.jpg';
+
 const About = () => {
     const [stayLogo, setStayLogo] = useState(false);
     const [logoSize, setLogoSize] = useState(80);
@@ -320,7 +327,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="../src/Assets/testimonial/img1.jpg" 
+                  <img src={IMG1} 
                        alt="Hà Khải Hoàn" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
@@ -343,7 +350,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="../src/Assets/testimonial/img2.jpg" 
+                  <img src={IMG2} 
                        alt="Hồ Thị Kính" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
@@ -366,7 +373,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="../src/Assets/testimonial/img3.jpg" 
+                  <img src={IMG3} 
                        alt="Võ T.Thu Thảo" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
@@ -389,7 +396,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="../src/Assets/testimonial/img4.jpg" 
+                  <img src={IMG4} 
                        alt="Nguyễn Trọng Nghĩa" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
@@ -412,7 +419,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="../src/Assets/testimonial/img5.jpg" 
+                  <img src={IMG5} 
                        alt="Nguyễn Ngọc Dũng" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
@@ -435,7 +442,7 @@ const About = () => {
             <div className="testimonial-item bg-white p-6 rounded-lg shadow-lg">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 mb-4">
-                  <img src="../src/Assets/testimonial/img6.jpg" 
+                  <img src={IMG6} 
                        alt="Võ T.Kim Chung" 
                        className="w-full h-full rounded-full object-cover"/>
                 </div>
