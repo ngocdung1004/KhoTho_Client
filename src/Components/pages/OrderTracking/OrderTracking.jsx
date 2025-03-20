@@ -38,9 +38,9 @@ const OrderTracking = () => {
     const [isCancel, setIsCancel] = useState(false);
     const [isCancelOpen, setCancelOpen] = useState(false);
 
-    const [bankId, setbankId] = useState("ACB");
-    const [accountBankNo, setaccountBankNo] = useState("13157957");
-    const [accountNameBank, setaccountNameBank] = useState("Ha Khai Hoan");
+    const [bankId, setbankId] = useState("TPBANK");
+    const [accountBankNo, setaccountBankNo] = useState("97704424111");
+    const [accountNameBank, setaccountNameBank] = useState("NGUYEN NGOC DUNG");
     const [databookingpayment, setdatabookingpayment] = useState(null)
     const [isConfirmedPayment, setisConfirmedPayment] = useState(false);
 
@@ -314,6 +314,11 @@ const OrderTracking = () => {
         return "green"; // Màu xanh khi hoàn thành
       };
 
+      console.log("Order Status:", dataBookingOrder.status);
+      console.log("isEndRating:", isEndRating);
+      
+
+
 
     return (
         <div className="w-[85%] m-auto white-color-sl">
@@ -365,26 +370,30 @@ const OrderTracking = () => {
                             <span className="totalAmount">đ̲{dataBookingOrder.totalAmount}</span>
                         </div>
                         <div className='button-block'>
-                        {["Rejected", "Completed"].includes(dataBookingOrder.status) ? null : (
-                            <>
-                                {!isCompleted && (
-                                    <button className="placeOrderButton" onClick={handleConfirm}>
-                                        Xác nhận hoàn thành
-                                    </button>
-                                )}
-                                {!isEndRating && databookingpayment.paymentStatus === "Success" && (
-                                    <button className="placeOrderButton" onClick={handleOpenModal}>
-                                        Đánh giá
-                                    </button>
-                                    )}
+                        <div className='button-block'>
+    {dataBookingOrder.status === "Rejected" ? null : (
+        <>
+            {!isCompleted && dataBookingOrder.status !== "Completed" && (
+                <button className="placeOrderButton" onClick={handleConfirm}>
+                    Xác nhận hoàn thành
+                </button>
+            )}
+            
+            {dataBookingOrder.status === "Completed" && !isEndRating && (
+                <button className="placeOrderButton" onClick={handleOpenModal}>
+                    Đánh giá
+                </button>
+            )}
 
-                                {dataBookingOrder.status === "Pending" && !isCancel && databookingpayment.paymentStatus === "Pending" && (
-                                    <button className="placeOrderButton placeOrderButtonCancel" onClick={handleCancelOpenModal}>
-                                        Hủy
-                                    </button>
-                                )}
-                            </>
-                        )}
+            {dataBookingOrder.status === "Pending" && !isCancel && databookingpayment.paymentStatus === "Pending" && (
+                <button className="placeOrderButton placeOrderButtonCancel" onClick={handleCancelOpenModal}>
+                    Hủy
+                </button>
+            )}
+        </>
+    )}
+</div>
+
 
                         </div>
                     </div>
