@@ -323,6 +323,22 @@ const About = () => {
         </Grid>
       </React.Fragment>
 
+      <section className="w-full py-12" style={{ backgroundColor: "#f4f7fa" }}>
+              <div className="max-w-7xl mx-auto px-4">
+                <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden shadow-lg">
+                  <iframe
+                    src="https://www.youtube.com/embed/MgJJow3LtMY?si=VIypDIskBI04CivG"
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className="absolute top-0 left-0 w-full h-full"
+                    style={{ background: "transparent" }}
+                  ></iframe>
+                </div>
+              </div>
+            </section>
+
       <section id="testimonial" className="testimonial section-padding py-10">
         <div className='text-center mb-12'>
           <h2 className='text-4xl font-bold mb-2'>FIFTYM</h2>

@@ -250,12 +250,13 @@ const Jobs = () => {
           </div>
         </div>
       </section>
+      
 
       <section className="w-full py-12" style={{ backgroundColor: "#f4f7fa" }}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden shadow-lg">
             <iframe
-              src="https://www.youtube.com/embed/MgJJow3LtMY?si=VIypDIskBI04CivG"
+              src="https://www.youtube.com/embed/_7jt-esEnPc?si=-4sE84mRANVoKqYg"
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -267,9 +268,7 @@ const Jobs = () => {
         </div>
       </section>
 
-
-
-
+      
       <SearchHome/>
       <Footer />
     </div>
