@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SearchHome.css"
+import { Link } from 'react-router-dom';
 
 const SearchHome = () => {
 
@@ -23,22 +24,23 @@ const SearchHome = () => {
           </p>
         </div>
         <div className="w-1/2 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg shadow-xl w-full">
-            <form>
-              <input
-                type="text"
-                placeholder="Tìm kiếm địa điểm..."
-                className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
-              />
-            <button
-              type="submit"
-              className="custom-animated-button"
+        <div className="bg-white p-4 rounded-lg shadow-xl w-full max-w-2xl mx-auto">
+          <form className="flex items-stretch gap-2">
+            <input
+              type="text"
+              placeholder="Tìm kiếm địa điểm..."
+              className="flex-1 px-4 py-3 border border-blue-500 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <Link
+              to="/Jobs"
+              className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-all duration-300 flex items-center justify-center"
+              style={{ textDecoration: "none" }}
             >
-              Tìm kiếm
-            </button>
-            
-            </form>
-          </div>
+              TÌM KIẾM
+            </Link>
+          </form>
+        </div>
         </div>
       </div>
 

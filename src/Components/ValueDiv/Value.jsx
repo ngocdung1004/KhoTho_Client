@@ -5,6 +5,7 @@ import valentine from '../../Assets/valentine.png';
 import shield from '../../Assets/shield.png';
 import image1 from '../../Assets/images/1.jpg'; // Import the new image
 import "./Value.css"
+import { Link } from 'react-router-dom';
 
 const Value = () => {
   return (
@@ -107,18 +108,18 @@ const Value = () => {
   ))}
 </div>
 
-
       <div className="card-container">
         <div className="card-text">
           <h1>Trải nghiệm ngay hôm nay!</h1>
           <p>Nhanh chóng trải nghiệm dịch vụ tuyệt vời của chúng tôi</p>
         </div>
-        <button className="card-button">
+        <Link to="/registerworker" style={{ textDecoration: "none" }} className="card-button no-underline">
           Đăng ký
-        </button>
-      </div>
+        </Link>
 
+      </div>
     </div>
+
   )
 }
 

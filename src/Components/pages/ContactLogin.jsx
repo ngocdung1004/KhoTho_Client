@@ -7,6 +7,7 @@ import { Container } from "react-bootstrap";
 import { FaGift, FaBox, FaStar, FaCalendarAlt } from 'react-icons/fa';
 import React from 'react';
 import "./styles/Contact2.css"
+import { Link } from 'react-router-dom';
 
 const ContactLogin = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -81,7 +82,9 @@ const ContactLogin = () => {
       </div>
     </div>
     <div className="col-lg-4 col-xs-12 text-lg-right text-center wow fadeInRight" data-wow-delay="0.3s">
-      <a href="#" className="cta-btn">Đăng ký</a>
+      <Link to="/registerworker" style={{ textDecoration: "none" }} className="card-button no-underline">
+                Đăng ký
+              </Link>
     </div>
   </div>
   </div>

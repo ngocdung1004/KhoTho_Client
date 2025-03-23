@@ -15,6 +15,7 @@ import {
   GeoapifyContext,
 } from "@geoapify/react-geocoder-autocomplete";
 import { Input } from "antd";
+import { Link } from 'react-router-dom';
 
 const RegisterWorker = () => {
     const USERnow = JSON.parse(localStorage.getItem("userData"));
@@ -38,6 +39,9 @@ const RegisterWorker = () => {
     const [specialization, setSpecialization] = useState('');
     const [yearsExperience, setYearsExperience] = useState(0);
     const [selfIntroduction, setSelfIntroduction] = useState('');
+
+    const [agreeTerms, setAgreeTerms] = useState(false);
+    const [showTermsModal, setShowTermsModal] = useState(false);
 
 
     // Thêm state để lưu trữ file ảnh thực tế
@@ -304,41 +308,96 @@ const handleCCCDUpload = (event, type) => {
 
             {/* Form for Account Settings (Introduction Info) */}
             {activeTab === 'introductionInfo' && (
-                <div className="form-container">
-                    {/* Option for Industry Group (Dropdown) */}
-                    <div className="form-row mb-4">
-                    <label className="block text-gray-600">Nhóm ngành</label>
-                    <select
-                      className="input-field"
-                      value={industryGroup}
-                      onChange={(e) => setIndustryGroup(e.target.value)}>
-                      <option value="">Chọn nhóm ngành</option>
-                      {jobTypes.map((jobType) => (
-                          <option key={jobType.jobTypeId} value={jobType.jobTypeId}>
-                              {jobType.jobTypeName}
-                          </option>
-                      ))}
-                    </select>
-                    </div>
-
-                    {/* Text Input for Specialization */}
-                    <div className="form-row mb-4">
-                    <label className="block text-gray-600">Chuyên môn</label>
-                    <input type="text" placeholder="Sửa chữa máy giặt" className="input-field" value={specialization} onChange={(e) => setSpecialization(e.target.value)}/>
-                    </div>
-
-                    {/* Number Input for Years of Experience */}
-                    <div className="form-row mb-4">
-                    <label className="block text-gray-600">Số năm kinh nghiệm</label>
-                    <input type="number" min="0" placeholder="0" className="input-field" value={yearsExperience} onChange={(e) => setYearsExperience(e.target.value)}/>
-                    </div>
-
-                    {/* Text Input for Self Introduction */}
-                    <div className="form-row mb-6">
-                    <label className="block text-gray-600">Giới thiệu bản thân</label>
-                    <textarea placeholder="Hãy nhập giới thiệu bản thân bạn..." rows="8" className="input-field" value={selfIntroduction} onChange={(e) => setSelfIntroduction(e.target.value)}></textarea>
-                    </div>
+                <div className="form-container max-h-screen overflow-y-auto p-4 bg-white rounded shadow-md h-[600px]">
+                {/* Option for Industry Group (Dropdown) */}
+                <div className="form-row mb-4">
+                  <label className="block text-gray-600">Nhóm ngành</label>
+                  <select
+                    className="input-field"
+                    value={industryGroup}
+                    onChange={(e) => setIndustryGroup(e.target.value)}
+                  >
+                    <option value="">Chọn nhóm ngành</option>
+                    {jobTypes.map((jobType) => (
+                      <option key={jobType.jobTypeId} value={jobType.jobTypeId}>
+                        {jobType.jobTypeName}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+              
+                {/* Text Input for Specialization */}
+                <div className="form-row mb-4">
+                  <label className="block text-gray-600">Chuyên môn</label>
+                  <input
+                    type="text"
+                    placeholder="Sửa chữa máy giặt"
+                    className="input-field"
+                    value={specialization}
+                    onChange={(e) => setSpecialization(e.target.value)}
+                  />
+                </div>
+              
+                {/* Number Input for Years of Experience */}
+                <div className="form-row mb-4">
+                  <label className="block text-gray-600">Số năm kinh nghiệm</label>
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="0"
+                    className="input-field"
+                    value={yearsExperience}
+                    onChange={(e) => setYearsExperience(e.target.value)}
+                  />
+                </div>
+              
+                {/* Text Input for Self Introduction */}
+                <div className="form-row mb-6">
+                  <label className="block text-gray-600">Giới thiệu bản thân</label>
+                  <textarea
+                    placeholder="Hãy nhập giới thiệu bản thân bạn..."
+                    rows="8"
+                    className="input-field"
+                    value={selfIntroduction}
+                    onChange={(e) => setSelfIntroduction(e.target.value)}
+                  ></textarea>
+                </div>
+              
+                {/* Thông tin thanh toán */}
+                <div>
+                  <div className="text-lg font-semibold mb-4">Thông tin thanh toán</div>
+              
+                  {/* Image ngân hàng */}
+                  <div className="mb-4 flex justify-center">
+                    <img
+                      src="https://i.imgur.com/lLvi0Si.png"
+                      alt="Ngân hàng"
+                      className="h-80 object-contain"
+                    />
+                  </div>
+              
+                  {/* Tên ngân hàng */}
+                  <div className="form-row mb-4">
+                    <label className="block text-gray-600">Ngân Hàng</label>
+                    <input
+                      type="text"
+                      placeholder="MBBank"
+                      className="input-field w-full border p-2 rounded"
+                    />
+                  </div>
+              
+                  {/* Số tài khoản */}
+                  <div className="form-row mb-4">
+                    <label className="block text-gray-600">Số tài khoản</label>
+                    <input
+                      type="text"
+                      placeholder="7979797979"
+                      className="input-field w-full border p-2 rounded"
+                    />
+                  </div>
+                </div>
+              </div>
+              
                 )}
 
             {/* Form for CCCD (Citizen ID) */}
@@ -372,10 +431,147 @@ const handleCCCDUpload = (event, type) => {
                     </div>
                   )}
                 </div>
-                <button className="update-button bg-blue-600 text-white rounded-md px-4 py-2 w-full mt-4"
-                onClick={handleSubmit_}>
+
+                  {/* Checkbox điều khoản */}
+                  <div className="form-row mb-4 flex gap-2">
+                    <label className="flex text-sm text-gray-700 gap-2">
+                    <input
+                      type="checkbox"
+                      checked={agreeTerms}
+                      onChange={() => setAgreeTerms(!agreeTerms)}/>
+
+                      Tôi đồng ý với{" "}
+                      <span
+                        className="text-blue-600 underline cursor-pointer"
+                        onClick={() => setShowTermsModal(true)}
+                      >
+                        điều khoản sử dụng
+                      </span>
+                    </label>
+                  </div>
+
+                {/* Nút xác nhận */}
+                <button
+                  className={`update-button rounded-md px-4 py-2 w-full mt-2 ${
+                    agreeTerms
+                      ? "bg-blue-600 text-white hover:bg-blue-700"
+                      : "bg-gray-400 text-white cursor-not-allowed"
+                  }`}
+                  onClick={handleSubmit_}
+                  disabled={!agreeTerms}
+                >
                   Xác nhận thông tin
                 </button>
+
+                {/* Modal điều khoản */}
+                {showTermsModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50 px-4">
+                      {/* Nút đóng */}
+                  
+                      <div className="bg-white rounded-lg p-8 w-full max-w-8xl max-h-[75vh] overflow-y-auto relative shadow-lg">
+                        
+                      <button
+                          className="absolute top-4 right-4 text-2xl text-gray-600 hover:text-black"
+                          onClick={() => setShowTermsModal(false)}
+                        >
+                          &times;
+                        </button>
+
+                        {/* Tiêu đề */}
+                        <h2 className="text-2xl font-bold mb-6 text-center">Điều khoản sử dụng</h2>
+
+                        {/* Nội dung điều khoản từ file KHOTHO */}
+                        <div className="text-gray-700 text-base space-y-4 text-justify leading-relaxed">
+                          <h2>Quy định chung</h2>
+                          <h1>Quy chế hoạt động website</h1>
+                          <p>
+                            1. Người dùng: là một cá nhân lao động như được định nghĩa dưới đây, và bao gồm bất kỳ người nào duyệt và/hoặc xem Website, cũng như bất kỳ người lao động nào trên Website phù hợp với các quy định của pháp luật, quy định và chính sách khác của Kho Thợ. “Cá nhân” – Các dịch vụ chỉ được cung cấp cho các cá nhân có khả năng tham gia vào một thỏa thuận có hiệu lực pháp lý theo luật Việt Nam.
+                          </p>
+                          <p>
+                            - Khi đăng ký tài khoản, người dùng được xem là Thành viên của Kho Thợ (“Thành viên”). Người dùng hiểu rằng:
+                            <br />+ Người dùng có thể tạo một tài khoản cá nhân của mình để sử dụng.
+                            <br />+ Người dùng có thể đăng tin theo đúng quy chuẩn, cam kết của thành viên hợp pháp đã công bố trên sàn.
+                          </p>
+                          <p>
+                            2. Kho Thợ có thể sửa đổi Quy chế tùy từng thời điểm vì các lý do liên quan đến luật pháp hay quy định, hoặc để đảm bảo Website hoạt động đúng cách và suôn sẻ.
+                            Nếu người dùng tiếp tục sử dụng Website sau ngày các sửa đổi bắt đầu có hiệu lực, Người dùng sẽ được cho là đã đồng ý bị ràng buộc bởi quy chế sửa đổi. Trong trường hợp Người dùng không đồng ý với các sửa đổi, Người dùng không được tiếp tục sử dụng Website và các dịch vụ.
+                          </p>
+                          <p>
+                            3. Dịch vụ tham gia giao dịch giữa thợ và người dùng phải đáp ứng đầy đủ các quy định của pháp luật có liên quan, không thuộc các trường hợp cấm kinh doanh, cấm quảng cáo theo quy định của pháp luật.
+                          </p>
+                          <p>
+                          4. Hoạt động sử dụng dịch vụ qua Kho Thợ phải được thực hiện công khai, minh bạch, đảm bảo quyền lợi của người tiêu dùng. Nội dung không phù hợp thì có quyền xóa, chỉnh sửa hoặc từ chối tin đăng nếu nội dung không phù hợp với quy định.
+                          </p>
+                          <br />
+                          <br />
+
+                          <h1>Hình thức thanh toán và giao nhận</h1>
+                          <p>1. Người dùng tự thoả thuận về hình thức thanh toán.</p>
+                          <p>2. Kho Thợ không tham gia vào quy trình thanh toán hay vận chuyển hàng hóa.</p>
+                          <br />
+                          <br />
+
+                          <h1>Dịch vụ bị cấm</h1>
+                          <p>1. Cung cấp thiết bị là hàng giả, hàng nhái, hàng kém chất lượng.</p>
+                          <p>2. Trao đổi Vũ khí, ma túy, thuốc lá và các chất gây nghiện.</p>
+                          <p>3. Các dịch vụ phạm pháp như cho vay nặng lãi, cờ bạc.</p>
+                          <br />
+                          <br />
+
+                          <h1>Chấm dứt quyền sử dụng</h1>
+                          <p>1. Các nội dung vi phạm quyền sở hữu trí tuệ.</p>
+                          <br />
+                          <br />
+
+                          <h2>Quy định đối với người thợ</h2>
+                          <h1>Quy trình đăng ký làm thợ để được quảng bá trên website</h1>
+                          <p>1. Khi một người thợ muốn được lên website, họ cần phải đăng kí tài khoản trên KhoTho và cung cấp thông tin cá nhân bao gồm: Sơ yếu lí lịch, nơi cư trú, hình ảnh CCCD hai mặt, hình ảnh chân dung, list công việc, xác nhận số điện thoại, giấy xác nhận là người bình thường (không có tiền án tiền sự hay vấn đề về sức khẻo). Thợ phải đóng tiền cho sàn để được quản bá theo phí quy định bởi sàn.</p>
+                          <p>2. Khi một người thợ có được người dùng book, họ phải trao đổi thông tin về cá nhân lại với người dùng. Sau khi biết được người dùng muốn book công việc gì thì đưa ra khoảng giá phù hợp với thị trường.Khi cả hai đi đến thoả thuận đồng ý, thì mới được phép thực hiện công việc. Nếu trong quá trình làm việc có pháp sinh vấn đề, thợ phải chủ động báo cáo với người dùng không được tự ý thực hiện mà không được sự đồng ý của người dùng. Khi đó bên sàn sẽ tạo một hợp đồng online để hai bên cam kết để đảm bảo quyền lợi khách hàng và cam kết thợ làm đúng đạo đức và hoàn thiện công việc đã nhận.</p>
+                          <br />- Sau khi hoàn thành công việc thì phải chụp ảnh/ video bằng chứng đã hoàn thành công việc lên website.
+                          <br />
+                          <br />
+
+                          <h1>Chính sách đăng tin</h1>
+                          <p>1.Khi thợ đăng kí thông tin cá nhân lên sàn, những thông tin đó phải chính xác, minh bạch, không gian dối, gây nhầm lẫn.</p>
+                          <p>2. Không được đăng tin liên quan đến các dịch vụ bị cấm (ví dụ: mại dâm, giao dịch ma tuý,...).</p>
+                          <br />
+                          <br />
+
+                          <h2>Quy định đối với người dùng</h2>
+                          <h1>Quy trình đăng kí của người dùng trên website</h1>
+                          <p>1. Khi người dùng muốn tìm kiếm thợ để làm việc, học cần phải đăng ký tại khoản và cung cấp một số thông tin cá nhân bao gồm: sơ yếu lí lịch, nơi cư trú, số điện thoại. Thực hiện các bước đăng ký xong, thì người dùng có thể book thợ để làm việc bằng cách sử dụng bộ lọc, đọc thông tin của thợ. Sau đó trao đổi trực tiếp với thợ để hai bên đi đến thoả thuận và chấp thuận họp đồng online.</p>
+                          <br />- Sau khi thợ hoàn thành công việc, người dùng có thể Feedback và đánh giá thông qua website.
+                          <br />
+                          <br />
+
+                          <h2>Đối với KHOTHO</h2>
+                          <h1>Trách nhiệm và quyền hạn của KHOTHO</h1>
+                          <p>1. Kho Thợ chỉ cung cấp nền tảng để kết nối người thợ và người dùng, không chịu trách nhiệm về nội dung các tin đăng hoặc chất lượng sản phẩm/dịch vụ.</p>
+                          <p>2. Kho Thợ có quyền từ chối cung cấp dịch vụ đối với những trường hợp vi phạm chính sách hoặc quy định pháp luật.</p>
+                          <p>3. Kho Thợ có thể cung cấp thông tin người dùng cho các cơ quan chức năng nếu có yêu cầu hợp pháp.</p>
+                          <br />
+                          <br />
+
+                          <h1>Chính sách bảo mật thông tin</h1>
+                          <p>1. Kho Thợ cam kết bảo vệ thông tin cá nhân của người dùng theo quy định về bảo mật.</p>
+                          <p>2. Người dùng có trách nhiệm bảo mật tài khoản của mình, không chia sẻ thông tin tài khoản cho người khác.</p>
+                          <p>3. Kho Thợ không chịu trách nhiệm về việc mất mát thông tin cá nhân nếu do người dùng chia sẻ thông tin tài khoản không an toàn.</p>
+                          <br />
+                          <br />
+
+                          <h1>Giải quyết tranh chấp</h1>
+                          <p>1. Kho Thợ không trực tiếp tham gia vào các giao dịch giữa người thợ và người dùng, tuy nhiên có thể hỗ trợ trong việc giải quyết tranh chấp.</p>
+                          <p>2. Người dùng cần chủ động liên hệ với nhau để giải quyết các vấn đề phát sinh từ giao dịch.</p>
+                          <p>3. Trong trường hợp xảy ra tranh chấp, Kho Thợ có thể cung cấp thông tin liên lạc giữa các bên dựa trên quy định pháp luật.</p>
+
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+
+
+                
               </div>
             )}
 
