@@ -256,7 +256,7 @@ const Jobs = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden shadow-lg">
             <iframe
-              src="https://www.youtube.com/embed/_7jt-esEnPc?si=-4sE84mRANVoKqYg"
+              src="https://www.youtube.com/embed/ZqO0f1qOyFs?si=R9n1FI8qKjpzzGlN"
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
