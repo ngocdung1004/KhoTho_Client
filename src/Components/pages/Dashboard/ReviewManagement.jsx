@@ -167,12 +167,12 @@ const ReviewManagement = () => {
         header: 'Comments',
         size: 200,
       },
-      {
-        accessorKey: 'createdAt',
-        header: 'Created At',
-        enableEditing: false,
-        Cell: ({ cell }) => new Date(cell.getValue()).toLocaleDateString(),
-      },
+      // {
+      //   accessorKey: 'createdAt',
+      //   header: 'Created At',
+      //   enableEditing: false,
+      //   Cell: ({ cell }) => new Date(cell.getValue()).toLocaleDateString(),
+      // },
     ],
     [workers, customers],
   );

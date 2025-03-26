@@ -174,12 +174,12 @@ const UserManagement = () => {
           return Object.entries(USER_TYPE_VALUES).find(([, value]) => value === userTypeValue)?.[0] || '';
         },
       },
-      {
-        accessorKey: 'createdAt',
-        header: 'Created At',
-        enableEditing: false,
-        Cell: ({ cell }) => new Date(cell.getValue()).toLocaleDateString(),
-      },
+      // {
+      //   accessorKey: 'createdAt',
+      //   header: 'Created At',
+      //   enableEditing: false,
+      //   Cell: ({ cell }) => new Date(cell.getValue()).toLocaleDateString(),
+      // },
     ],
     [],
   );
